@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:20 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/07/06 18:15:45 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/07/26 18:33:59 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ void		init(t_core		*cr)
 		err_ex(0);
 	if (!(cr->win = mlx_new_window(cr->mlx, WIN_WIDTH, WIN_HIGHT, "Editor")))
 		err_ex(0);
-	if (!(cr->sectors = (t_sector *)malloc(sizeof(t_sector))))
-		err_ex(0);
-	cr->sectors->next = NULL;
-	cr->sectors->walls = NULL;
+	// if (!(cr->sectors = (t_wall *)malloc(sizeof(t_wall))))
+	// 	err_ex(0);
+	// cr->sectors->next = NULL;
+	// cr->sectors->walls = NULL;
 	cr->vs.color = 0xffffff;
 	img_new(cr);
 }

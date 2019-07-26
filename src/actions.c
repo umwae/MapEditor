@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:59 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/07/02 20:12:55 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/07/26 18:22:05 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 		cr->vs.x1 = x;
 		cr->vs.y1 = y;
 		magnet(cr, &cr->vs.x1, &cr->vs.y1);
-		add_wall(cr, cr->sectors);
+		add_wall(cr);
 	}
 	else if (button == 2)
 	{

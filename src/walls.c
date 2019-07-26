@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image.c                                            :+:      :+:    :+:   */
+/*   walls.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/07/06 22:12:20 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/07/26 19:43:26 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "stdlib.h"
 #include "math.h"
 
-static float		calc_dist(int x0, int y0, int x1, int y1)
+static float			calc_dist(int x0, int y0, int x1, int y1)
 {
 	int	dx;
 	int	dy;
@@ -27,7 +27,7 @@ static float		calc_dist(int x0, int y0, int x1, int y1)
 
 void					magnet(t_core *cr, int *x, int *y)//How do they work???
 {
-	t_wall	*wall;
+	t_wall		*wall;
 	float		dist;
 	int			closest_x;
 	int			closest_y;
@@ -36,19 +36,25 @@ void					magnet(t_core *cr, int *x, int *y)//How do they work???
 	closest_x = *x;
 	closest_y = *y;
 	min_dist = MAGNET_RADIUS;
-	wall = cr->sectors->walls;
+	wall = cr->wlist;
 	if (!wall)
 		return ;
 	while (wall)
 	{
-		if ((dist = calc_dist(*x, *y, wall->p1.x, wall->p1.y)) <= min_dist)
+		if ((dist = calc_dist(*x, *y, wall->p1.x, wall->p1.y)) <= min_dist)//Выделить в функцию
 		{
+			if ((wall->p1.x == cr->vs.mem_x && wall->p1.y == cr->vs.mem_y) || \
+			(wall->p2.x == cr->vs.mem_x && wall->p2.y == cr->vs.mem_y))
+				return ;
 			min_dist = dist;
 			closest_x = wall->p1.x;
 			closest_y = wall->p1.y;
 		}
 		if ((dist = calc_dist(*x, *y, wall->p2.x, wall->p2.y)) <= min_dist)
 		{
+			if ((wall->p1.x == cr->vs.mem_x && wall->p1.y == cr->vs.mem_y) || \
+			(wall->p2.x == cr->vs.mem_x && wall->p2.y == cr->vs.mem_y))
+				return ;
 			min_dist = dist;
 			closest_x = wall->p2.x;
 			closest_y = wall->p2.y;
@@ -61,17 +67,16 @@ void					magnet(t_core *cr, int *x, int *y)//How do they work???
 	*y = closest_y;
 }
 
-void					add_wall(t_core *cr, t_sector *sec)
+void					add_wall(t_core *cr)
 {
 	t_wall	*wall;
-	t_wall	*tmp;
 
-	wall = sec->walls;
+	wall = cr->wlist;
 	if (!wall)
 	{
-		cr->sectors->walls = (t_wall *)malloc(sizeof(t_wall));
-		cr->sectors->walls->next = NULL;
-		wall = sec->walls;
+		cr->wlist = (t_wall *)malloc(sizeof(t_wall));
+		cr->wlist->next = NULL;
+		wall = cr->wlist;
 	}
 	else
 	{

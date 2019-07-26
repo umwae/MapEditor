@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image.c                                            :+:      :+:    :+:   */
+/*   show.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/07/06 22:12:20 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/07/26 18:34:19 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void		copy_vals(t_core *cr)
 	cr->vs.y0_copy = cr->vs.y0;
 }
 
-void					bresenham(t_core *cr, void (*print_func)(void *, int, int, int))
+void			bresenham(t_core *cr, void (*print_func)(void *, int, int, int))
 {
 	int	sx;
 	int	err;
@@ -59,11 +59,11 @@ void					bresenham(t_core *cr, void (*print_func)(void *, int, int, int))
 	}
 }
 
-static void			draw_walls(t_core *cr, t_sector *sec)
+static void		draw_walls(t_core *cr)
 {
 	t_wall	*wall;
 
-	wall = sec->walls;
+	wall = cr->wlist;
 	while (wall)
 	{
 		cr->vs.x0 = wall->p1.x;
@@ -72,18 +72,6 @@ static void			draw_walls(t_core *cr, t_sector *sec)
 		cr->vs.y1 = wall->p2.y;
 		bresenham(cr, &img_pxl);
 		wall = wall->next;
-	}
-}
-
-static void			draw_sectors(t_core *cr)
-{
-	t_sector	*sec;
-
-	sec = cr->sectors;
-	while (sec)
-	{
-		draw_walls(cr, sec);
-		sec = sec->next;
 	}
 }
 
@@ -98,6 +86,6 @@ void			redraw(t_core *cr)
 	// cr->sectors->walls->p2.x = 220;
 	// cr->sectors->walls->p2.y = 330;
 	// minimap_init(cr);
-	draw_sectors(cr);
+	draw_walls(cr);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->image, 0, 0);
 }

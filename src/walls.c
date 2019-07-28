@@ -15,7 +15,7 @@
 #include "stdlib.h"
 #include "math.h"
 
-static float			calc_dist(int x0, int y0, int x1, int y1)
+float					calc_dist(int x0, int y0, int x1, int y1)
 {
 	int	dx;
 	int	dy;
@@ -25,7 +25,14 @@ static float			calc_dist(int x0, int y0, int x1, int y1)
 	return (sqrt(pow(dx, 2) + pow(dy, 2)));
 }
 
-void					magnet(t_core *cr, int *x, int *y)//How do they work???
+// void					choose_wall(t_core *cr, int *x, int *y)
+// {
+// 	t_wall		*wall;
+//
+//
+// }
+
+void					magnet(t_core *cr, int *x, int *y, int check_start)//How do they work???
 {
 	t_wall		*wall;
 	float		dist;
@@ -41,10 +48,10 @@ void					magnet(t_core *cr, int *x, int *y)//How do they work???
 		return ;
 	while (wall)
 	{
-		if ((dist = calc_dist(*x, *y, wall->p1.x, wall->p1.y)) <= min_dist)//Выделить в функцию
+		if ((dist = calc_dist(*x, *y, wall->p1.x, wall->p1.y)) <= min_dist)
 		{
-			if ((wall->p1.x == cr->vs.mem_x && wall->p1.y == cr->vs.mem_y) || \
-			(wall->p2.x == cr->vs.mem_x && wall->p2.y == cr->vs.mem_y))
+			if (((wall->p1.x == cr->vs.mem_x && wall->p1.y == cr->vs.mem_y) || \
+			(wall->p2.x == cr->vs.mem_x && wall->p2.y == cr->vs.mem_y)) && check_start == 1)
 				return ;
 			min_dist = dist;
 			closest_x = wall->p1.x;
@@ -52,8 +59,8 @@ void					magnet(t_core *cr, int *x, int *y)//How do they work???
 		}
 		if ((dist = calc_dist(*x, *y, wall->p2.x, wall->p2.y)) <= min_dist)
 		{
-			if ((wall->p1.x == cr->vs.mem_x && wall->p1.y == cr->vs.mem_y) || \
-			(wall->p2.x == cr->vs.mem_x && wall->p2.y == cr->vs.mem_y))
+			if (((wall->p1.x == cr->vs.mem_x && wall->p1.y == cr->vs.mem_y) || \
+			(wall->p2.x == cr->vs.mem_x && wall->p2.y == cr->vs.mem_y)) && check_start == 1)
 				return ;
 			min_dist = dist;
 			closest_x = wall->p2.x;
@@ -90,4 +97,5 @@ void					add_wall(t_core *cr)
 	wall->p1.y = cr->vs.mem_y;
 	wall->p2.x = cr->vs.x1;
 	wall->p2.y = cr->vs.y1;
+	wall->color = WALL_COLOR;
 }

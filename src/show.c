@@ -70,6 +70,7 @@ static void		draw_walls(t_core *cr)
 		cr->vs.y0 = wall->p1.y;
 		cr->vs.x1 = wall->p2.x;
 		cr->vs.y1 = wall->p2.y;
+		cr->vs.color = wall->color;
 		bresenham(cr, &img_pxl);
 		wall = wall->next;
 	}

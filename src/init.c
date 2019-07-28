@@ -26,6 +26,7 @@ void		init(t_core		*cr)
 	// 	err_ex(0);
 	// cr->sectors->next = NULL;
 	// cr->sectors->walls = NULL;
-	cr->vs.color = 0xffffff;
+	cr->wlist = NULL;
+	cr->vs.color = WALL_COLOR;
 	img_new(cr);
 }

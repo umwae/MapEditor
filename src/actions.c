@@ -41,7 +41,7 @@ int			mouse_move(int x, int y, t_core *cr)
 		cr->vs.y1 = y;
 		cr->vs.x0 = cr->vs.mem_x;
 		cr->vs.y0 = cr->vs.mem_y;
-		magnet(cr, &cr->vs.x1, &cr->vs.y1);
+		magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
 		bresenham(cr, &pxl_put_wrap);
 	}
 	// redraw(cr);
@@ -55,7 +55,7 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 		cr->lmb = 0;
 		cr->vs.x1 = x;
 		cr->vs.y1 = y;
-		magnet(cr, &cr->vs.x1, &cr->vs.y1);
+		magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
 		add_wall(cr);
 	}
 	else if (button == 2)
@@ -77,7 +77,7 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 		cr->vs.y0 = y;
 		cr->vs.x1 = x;
 		cr->vs.y1 = y;
-		magnet(cr, &cr->vs.x0, &cr->vs.y0);
+		magnet(cr, &cr->vs.x0, &cr->vs.y0, 0);
 		cr->vs.mem_x = cr->vs.x0;
 		cr->vs.mem_y = cr->vs.y0;
 		// printf("MOUSE_PRESS %d %d %d %d\n", );

@@ -19,6 +19,7 @@
 # define WIN_WIDTH 1290
 # define MAGNET_RADIUS 45
 # define WIN_HIGHT 900
+# define WALL_COLOR 0xffffff
 
 typedef struct		s_coord
 {
@@ -30,6 +31,7 @@ typedef struct		s_wall
 {
 	t_coord					p1;
 	t_coord					p2;
+	int							color;
 	void						*next;
 }									t_wall;
 
@@ -78,6 +80,7 @@ int								mouse_release(int button, int x, int y, t_core *cr);
 int								mouse_move(int x, int y, t_core *cr);
 void							bresenham(t_core *cr, void (*print_func)(void *, int, int, int));
 void							add_wall(t_core *cr);
-void							magnet(t_core *cr, int *x, int *y);
+void							magnet(t_core *cr, int *x, int *y, int check_start);
+float							calc_dist(int x0, int y0, int x1, int y1);
 
 #endif

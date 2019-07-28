@@ -89,4 +89,5 @@ void			redraw(t_core *cr)
 	// minimap_init(cr);
 	draw_walls(cr);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->image, 0, 0);
+	display_instruments(cr);
 }

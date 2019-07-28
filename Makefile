@@ -12,8 +12,8 @@
 
 NAME=Editor
 
-CFLAGS=#-Wall -Wextra -Werror
-FFLAGS= -framework OpenGL -framework AppKit
+CFLAGS=-Wall -Wextra -Werror
+FFLAGS=-framework OpenGL -framework AppKit
 #FFLAGS= -lXext -lX11 -lm
 
 SRC_PATH=./src
@@ -24,7 +24,8 @@ MLX_INC_PATH=/usr/X11/include
 FT_PATH=./libft
 BIN_PATH=./bin
 
-SRC= main.c image.c init.c show.c actions.c walls.c
+SRC= main.c image.c init.c show.c actions.c walls.c selection.c utilities.c \
+context_menu.c gui.c
 OBJ:= $(addprefix $(BIN_PATH)/,$(SRC:.c=.o))
 
 .PHONY: all clean fclean re

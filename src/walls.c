@@ -15,22 +15,17 @@
 #include "stdlib.h"
 #include "math.h"
 
-float					calc_dist(int x0, int y0, int x1, int y1)
+t_wall				*find_by_index(t_core *cr, int index)
 {
-	int	dx;
-	int	dy;
+	t_wall		*wall;
 
-	dx = abs(x0) > abs(x1) ? x0 - x1 : x1 - x0;
-	dy = abs(y0) > abs(y1) ? y0 - y1 : y1 - y0;
-	return (sqrt(pow(dx, 2) + pow(dy, 2)));
+	wall = cr->wlist;
+	// if (!wall || index < 0)
+	// 	return (NULL);
+	while (wall && index--)
+		wall = wall->next;
+	return (wall);
 }
-
-// void					choose_wall(t_core *cr, int *x, int *y)
-// {
-// 	t_wall		*wall;
-//
-//
-// }
 
 void					magnet(t_core *cr, int *x, int *y, int check_start)//How do they work???
 {
@@ -77,18 +72,24 @@ void					magnet(t_core *cr, int *x, int *y, int check_start)//How do they work??
 void					add_wall(t_core *cr)
 {
 	t_wall	*wall;
+	int			i;
 
+	i = 1;
 	wall = cr->wlist;
 	if (!wall)
 	{
 		cr->wlist = (t_wall *)malloc(sizeof(t_wall));
 		cr->wlist->next = NULL;
 		wall = cr->wlist;
+		i = 0;
 	}
 	else
 	{
 		while (wall->next)
+		{
 			wall = wall->next;
+			i++;
+		}
 		wall->next = (t_wall *)malloc(sizeof(t_wall));
 		wall = wall->next;
 		wall->next = NULL;
@@ -98,4 +99,6 @@ void					add_wall(t_core *cr)
 	wall->p2.x = cr->vs.x1;
 	wall->p2.y = cr->vs.y1;
 	wall->color = WALL_COLOR;
+	wall->index = i;
+	wall->len = calc_dist(wall->p1.x, wall->p1.y, wall->p2.x, wall->p2.y);
 }

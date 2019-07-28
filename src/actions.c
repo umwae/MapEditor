@@ -41,6 +41,7 @@ int			mouse_move(int x, int y, t_core *cr)
 		cr->vs.y1 = y;
 		cr->vs.x0 = cr->vs.mem_x;
 		cr->vs.y0 = cr->vs.mem_y;
+		cr->vs.color = WALL_COLOR;
 		magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
 		bresenham(cr, &pxl_put_wrap);
 	}
@@ -52,6 +53,12 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 {
 	if (button == 1)
 	{
+		if (cr->menu_is_open == 1)
+		{
+			cr->menu_is_open = 0;
+			redraw(cr);
+			return (0);
+		}
 		cr->lmb = 0;
 		cr->vs.x1 = x;
 		cr->vs.y1 = y;
@@ -61,6 +68,7 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 	else if (button == 2)
 	{
 		cr->rmb = 0;
+		return (0);
 	}
 	else
 		return (0);
@@ -72,6 +80,10 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 {
 	if (button == 1)
 	{
+		if (cr->menu_is_open == 1)
+		{
+			return (0);
+		}
 		cr->lmb = 1;
 		cr->vs.x0 = x;
 		cr->vs.y0 = y;
@@ -85,6 +97,11 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 	else if (button == 2)
 	{
 		cr->rmb = 1;
+
+		if (select_wall(cr, x, y) >= 0)
+			find_by_index(cr, select_wall(cr, x, y))->color = SELECT_COLOR;
+		redraw(cr);
+		rmb_menu(cr, x, y);
 	}
 	return (0);
 }

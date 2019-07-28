@@ -16,13 +16,6 @@
 #include <time.h>
 #include <stdio.h>
 
-void	err_ex(int pr)
-{
-	if (pr == 0)
-		ft_putstr("Error: memory allocation failure\n");
-	exit(1);
-}
-
 int		hooks(t_core *cr)
 {
 	mlx_hook(cr->win, 4, 1, mouse_press, cr);
@@ -44,5 +37,6 @@ int		main(int argc, char **argv)
 	init(cr);
 	hooks(cr);
 	(void)argc;
+	(void)argv;
 	return (0);
 }

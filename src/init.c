@@ -27,6 +27,7 @@ void		init(t_core		*cr)
 	// cr->sectors->next = NULL;
 	// cr->sectors->walls = NULL;
 	cr->wlist = NULL;
-	cr->vs.color = WALL_COLOR;
+	load_gui(cr);
 	img_new(cr);
+	redraw(cr);
 }

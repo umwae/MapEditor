@@ -76,6 +76,7 @@ typedef struct		s_core
 	int							*icons_trash;//Иконки инструментов одним имейджем
 	int							*icons_data;
 	int							menu_is_open;
+	t_coord					**links;
 }									t_core;
 
 void							init(t_core		*cr);
@@ -102,5 +103,6 @@ void							draw_rectangle(t_core *cr, t_coord xy, t_coord ab, int color);
 void							rmb_menu(t_core *cr, int x, int y);
 void			load_gui(t_core *cr);
 void			display_instruments(t_core *cr);
+void			halfplane(t_core *cr, t_wall *wall);
 
 #endif

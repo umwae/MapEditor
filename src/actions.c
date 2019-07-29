@@ -100,6 +100,7 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 
 		if (select_wall(cr, x, y) >= 0)
 			find_by_index(cr, select_wall(cr, x, y))->color = SELECT_COLOR;
+		halfplane(cr, find_by_index(cr, select_wall(cr, x, y)));//ubrat
 		redraw(cr);
 		rmb_menu(cr, x, y);
 	}

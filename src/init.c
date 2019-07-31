@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:20 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/07/26 18:33:59 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/07/31 17:58:43 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void		init(t_core		*cr)
 	// cr->sectors->next = NULL;
 	// cr->sectors->walls = NULL;
 	cr->wlist = NULL;
-	cr->links = (t_coord **)malloc(sizeof(t_coord) * 100);
+	cr->links = (t_wlink **)malloc(sizeof(t_wlink *) * 100);
+	// cr->links[0] = NULL;
 	load_gui(cr);
 	img_new(cr);
 	redraw(cr);

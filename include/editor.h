@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:16 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/07/26 18:44:30 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/07/31 19:19:52 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 # define WALL_COLOR 0xECF7FF
 # define SELECT_COLOR 0xFFD200
 # define MENU_COLOR 0xA0A0A0
+
+# define PI_CEIL 4
 
 typedef struct		s_coord
 {
@@ -58,6 +60,13 @@ typedef struct		s_visual
 	int							color;
 }									t_visual;
 
+typedef struct					s_wlink
+{
+	t_coord						p;
+	int							id;
+}								t_wlink;
+
+
 typedef struct		s_core
 {
 	void						*mlx;
@@ -76,7 +85,8 @@ typedef struct		s_core
 	int							*icons_trash;//Иконки инструментов одним имейджем
 	int							*icons_data;
 	int							menu_is_open;
-	t_coord					**links;
+	t_wlink					**links;
+	int						clockwise;
 }									t_core;
 
 void							init(t_core		*cr);
@@ -103,6 +113,6 @@ void							draw_rectangle(t_core *cr, t_coord xy, t_coord ab, int color);
 void							rmb_menu(t_core *cr, int x, int y);
 void			load_gui(t_core *cr);
 void			display_instruments(t_core *cr);
-void			halfplane(t_core *cr, t_wall *wall);
+void			halfplane(t_core *cr, t_wall *ref);
 
 #endif

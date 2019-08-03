@@ -15,6 +15,11 @@
 #include "stdlib.h"
 #include "math.h"
 
+// void			choose_instrument(t_core *cr)
+// {
+//
+// }
+
 void			display_instruments(t_core *cr)
 {
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->icons_trash, 0, WIN_HIGHT / 5);

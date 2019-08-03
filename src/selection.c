@@ -15,7 +15,7 @@
 #include "stdlib.h"
 #include "math.h"
 
-static void	reset_color(t_core *cr)
+void			reset_color(t_core *cr)
 {
 		t_wall		*wall;
 

@@ -99,8 +99,15 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 		cr->rmb = 1;
 
 		if (select_wall(cr, x, y) >= 0)
+		{
+			printf("--------------RMB CLICK--------------\n");
+			reset_color(cr);//Убрать
 			find_by_index(cr, select_wall(cr, x, y))->color = SELECT_COLOR;
-		halfplane(cr, find_by_index(cr, select_wall(cr, x, y)));//ubrat
+			cr->click.x = x;
+			cr->click.y = y;
+			cr->wpoint = 2;
+			halfplane(cr, find_by_index(cr, select_wall(cr, x, y)));//Добавить условие
+		}
 		redraw(cr);
 		rmb_menu(cr, x, y);
 	}

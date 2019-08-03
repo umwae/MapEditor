@@ -85,8 +85,12 @@ typedef struct		s_core
 	int							*icons_trash;//Иконки инструментов одним имейджем
 	int							*icons_data;
 	int							menu_is_open;
-	t_wlink					**links;
-	int						clockwise;
+	int						wside;
+	t_coord				click;
+	int						idcurr;
+	float					angle_mem;
+	int						wpoint;
+	int						wpoint_tmp;
 }									t_core;
 
 void							init(t_core		*cr);
@@ -114,5 +118,6 @@ void							rmb_menu(t_core *cr, int x, int y);
 void			load_gui(t_core *cr);
 void			display_instruments(t_core *cr);
 void			halfplane(t_core *cr, t_wall *ref);
+void			reset_color(t_core *cr);
 
 #endif

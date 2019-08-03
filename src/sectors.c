@@ -14,99 +14,103 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "math.h"
-//atq2
-static void				calc_angle(t_core *cr, t_wall *ref)
+
+static int				calc_angle(t_core *cr, t_wall *ref, t_coord *wp, int id, t_coord *refpoint, t_coord *refstart)
 {
 	float	c;
 	float	b;
 	float	a;
-	float	ang;
-	int		i;
-	float	ang_mem;
-	int		id;
+	float	angle;
 
-	i = 0;
-	ang_mem = PI_CEIL;
 	c = ref->len;
-	// printf("%d\n", cr->links[i]->x);
-	while (cr->links[i])
+	a = calc_dist(refstart->x, refstart->y, wp->x, wp->y);
+	b = calc_dist(refpoint->x, refpoint->y, wp->x, wp->y);
+	angle = acos((b * b + c * c - a * a) / (2 * b * c));
+	printf("angle %f\n", angle);
+	if (angle < cr->angle_mem)
 	{
-		b = calc_dist(ref->p1.x, ref->p1.y, cr->links[i]->p.x, cr->links[i]->p.y);
-		a = calc_dist(ref->p2.x, ref->p2.y, cr->links[i]->p.x, cr->links[i]->p.y);
-		ang = acos((b * b + c * c - a * a) / (2 * b * c));
-		printf("ANGLE: %f %f|%f|%f\n", ang, a, b, c);
-		fflush(stdout);
-		if (ang != ang)
-			return ;
-		if (ang < ang_mem)
-		{
-			ang_mem = ang;
-			id = cr->links[i]->id;
-		}
-		i++;
+		cr->angle_mem = angle;
+		cr->idcurr = id;
+		cr->wpoint = cr->wpoint_tmp;
 	}
-	if (ang_mem == PI_CEIL)
-		return;
-	halfplane(cr, find_by_index(cr, id));
+	if (cr->angle_mem == PI_CEIL)
+		return (0);
+	return (1);
+}
+
+static int	compare_walls(t_core *cr, t_wall *ref, t_wall *wall, t_coord *refpoint, t_coord *refstart)
+{
+	t_coord	wallpoint;
+	float		d;
+
+	printf("comparing ID%d and ID%d\n", ref->index, wall->index);
+	if (wall->index == ref->index)
+		return (0);
+	if ((wall->p1.x == refpoint->x) && (wall->p1.y == refpoint->y))
+	{
+		wallpoint.x = wall->p2.x;
+		wallpoint.y = wall->p2.y;
+		cr->wpoint_tmp = 2;
+		printf("connected with P1\n");
+	}
+	else if ((wall->p2.x == refpoint->x) && (wall->p2.y == refpoint->y))
+	{
+		wallpoint.x = wall->p1.x;
+		wallpoint.y = wall->p1.y;
+		printf("connected with P2\n");
+		cr->wpoint_tmp = 1;
+	}
+	else
+		return (0);
+	d = (refpoint->x - refstart->x) * (wallpoint.y - refstart->y) - \
+	(refpoint->y - refstart->y) * (wallpoint.x - refstart->x);
+	// (bx-ax)*(py-ay)-(by-ay)*(px-ax)
+	printf("side %f\n", d);
+	if ((d < 0 && cr->wside == 0) || (d > 0 && cr->wside == 1))
+	{
+		calc_angle(cr, ref, &wallpoint, wall->index, refpoint, refstart);
+	}
+	return (0);
 }
 
 void				halfplane(t_core *cr, t_wall *ref)
 {
-	float		d;
 	t_wall	*wall;
-	int		i;
-	t_wlink	*tmp;
-	int		cycle = 0;
+	t_coord	refpoint;
+	t_coord	refstart;
 
-	i = 0;
+	cr->angle_mem = PI_CEIL;
+	cr->idcurr = 0;
+	if (ref->color == 0xff0000)
+		return ;
+	printf("=============\nclickside: %d || ", cr->wside);
+	if (cr->wpoint == 2)
+	{
+		refpoint.x = ref->p2.x;
+		refpoint.y = ref->p2.y;
+		refstart.x = ref->p1.x;
+		refstart.y = ref->p1.y;
+		printf("refpoint: 2\n");
+	}
+	else
+	{
+		refpoint.x = ref->p1.x;
+		refpoint.y = ref->p1.y;
+		refstart.x = ref->p2.x;
+		refstart.y = ref->p2.y;
+		printf("refpoint: 1\n");
+	}
+	cr->wside = (refpoint.x - refstart.x) * (cr->click.y - refstart.y) - \
+	(refpoint.y - refstart.y) * (cr->click.x - refstart.x) > 0 ? 1 : 0;
+	//	(bx-ax)*(py-ay)-(by-ay)*(px-ax)
 	wall = cr->wlist;
 	if (!wall || !ref)
 		return ;
-	while (d == d)
+	while (wall)
 	{
-		while (wall)
-		{
-			if (wall->index != ref->index)
-			{
-				if ((wall->p1.x == ref->p1.x) && (wall->p1.y == ref->p1.y))
-				{
-					cr->clockwise = (wall->p2.x - ref->p1.x) * (ref->p2.y - ref->p1.y) - (wall->p2.y - ref->p1.y) * (wall->p2.x - ref->p1.x) > 0 ? 1 : 0;
-					d = (wall->p2.x - ref->p1.x) * (ref->p2.y - ref->p1.y) - (wall->p2.y - ref->p1.y) * (wall->p2.x - ref->p1.x);
-					if ((d < 0 && cr->clockwise > 0) || (d > 0 && cr->clockwise < 0))
-					{
-						wall->color = 0xff0000;
-					}
-					// printf("%f, I = %d\n", d, i);
-				}
-				else if ((wall->p2.x == ref->p1.x) && (wall->p2.y == ref->p1.y))
-				{
-					cr->clockwise = (wall->p2.x - ref->p1.x) * (ref->p2.y - ref->p1.y) - (wall->p2.y - ref->p1.y) * (wall->p2.x - ref->p1.x) > 0 ? 1 : 0;
-					printf("ID: %d %d\n", wall->index, ref->index);
-					if (wall->index == ref->index)
-					{
-						return ;
-					}
-					d = (wall->p1.x - ref->p1.x) * (ref->p2.y - ref->p2.y) - (wall->p1.y - ref->p1.y) * (wall->p1.x - ref->p1.x);
-					printf("%f, I = %d\n", d, i);
-					if ((d < 0 && cr->clockwise > 0) || (d > 0 && cr->clockwise < 0))
-					{
-						wall->color = 0xff0000;
-						tmp = (t_wlink *)malloc(sizeof(t_wlink));
-						tmp->p.x = wall->p1.x;
-						tmp->p.y = wall->p1.y;
-						tmp->id = wall->index;
-						cr->links[i] = tmp;
-						cr->links[i + 1] = NULL;
-						i++;
-					}
-					// ref = wall;
-					// wall = cr->wlist;
-				}
-			}
-			wall = wall->next;
-		}
-		if (cr->links[0])
-			calc_angle(cr, ref);
-		return ;
+		compare_walls(cr, ref, wall, &refpoint, &refstart);
+		wall = wall->next;
 	}
+	ref->color = 0xff0000;
+	halfplane(cr, find_by_index(cr, cr->idcurr));
 }

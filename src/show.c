@@ -81,6 +81,7 @@ void			redraw(t_core *cr)
 	// mlx_destroy_image(cr->mlx, cr->image);
 	// img_new(cr);
 	mlx_clear_window(cr->mlx, cr->win);
+	img_fill(cr->idata, 0x000000);
 	// img_pxl(cr, 100, 100, 0xffffff);
 	// cr->sectors->walls->p1.x = 200;
 	// cr->sectors->walls->p1.y = 200;

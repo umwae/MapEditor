@@ -13,12 +13,27 @@
 #include "editor.h"
 #include "stdio.h"
 
+void		img_fill(void *idata, int color)
+{
+	int		*p;
+	int		xl;
+	int		yl;
+
+	p = (int *)idata;
+	yl = WIN_HIGHT;
+	while (yl--)
+	{
+		xl = WIN_WIDTH;
+		while (xl--)
+			*p++ = color;
+	}
+}
+
 void		img_new(t_core *cr)
 {
 	if (!(cr->image = mlx_new_image(cr->mlx, WIN_WIDTH, WIN_HIGHT)))
 		err_ex(0);
 	cr->idata = mlx_get_data_addr(cr->image, &cr->bpp, &(cr->linesize), &cr->endian);
-	// cr->addr = (int *)cr->image;
 }
 
 // void		img_minimap_new(t_core *cr)

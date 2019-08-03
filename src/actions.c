@@ -59,11 +59,14 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 			redraw(cr);
 			return (0);
 		}
-		cr->lmb = 0;
-		cr->vs.x1 = x;
-		cr->vs.y1 = y;
-		magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
-		add_wall(cr);
+		if (cr->lmb == 1)
+		{
+			cr->lmb = 0;
+			cr->vs.x1 = x;
+			cr->vs.y1 = y;
+			magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
+			add_wall(cr);
+		}
 	}
 	else if (button == 2)
 	{
@@ -80,19 +83,20 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 {
 	if (button == 1)
 	{
-		if (cr->menu_is_open == 1)
-		{
-			return (0);
-		}
-		cr->lmb = 1;
-		cr->vs.x0 = x;
-		cr->vs.y0 = y;
-		cr->vs.x1 = x;
-		cr->vs.y1 = y;
-		magnet(cr, &cr->vs.x0, &cr->vs.y0, 0);
-		cr->vs.mem_x = cr->vs.x0;
-		cr->vs.mem_y = cr->vs.y0;
-		// printf("MOUSE_PRESS %d %d %d %d\n", );
+		if (!choose_instrument(cr, x, y))
+			(*cr->inst_func)(cr, x, y);
+		// if (cr->menu_is_open == 1)
+		// {
+		// 	return (0);
+		// }
+		// cr->lmb = 1;
+		// cr->vs.x0 = x;
+		// cr->vs.y0 = y;
+		// cr->vs.x1 = x;
+		// cr->vs.y1 = y;
+		// magnet(cr, &cr->vs.x0, &cr->vs.y0, 0);
+		// cr->vs.mem_x = cr->vs.x0;
+		// cr->vs.mem_y = cr->vs.y0;
 	}
 	else if (button == 2)
 	{

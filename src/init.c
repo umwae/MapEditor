@@ -16,7 +16,7 @@
 #include <time.h>
 #include <stdio.h>
 
-void		init(t_core		*cr)
+void				init(t_core		*cr)
 {
 	if (!(cr->mlx = mlx_init()))
 		err_ex(0);
@@ -24,6 +24,7 @@ void		init(t_core		*cr)
 		err_ex(0);
 	cr->wlist = NULL;
 	load_gui(cr);
+	cr->inst_func = draw_wall;
 	img_new(cr);
 	redraw(cr);
 }

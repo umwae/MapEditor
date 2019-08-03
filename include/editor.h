@@ -29,6 +29,9 @@
 
 # define PI_CEIL 4
 
+# define INST_PANEL_X 0
+# define INST_PANEL_Y WIN_HIGHT / 5
+
 typedef struct		s_coord
 {
 	int							x;
@@ -60,13 +63,6 @@ typedef struct		s_visual
 	int							color;
 }									t_visual;
 
-typedef struct					s_wlink
-{
-	t_coord						p;
-	int							id;
-}								t_wlink;
-
-
 typedef struct		s_core
 {
 	void						*mlx;
@@ -91,6 +87,10 @@ typedef struct		s_core
 	float					angle_mem;
 	int						wpoint;
 	int						wpoint_tmp;
+
+	t_coord				inst_panel;
+	t_coord				inst_panel_size;
+	void					(*inst_func)(void *cr, int x, int y);
 }									t_core;
 
 void							init(t_core		*cr);
@@ -115,9 +115,13 @@ int				 				min(int a, int b);
 int 							max(int a, int b);
 void							draw_rectangle(t_core *cr, t_coord xy, t_coord ab, int color);
 void							rmb_menu(t_core *cr, int x, int y);
-void			load_gui(t_core *cr);
-void			display_instruments(t_core *cr);
-void			halfplane(t_core *cr, t_wall *ref);
-void			reset_color(t_core *cr);
+void							load_gui(t_core *cr);
+void							display_instruments(t_core *cr);
+void							halfplane(t_core *cr, t_wall *ref);
+void							reset_color(t_core *cr);
+int								choose_instrument(t_core *cr, int x, int y);
+void							draw_wall(void *td, int x, int y);
+void							eraser(void *td, int x, int y);
+void							img_fill(void *idata, int color);
 
 #endif

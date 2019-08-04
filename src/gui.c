@@ -15,7 +15,40 @@
 #include "stdlib.h"
 #include "math.h"
 
-void	draw_wall(void *td, int x, int y)
+static void	find_sector(void *td, int x, int y)
+{
+	t_core	*cr;
+	char		*text;
+
+	cr = td;
+	if (select_wall(cr, x, y) >= 0)
+	{
+		reset_color(cr);
+		cr->click.x = x;
+		cr->click.y = y;
+		cr->wpoint = 2;
+		printf("---------------------SEL SEC CLICK---------------------\n");
+		halfplane(cr, find_by_index(cr, select_wall(cr, x, y)));
+		//
+		if (!find_msg_by_id(cr, 0))
+		{
+			text = malloc(sizeof(char) * ft_strlen("Y to apply") + 1);
+			ft_strcpy(text, "Y to apply");
+			add_message(cr, &text, 2, 0xffffff, 0);
+		}
+	}
+}
+
+static void	select_wall_wrap(void *td, int x, int y)
+{
+	t_core	*cr;
+
+	cr = td;
+	if (select_wall(cr, x, y) >= 0)
+		find_by_index(cr, select_wall(cr, x, y))->color = SELECT_COLOR;
+}
+
+void				draw_wall(void *td, int x, int y)
 {
 	t_core	*cr;
 
@@ -32,7 +65,7 @@ void	draw_wall(void *td, int x, int y)
 	cr->vs.mem_y = cr->vs.y0;
 }
 
-void	eraser(void *td, int x, int y)
+void				eraser(void *td, int x, int y)
 {
 	t_core	*cr;
 	int			id;
@@ -64,27 +97,34 @@ void	eraser(void *td, int x, int y)
 	redraw(cr);
 }
 
-int			choose_instrument(t_core *cr, int x, int y)
+int					choose_instrument(t_core *cr, int x, int y)
 {
 	// printf("%d %d\n", cr->inst_panel_size.x, cr->inst_panel_size.y);
 	if (!(x > cr->inst_panel.x && x < cr->inst_panel_size.x && \
 		y > cr->inst_panel.y && y < cr->inst_panel.y + cr->inst_panel_size.y))
 		return (0);
-	if (y > cr->inst_panel.y && y < cr->inst_panel.y + cr->inst_panel_size.y / 2)
+	else if (y > cr->inst_panel.y && y < cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM)
 		cr->inst_func = draw_wall;
-	if (y > cr->inst_panel.y + cr->inst_panel_size.y / 2 && y < cr->inst_panel.y + cr->inst_panel_size.y)
+	else if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM && y < \
+		cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 2)
 		cr->inst_func = eraser;
+	else if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 2 && y < \
+		cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 3)
+		cr->inst_func = select_wall_wrap;
+	else if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 3 && y < \
+		cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 4)
+		cr->inst_func = find_sector;
 	return (1);
 	// printf("HH\n");
 }
 
-void			display_instruments(t_core *cr)
+void				display_instruments(t_core *cr)
 {
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->icons_trash, \
 		cr->inst_panel.x, cr->inst_panel.y);
 }
 
-void			load_gui(t_core *cr)
+void				load_gui(t_core *cr)
 {
 	int	i;
 

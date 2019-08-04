@@ -25,6 +25,8 @@ void				init(t_core		*cr)
 	cr->wlist = NULL;
 	load_gui(cr);
 	cr->inst_func = draw_wall;
+	cr->messages = (t_list **)malloc(sizeof(t_list *));
+	*cr->messages = NULL;
 	img_new(cr);
 	redraw(cr);
 }

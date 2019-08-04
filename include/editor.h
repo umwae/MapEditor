@@ -31,6 +31,7 @@
 
 # define INST_PANEL_X 0
 # define INST_PANEL_Y WIN_HIGHT / 5
+# define INST_NUM 4
 
 typedef struct		s_coord
 {
@@ -63,6 +64,14 @@ typedef struct		s_visual
 	int							color;
 }									t_visual;
 
+typedef struct		s_msg
+{
+	char						**text;
+	t_coord					pos;
+	int							color;
+	int							id;
+}									t_msg;
+
 typedef struct		s_core
 {
 	void						*mlx;
@@ -81,16 +90,18 @@ typedef struct		s_core
 	int							*icons_trash;//Иконки инструментов одним имейджем
 	int							*icons_data;
 	int							menu_is_open;
-	int						wside;
-	t_coord				click;
-	int						idcurr;
-	float					angle_mem;
-	int						wpoint;
-	int						wpoint_tmp;
+	int							wside;
+	t_coord					click;
+	int							idcurr;
+	float						angle_mem;
+	int							wpoint;
+	int							wpoint_tmp;
 
-	t_coord				inst_panel;
-	t_coord				inst_panel_size;
-	void					(*inst_func)(void *cr, int x, int y);
+	t_coord					inst_panel;
+	t_coord					inst_panel_size;
+	void						(*inst_func)(void *cr, int x, int y);
+
+	t_list					**messages;
 }									t_core;
 
 void							init(t_core		*cr);
@@ -123,5 +134,8 @@ int								choose_instrument(t_core *cr, int x, int y);
 void							draw_wall(void *td, int x, int y);
 void							eraser(void *td, int x, int y);
 void							img_fill(void *idata, int color);
+void							show_messages(t_core *cr);
+void							add_message(t_core *cr, char **text, int pos, int color, int id);
+int								find_msg_by_id(t_core *cr, int id);
 
 #endif

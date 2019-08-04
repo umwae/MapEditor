@@ -78,17 +78,10 @@ static void		draw_walls(t_core *cr)
 
 void			redraw(t_core *cr)
 {
-	// mlx_destroy_image(cr->mlx, cr->image);
-	// img_new(cr);
 	mlx_clear_window(cr->mlx, cr->win);
 	img_fill(cr->idata, 0x000000);
-	// img_pxl(cr, 100, 100, 0xffffff);
-	// cr->sectors->walls->p1.x = 200;
-	// cr->sectors->walls->p1.y = 200;
-	// cr->sectors->walls->p2.x = 220;
-	// cr->sectors->walls->p2.y = 330;
-	// minimap_init(cr);
 	draw_walls(cr);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->image, 0, 0);
 	display_instruments(cr);
+	show_messages(cr);
 }

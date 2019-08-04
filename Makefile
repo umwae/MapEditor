@@ -25,7 +25,7 @@ FT_PATH=./libft
 BIN_PATH=./bin
 
 SRC= main.c image.c init.c show.c actions.c walls.c selection.c utilities.c \
-context_menu.c gui.c sectors.c
+context_menu.c gui.c sectors.c messages.c
 OBJ:= $(addprefix $(BIN_PATH)/,$(SRC:.c=.o))
 
 .PHONY: all clean fclean re

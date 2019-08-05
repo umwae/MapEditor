@@ -15,6 +15,30 @@
 #include "math.h"
 #include "stdlib.h"
 
+void					straight_line(t_core *cr, int *x, int *y)
+{
+	int		dx;
+	int		dy;
+	float	m;
+
+	dx = abs(*x - cr->vs.mem_x);
+	dy = abs(*y - cr->vs.mem_y);
+	if (dx == 0 || dy == 0)
+		return;
+	m = atan2(abs(dy), abs(dx));
+	if (m > 0 && m < (PI_4 / 2) / 3)
+		*y = cr->vs.mem_y;
+	else if (m > (PI_4 / 2) / 3 * 2 && m < (PI_4 / 2))
+		*x = cr->vs.mem_x;
+	else
+	{
+		*x = *x - cr->vs.mem_x > 0  ? cr->vs.mem_x + \
+		(dx + dy) / 2 : cr->vs.mem_x - (dx + dy) / 2;
+		*y = *y - cr->vs.mem_y > 0 ? cr->vs.mem_y + \
+		(dx + dy) / 2 : cr->vs.mem_y - (dx + dy) / 2;
+	}
+}
+
 static void		copy_vals(t_core *cr)
 {
 	cr->vs.x0_copy = cr->vs.x0;
@@ -64,8 +88,6 @@ static void		draw_walls(t_core *cr)
 	t_wall	*wall;
 
 	wall = cr->wlist;
-	// printf("%s\n", cr->wlist->next);
-	// fflush(stdout);
 	while (wall)
 	{
 		cr->vs.x0 = wall->p1.x;

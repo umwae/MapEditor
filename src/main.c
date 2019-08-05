@@ -22,6 +22,7 @@ int		hooks(t_core *cr)
 	mlx_hook(cr->win, 5, 1, mouse_release, cr);
 	mlx_hook(cr->win, 6, 1, mouse_move, cr);
 	mlx_hook(cr->win, 2, 1, key_action, cr);
+	mlx_hook(cr->win, 3, 0, key_release, cr);
 	mlx_hook(cr->win, 17, 1, red_button, cr);
 	mlx_loop(cr->mlx);
 	return (0);

@@ -20,12 +20,21 @@ int			red_button(t_core *pr)
 	exit(0);
 }
 
+int			key_release(int keycode, t_core *cr)
+{
+	if (keycode == 257)
+		cr->draw_straight = 0;
+	return (0);
+}
+
 int			key_action(int keycode, t_core *cr)
 {
 	if (keycode == 53)
 		exit(0);
 	else if (keycode == 16)
 		iter_wall(cr, 0, 0, &apply_sector);
+	else if (keycode == 257)
+		cr->draw_straight = 1;
 	redraw(cr);
 	return (0);
 }
@@ -34,6 +43,8 @@ int			mouse_move(int x, int y, t_core *cr)
 {
 	if (cr->lmb == 1)
 	{
+		if (cr->draw_straight == 1)
+			straight_line(cr, &x, &y);
 		redraw(cr);
 		cr->vs.x1 = x;
 		cr->vs.y1 = y;
@@ -43,7 +54,6 @@ int			mouse_move(int x, int y, t_core *cr)
 		magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
 		bresenham(cr, &pxl_put_wrap);
 	}
-	// redraw(cr);
 	return (0);
 }
 
@@ -60,6 +70,8 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 		if (cr->lmb == 1)
 		{
 			cr->lmb = 0;
+			if (cr->draw_straight == 1)
+				straight_line(cr, &x, &y);
 			cr->vs.x1 = x;
 			cr->vs.y1 = y;
 			magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);

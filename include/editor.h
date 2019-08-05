@@ -30,6 +30,7 @@
 # define APP_SEC_COLOR 0x00FFFF
 
 # define PI_CEIL 4
+# define PI_4 3.1415f
 
 # define INST_PANEL_X 0
 # define INST_PANEL_Y WIN_HIGHT / 5
@@ -110,6 +111,7 @@ typedef struct		s_core
 	t_list					**messages;
 
 	int							sec_num;
+	int							draw_straight;
 }									t_core;
 
 void							init(t_core		*cr);
@@ -120,6 +122,7 @@ void							img_pxl(void *td, int x, int y, int color);
 void							pxl_put_wrap(void *td, int x, int y, int color);
 int								red_button(t_core *pr);
 int								key_action(int keycode, t_core *cr);
+int								key_release(int keycode, t_core *cr);
 int								mouse_press(int button, int x, int y, t_core *cr);
 int								mouse_release(int button, int x, int y, t_core *cr);
 int								mouse_move(int x, int y, t_core *cr);
@@ -150,5 +153,6 @@ void							iter_wall(t_core *cr, int pr1, int pr2, void (*f)(t_core *, t_wall *,
 void							apply_sector(t_core *cr, t_wall *wall,int color1, int color2);
 void							turn_color(t_core *cr, t_wall *wall, int color1, int color2);
 void							reset_color_exc(t_core *cr, t_wall *wall, int color1, int color2);
+void							straight_line(t_core *cr, int *x, int *y);
 
 #endif

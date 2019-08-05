@@ -24,10 +24,8 @@ int			key_action(int keycode, t_core *cr)
 {
 	if (keycode == 53)
 		exit(0);
-	// else if (keycode == 0)
-	// {
-	//
-	// }
+	else if (keycode == 16)
+		iter_wall(cr, 0, 0, &apply_sector);
 	redraw(cr);
 	return (0);
 }
@@ -89,7 +87,6 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 	else if (button == 2)
 	{
 		cr->rmb = 1;
-
 		if (select_wall(cr, x, y) >= 0)
 		{
 			find_by_index(cr, select_wall(cr, x, y))->color = SELECT_COLOR;

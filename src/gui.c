@@ -15,6 +15,17 @@
 #include "stdlib.h"
 #include "math.h"
 
+void				highlight(t_core *cr)
+{
+	t_coord		pos;
+
+	if (!cr->highlight)
+		return ;
+	pos.y =	cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * (cr->highlight - 1);
+	pos.x = cr->inst_panel.x;
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->hl_trash, pos.x, pos.y);
+}
+
 static void	find_sector(void *td, int x, int y)
 {
 	t_core	*cr;
@@ -77,6 +88,12 @@ void				eraser(void *td, int x, int y)
 	wall = cr->wlist;
 	if (!wall)
 		return ;
+	if (!wall->next)
+	{
+		free(wall);
+		cr->wlist = NULL;
+		return ;
+	}
 	while (wall->next)
 	{
 		if (((t_wall *)wall->next)->index == id)
@@ -91,7 +108,6 @@ void				eraser(void *td, int x, int y)
 	wall = cr->wlist;
 	while (wall)
 	{
-		printf("%d\n", wall->index);
 		wall = wall->next;
 	}
 	redraw(cr);
@@ -99,23 +115,37 @@ void				eraser(void *td, int x, int y)
 
 int					choose_instrument(t_core *cr, int x, int y)
 {
-	// printf("%d %d\n", cr->inst_panel_size.x, cr->inst_panel_size.y);
+	int		inst_num;
+
+	inst_num = 0;
 	if (!(x > cr->inst_panel.x && x < cr->inst_panel_size.x && \
 		y > cr->inst_panel.y && y < cr->inst_panel.y + cr->inst_panel_size.y))
 		return (0);
 	else if (y > cr->inst_panel.y && y < cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM)
+	{
 		cr->inst_func = draw_wall;
+		inst_num = 1;
+	}
 	else if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM && y < \
 		cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 2)
+	{
 		cr->inst_func = eraser;
+		inst_num = 2;
+	}
 	else if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 2 && y < \
 		cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 3)
+	{
 		cr->inst_func = select_wall_wrap;
+		inst_num = 3;
+	}
 	else if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 3 && y < \
-		cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 4)
+		cr->inst_panel.y + cr->inst_panel_size.y)
+	{
 		cr->inst_func = find_sector;
+		inst_num = 4;
+	}
+	cr->highlight = inst_num;
 	return (1);
-	// printf("HH\n");
 }
 
 void				display_instruments(t_core *cr)
@@ -127,6 +157,8 @@ void				display_instruments(t_core *cr)
 void				load_gui(t_core *cr)
 {
 	int	i;
+	int	x;
+	int	y;
 
 	i = 1;
 	if (!(cr->icons_trash = (int *)malloc(sizeof(int))))
@@ -137,4 +169,11 @@ void				load_gui(t_core *cr)
 		&cr->bpp, &(cr->linesize), &(cr->endian));
 	cr->inst_panel.x = INST_PANEL_X;
 	cr->inst_panel.y = INST_PANEL_Y;
+	//
+	if (!(cr->hl_trash = (int *)malloc(sizeof(int))))
+		err_ex(0);
+	cr->hl_trash = mlx_xpm_file_to_image(cr->mlx, "./gui/highlight.xpm", \
+	&x, &y);
+	cr->hl_data = (int *)mlx_get_data_addr(cr->hl_trash, \
+	&cr->bpp, &(cr->linesize), &(cr->endian));
 }

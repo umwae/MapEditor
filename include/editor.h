@@ -26,6 +26,8 @@
 # define WALL_COLOR 0xECF7FF
 # define SELECT_COLOR 0xFFD200
 # define MENU_COLOR 0xA0A0A0
+# define SEL_SEC_COLOR 0xFF3300
+# define APP_SEC_COLOR 0x00FFFF
 
 # define PI_CEIL 4
 
@@ -46,6 +48,7 @@ typedef struct		s_wall
 	int							index;
 	float						len;
 	int							color;
+	int							sectors[2];
 	void						*next;
 }									t_wall;
 
@@ -87,8 +90,10 @@ typedef struct		s_core
 	int							lmb;//Left mouse button
 	int							rmb;
 	// t_coord					last_point;
-	int							*icons_trash;//Иконки инструментов одним имейджем
-	int							*icons_data;
+	void						*icons_trash;//Иконки инструментов одним имейджем
+	void						*hl_trash;
+	void						*icons_data;
+	void						*hl_data;
 	int							menu_is_open;
 	int							wside;
 	t_coord					click;
@@ -100,8 +105,11 @@ typedef struct		s_core
 	t_coord					inst_panel;
 	t_coord					inst_panel_size;
 	void						(*inst_func)(void *cr, int x, int y);
+	int							highlight;
 
 	t_list					**messages;
+
+	int							sec_num;
 }									t_core;
 
 void							init(t_core		*cr);
@@ -137,5 +145,10 @@ void							img_fill(void *idata, int color);
 void							show_messages(t_core *cr);
 void							add_message(t_core *cr, char **text, int pos, int color, int id);
 int								find_msg_by_id(t_core *cr, int id);
+void							highlight(t_core *cr);
+void							iter_wall(t_core *cr, int pr1, int pr2, void (*f)(t_core *, t_wall *, int, int));
+void							apply_sector(t_core *cr, t_wall *wall,int color1, int color2);
+void							turn_color(t_core *cr, t_wall *wall, int color1, int color2);
+void							reset_color_exc(t_core *cr, t_wall *wall, int color1, int color2);
 
 #endif

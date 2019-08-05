@@ -15,13 +15,25 @@
 #include "stdlib.h"
 #include "math.h"
 
+void			iter_wall(t_core *cr, int pr1, int pr2, void (*f)(t_core *, t_wall *, int, int))
+{
+		t_wall		*wall;
+
+		wall = cr->wlist;
+		if (!wall)
+			return ;
+		while (wall)
+		{
+			(*f)(cr, wall, pr1, pr2);
+			wall = wall->next;
+		}
+}
+
 t_wall				*find_by_index(t_core *cr, int index)
 {
 	t_wall		*wall;
 
 	wall = cr->wlist;
-	// if (!wall || index < 0)
-	// 	return (NULL);
 	while (wall && index--)
 		wall = wall->next;
 	return (wall);
@@ -79,8 +91,8 @@ void					add_wall(t_core *cr)
 	if (!wall)
 	{
 		cr->wlist = (t_wall *)malloc(sizeof(t_wall));
-		cr->wlist->next = NULL;
 		wall = cr->wlist;
+		cr->wlist->next = NULL;
 		i = 0;
 	}
 	else
@@ -101,4 +113,6 @@ void					add_wall(t_core *cr)
 	wall->color = WALL_COLOR;
 	wall->index = i;
 	wall->len = calc_dist(wall->p1.x, wall->p1.y, wall->p2.x, wall->p2.y);
+	wall->sectors[0] = -1;
+	wall->sectors[1] = -1;
 }

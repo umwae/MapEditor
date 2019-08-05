@@ -15,20 +15,6 @@
 #include "stdlib.h"
 #include "math.h"
 
-void			reset_color(t_core *cr)
-{
-		t_wall		*wall;
-
-		wall = cr->wlist;
-		if (!wall)
-			return ;
-		while (wall)
-		{
-			wall->color = WALL_COLOR;
-			wall = wall->next;
-		}
-}
-
 int					is_near_wall(t_wall *wall, int x, int y)
 {
 	if (x < min(wall->p1.x, wall->p2.x) - SELECT_PADDING || \
@@ -36,8 +22,6 @@ int					is_near_wall(t_wall *wall, int x, int y)
 	y < min(wall->p1.y, wall->p2.y) - SELECT_PADDING || \
 	y > max(wall->p1.y, wall->p2.y) + SELECT_PADDING)
 		return (0);
-	// if (cr->hit.x < min(wall->p1.x, wall->p2.x) || cr->hit.x > max(wall->p1.x, wall->p2.x)
-	// 	return ;
 	return (1);
 }
 
@@ -73,6 +57,6 @@ int					select_wall(t_core *cr, int x, int y)
 	}
 	if (min_dist == SELECT_RADIUS)
 		return (-1);
-	reset_color(cr);
+	iter_wall(cr, APP_SEC_COLOR, -1, &reset_color_exc);
 	return (closest_wall);
 }

@@ -64,6 +64,8 @@ static void		draw_walls(t_core *cr)
 	t_wall	*wall;
 
 	wall = cr->wlist;
+	// printf("%s\n", cr->wlist->next);
+	// fflush(stdout);
 	while (wall)
 	{
 		cr->vs.x0 = wall->p1.x;
@@ -83,5 +85,6 @@ void			redraw(t_core *cr)
 	draw_walls(cr);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->image, 0, 0);
 	display_instruments(cr);
-	show_messages(cr);
+	highlight(cr);
+	// show_messages(cr);
 }

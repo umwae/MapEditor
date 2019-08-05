@@ -15,56 +15,47 @@
 #include "stdlib.h"
 #include "math.h"
 
-int					find_msg_by_id(t_core *cr, int id)
+void			apply_sector(t_core *cr, t_wall *wall, int pr1, int pr2)
 {
-	t_list	*curr;
-
-	curr = *cr->messages;
-	while (curr)
-	{
-		if (((t_msg *)curr->content)->id == id)
-			return (1);
-		curr = curr->next;
-	}
-	return (0);
-}
-
-void				show_messages(t_core *cr)
-{
-	t_list	*curr;
-	t_msg		*msg;
-
-	if (!*cr->messages)
+	(void)pr1;
+	(void)pr1;
+	if (wall->color != SEL_SEC_COLOR)
 		return ;
-	curr = *cr->messages;
-	msg = (t_msg *)curr->content;
-	while (curr)
+	wall->color = APP_SEC_COLOR;
+	if (wall->sectors[0] < 0)
+		wall->sectors[0] = cr->sec_num;
+	else if (wall->sectors[1] < 0)
+		wall->sectors[1] = cr->sec_num;
+
+}
+
+void			turn_color(t_core *cr, t_wall *wall, int color1, int color2)
+{
+	if (wall->color == color1)
+		wall->color = color2;
+}
+
+void			reset_color_exc(t_core *cr, t_wall *wall, int color1, int color2)
+{
+	if (wall->color != color1 && wall->color != color2)
 	{
-		mlx_string_put(cr->mlx, cr->win, msg->pos.x, \
-		msg->pos.y, msg->color, \
-		*msg->text);
-		curr = curr->next;
+		if (wall->sectors[0] < 0 && wall->sectors[1] < 0)
+			wall->color = WALL_COLOR;
+		else
+			wall->color = APP_SEC_COLOR;
 	}
 }
 
-void		add_message(t_core *cr, char **text, int pos, int color, int id)
+void			reset_color(t_core *cr)
 {
-	t_msg		*msg;
-	t_list	*list;
+	t_wall		*wall;
 
-	msg = (t_msg *)malloc(sizeof(t_msg));
-	if (pos == 2)
+	wall = cr->wlist;
+	if (!wall)
+		return ;
+	while (wall)
 	{
-		msg->pos.x = WIN_WIDTH / 2;
-		msg->pos.y = WIN_HIGHT * 0.03;
+		wall->color = WALL_COLOR;
+		wall = wall->next;
 	}
-	msg->text = text;
-	msg->color = color;
-	msg->id = id;
-	list = ft_lstnew(msg, sizeof(t_msg));
-	ft_lstadd(cr->messages, list);
-	//
-	list = *cr->messages;
-	while (list)
-		list = list->next;
 }

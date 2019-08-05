@@ -81,8 +81,9 @@ void				halfplane(t_core *cr, t_wall *ref)
 
 	cr->angle_mem = PI_CEIL;
 	cr->idcurr = 0;
-	if (ref->color == 0xff0000)
+	if (ref->color == SEL_SEC_COLOR)
 		return ;
+	cr->sec_num++;
 	printf("=============\nclickside: %d || ", cr->wside);
 	if (cr->wpoint == 2)
 	{
@@ -111,6 +112,6 @@ void				halfplane(t_core *cr, t_wall *ref)
 		compare_walls(cr, ref, wall, &refpoint, &refstart);
 		wall = wall->next;
 	}
-	ref->color = 0xff0000;
+	ref->color = SEL_SEC_COLOR;
 	halfplane(cr, find_by_index(cr, cr->idcurr));
 }

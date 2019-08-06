@@ -23,7 +23,9 @@ int			red_button(t_core *pr)
 int			key_release(int keycode, t_core *cr)
 {
 	if (keycode == 257)
-		cr->draw_straight = 0;
+		cr->shift_button = 0;
+	else if (keycode == 256)
+		cr->ctrl_button = 0;
 	return (0);
 }
 
@@ -32,9 +34,14 @@ int			key_action(int keycode, t_core *cr)
 	if (keycode == 53)
 		exit(0);
 	else if (keycode == 16)
+	{
 		iter_wall(cr, 0, 0, &apply_sector);
+		iter_wall(cr, 0, 0, &redraw_color);
+	}
 	else if (keycode == 257)
-		cr->draw_straight = 1;
+		cr->shift_button = 1;
+	else if (keycode == 256)
+		cr->ctrl_button = 1;
 	redraw(cr);
 	return (0);
 }
@@ -43,7 +50,7 @@ int			mouse_move(int x, int y, t_core *cr)
 {
 	if (cr->lmb == 1)
 	{
-		if (cr->draw_straight == 1)
+		if (cr->shift_button == 1)
 			straight_line(cr, &x, &y);
 		redraw(cr);
 		cr->vs.x1 = x;
@@ -70,7 +77,7 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 		if (cr->lmb == 1)
 		{
 			cr->lmb = 0;
-			if (cr->draw_straight == 1)
+			if (cr->shift_button == 1)
 				straight_line(cr, &x, &y);
 			cr->vs.x1 = x;
 			cr->vs.y1 = y;
@@ -91,20 +98,31 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 
 int			mouse_press(int button, int x, int y, t_core *cr)
 {
+	int		wall_id;
+
 	if (button == 1)
 	{
 		if (!choose_instrument(cr, x, y))
+		{
+			// printf("NOT AN INSTRUMENT\n");
 			(*cr->inst_func)(cr, x, y);
+			if (cr->menu_is_open == 1)
+			{
+				check_menu_events(cr, x, y);
+			}
+		}
 	}
 	else if (button == 2)
 	{
 		cr->rmb = 1;
-		if (select_wall(cr, x, y) >= 0)
+		find_multi_sel(cr);
+		if ((wall_id = select_wall(cr, x, y)) >= 0)
 		{
-			find_by_index(cr, select_wall(cr, x, y))->color = SELECT_COLOR;
+			find_by_index(cr, wall_id)->color = SELECT_COLOR;
 			redraw(cr);
-			rmb_menu(cr, x, y);
+			rmb_menu(cr, find_by_index(cr, wall_id), x, y);
 		}
+		cr->multi_sel = 0;
 	}
 	return (0);
 }

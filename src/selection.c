@@ -56,7 +56,17 @@ int					select_wall(t_core *cr, int x, int y)
 			wall = wall->next;
 	}
 	if (min_dist == SELECT_RADIUS)
+	{
+		iter_wall(cr, -1, -1, &redraw_color);
 		return (-1);
-	iter_wall(cr, APP_SEC_COLOR, -1, &reset_color_exc);
+	}
+	if (!cr->ctrl_button && !cr->multi_sel)
+	{
+		if (!cr->multi_sel)
+			iter_wall(cr, -1, -1, &redraw_color);
+		else
+			iter_wall(cr, SELECT_COLOR, -1, &redraw_color);
+	}
+
 	return (closest_wall);
 }

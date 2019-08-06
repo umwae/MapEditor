@@ -86,6 +86,8 @@ void					add_wall(t_core *cr)
 	t_wall	*wall;
 	int			i;
 
+	if (cr->vs.x1 == cr->vs.mem_x && cr->vs.y1 == cr->vs.mem_y)
+		return ;
 	i = 1;
 	wall = cr->wlist;
 	if (!wall)
@@ -115,4 +117,6 @@ void					add_wall(t_core *cr)
 	wall->len = calc_dist(wall->p1.x, wall->p1.y, wall->p2.x, wall->p2.y);
 	wall->sectors[0] = -1;
 	wall->sectors[1] = -1;
+	wall->isportal = 0;
+	iter_wall(cr, 0, 0, &redraw_color);
 }

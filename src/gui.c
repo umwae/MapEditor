@@ -30,16 +30,17 @@ static void	find_sector(void *td, int x, int y)
 {
 	t_core	*cr;
 	char		*text;
+	int			wall_id;
 
 	cr = td;
-	if (select_wall(cr, x, y) >= 0)
+	if ((wall_id = select_wall(cr, x, y)) >= 0)
 	{
-		reset_color(cr);
+		iter_wall(cr, APP_SEC_COLOR, 0, &redraw_color);
 		cr->click.x = x;
 		cr->click.y = y;
 		cr->wpoint = 2;
 		printf("---------------------SEL SEC CLICK---------------------\n");
-		halfplane(cr, find_by_index(cr, select_wall(cr, x, y)));
+		halfplane(cr, find_by_index(cr, wall_id));
 		//
 		if (!find_msg_by_id(cr, 0))
 		{
@@ -76,6 +77,23 @@ void				draw_wall(void *td, int x, int y)
 	cr->vs.mem_y = cr->vs.y0;
 }
 
+static			void restore_id(t_core *cr)
+{
+	t_wall		*wall;
+	int				i;
+
+	i = 0;
+	wall = cr->wlist;
+	if (!wall)
+		return ;
+	while (wall)
+	{
+		wall->index = i;
+		i++;
+		wall = wall->next;
+	}
+}
+
 void				eraser(void *td, int x, int y)
 {
 	t_core	*cr;
@@ -94,6 +112,14 @@ void				eraser(void *td, int x, int y)
 		cr->wlist = NULL;
 		return ;
 	}
+	if (id == 0)
+	{
+		rm = wall;
+		cr->wlist = wall->next;
+		free(rm);
+		restore_id(cr);
+		return ;
+	}
 	while (wall->next)
 	{
 		if (((t_wall *)wall->next)->index == id)
@@ -101,13 +127,9 @@ void				eraser(void *td, int x, int y)
 			rm = wall->next;
 			wall->next = ((t_wall *)wall->next)->next;
 			free(rm);
+			restore_id(cr);
 			return ;
 		}
-		wall = wall->next;
-	}
-	wall = cr->wlist;
-	while (wall)
-	{
 		wall = wall->next;
 	}
 	redraw(cr);

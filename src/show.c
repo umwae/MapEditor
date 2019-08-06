@@ -15,6 +15,29 @@
 #include "math.h"
 #include "stdlib.h"
 
+void					draw_nodes(t_core *cr, t_wall *wall, int pr1, int pr2)
+{
+	t_coord		xy;
+	t_coord		ab;
+
+	(void)pr1;
+	(void)pr1;
+	ab.x = POINT_SIZE;
+	ab.y = POINT_SIZE;
+	xy.x = wall->p1.x - POINT_SIZE / 2;
+	xy.y = wall->p1.y - POINT_SIZE / 2;
+	draw_rectangle(cr, xy, ab, POINT_COLOR);
+	xy.x = wall->p2.x - POINT_SIZE / 2;
+	xy.y = wall->p2.y - POINT_SIZE / 2;
+	draw_rectangle(cr, xy, ab, POINT_COLOR);
+//
+	// char *txt = malloc(sizeof(char) * 5);//Отображает номера стен, вызывает тормоза
+	// ft_strcpy(txt, ft_itoa(wall->index));
+	// mlx_string_put(cr->mlx, cr->win, min(wall->p2.x, wall->p1.x) + abs(wall->p2.x - wall->p1.x) / 2, \
+	// min(wall->p2.y, wall->p1.y) + abs(wall->p2.y - wall->p1.y) / 2, 0xffffff, txt);
+//
+}
+
 void					straight_line(t_core *cr, int *x, int *y)
 {
 	int		dx;
@@ -106,6 +129,7 @@ void			redraw(t_core *cr)
 	img_fill(cr->idata, 0x000000);
 	draw_walls(cr);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->image, 0, 0);
+	iter_wall(cr, 0, 0, &draw_nodes);
 	display_instruments(cr);
 	highlight(cr);
 	// show_messages(cr);

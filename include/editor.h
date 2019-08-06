@@ -22,12 +22,16 @@
 # define MAGNET_RADIUS 30
 # define SELECT_RADIUS 60
 # define SELECT_PADDING 30
+# define POINT_SIZE 4
 
 # define WALL_COLOR 0xECF7FF
 # define SELECT_COLOR 0xFFD200
 # define MENU_COLOR 0xA0A0A0
 # define SEL_SEC_COLOR 0xFF3300
 # define APP_SEC_COLOR 0x00FFFF
+# define POINT_COLOR 0xFFFFFF
+# define PORTAL_COLOR 0xA600E7
+# define APP_PORTAL_COLOR 0xBF8EEA
 
 # define PI_CEIL 4
 # define PI_4 3.1415f
@@ -35,6 +39,9 @@
 # define INST_PANEL_X 0
 # define INST_PANEL_Y WIN_HIGHT / 5
 # define INST_NUM 4
+# define MENU_XLEN 300
+# define MENU_YLEN 500
+# define CHECKBOX_SIZE 20
 
 typedef struct		s_coord
 {
@@ -50,6 +57,7 @@ typedef struct		s_wall
 	float						len;
 	int							color;
 	int							sectors[2];
+	int							isportal;
 	void						*next;
 }									t_wall;
 
@@ -76,6 +84,11 @@ typedef struct		s_msg
 	int							id;
 }									t_msg;
 
+typedef struct		s_elems
+{
+	int							isportal;
+}									t_elems;
+
 typedef struct		s_core
 {
 	void						*mlx;
@@ -88,6 +101,7 @@ typedef struct		s_core
 	//
 	t_wall					*wlist;
 	t_visual				vs;
+	t_elems					cmenu_elems;
 	int							lmb;//Left mouse button
 	int							rmb;
 	// t_coord					last_point;
@@ -111,7 +125,9 @@ typedef struct		s_core
 	t_list					**messages;
 
 	int							sec_num;
-	int							draw_straight;
+	int							shift_button;
+	int							ctrl_button;
+	int							multi_sel;
 }									t_core;
 
 void							init(t_core		*cr);
@@ -136,7 +152,7 @@ int								is_near_wall(t_wall *wall, int x, int y);
 int				 				min(int a, int b);
 int 							max(int a, int b);
 void							draw_rectangle(t_core *cr, t_coord xy, t_coord ab, int color);
-void							rmb_menu(t_core *cr, int x, int y);
+void							rmb_menu(t_core *cr, t_wall *wall, int x, int y);
 void							load_gui(t_core *cr);
 void							display_instruments(t_core *cr);
 void							halfplane(t_core *cr, t_wall *ref);
@@ -152,7 +168,11 @@ void							highlight(t_core *cr);
 void							iter_wall(t_core *cr, int pr1, int pr2, void (*f)(t_core *, t_wall *, int, int));
 void							apply_sector(t_core *cr, t_wall *wall,int color1, int color2);
 void							turn_color(t_core *cr, t_wall *wall, int color1, int color2);
-void							reset_color_exc(t_core *cr, t_wall *wall, int color1, int color2);
+void							redraw_color(t_core *cr, t_wall *wall, int exception1, int exception2);
 void							straight_line(t_core *cr, int *x, int *y);
+void							draw_nodes(t_core *cr, t_wall *wall, int pr1, int pr2);
+void							find_multi_sel(t_core *cr);
+void							check_menu_events(t_core *cr, int x, int y);
+void							switch_isportal(t_core *cr, t_wall *wall, int switchval, int pr2);
 
 #endif

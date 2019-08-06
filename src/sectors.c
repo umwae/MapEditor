@@ -33,6 +33,12 @@ static int				calc_angle(t_core *cr, t_wall *ref, t_coord *wp, int id, t_coord *
 		cr->idcurr = id;
 		cr->wpoint = cr->wpoint_tmp;
 	}
+	if (angle != angle)//Костыль, поправить расчеты и убрать
+		{
+			cr->angle_mem = 0;
+			cr->idcurr = id;
+			cr->wpoint = cr->wpoint_tmp;
+		}
 	if (cr->angle_mem == PI_CEIL)
 		return (0);
 	return (1);
@@ -66,7 +72,7 @@ static int	compare_walls(t_core *cr, t_wall *ref, t_wall *wall, t_coord *refpoin
 	(refpoint->y - refstart->y) * (wallpoint.x - refstart->x);
 	// (bx-ax)*(py-ay)-(by-ay)*(px-ax)
 	printf("side %f\n", d);
-	if ((d < 0 && cr->wside == 0) || (d > 0 && cr->wside == 1))
+	if ((d < 0 && cr->wside == 0) || (d > 0 && cr->wside == 1) || d == 0)
 	{
 		calc_angle(cr, ref, &wallpoint, wall->index, refpoint, refstart);
 	}

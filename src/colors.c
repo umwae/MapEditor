@@ -40,7 +40,7 @@ void			find_multi_sel(t_core *cr)
 void			apply_sector(t_core *cr, t_wall *wall, int pr1, int pr2)
 {
 	(void)pr1;
-	(void)pr1;
+	(void)pr2;
 	if (wall->color != SEL_SEC_COLOR)
 		return ;
 	wall->color = APP_SEC_COLOR;

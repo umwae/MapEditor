@@ -124,6 +124,7 @@ void				eraser(void *td, int x, int y)
 	{
 		if (((t_wall *)wall->next)->index == id)
 		{
+			remove_sectors(cr, id);
 			rm = wall->next;
 			wall->next = ((t_wall *)wall->next)->next;
 			free(rm);

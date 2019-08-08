@@ -15,7 +15,7 @@
 #include "stdlib.h"
 #include "math.h"
 
-void			iter_wall(t_core *cr, int pr1, int pr2, void (*f)(t_core *, t_wall *, int, int))
+void			iter_wall(t_core *cr, int pr1, int pr2, void (*f)(t_core *, t_wall *, int, int))//Переписать на void* типы
 {
 		t_wall		*wall;
 

@@ -15,6 +15,36 @@
 #include "stdlib.h"
 #include "math.h"
 
+static void			remove_sectors_search(t_core *cr, t_wall *wall, int id, int pr2)
+{
+	(void)pr2;
+	if (wall->index == id)
+	{
+		if (wall->sectors[0] >= 0)
+			cr->idsec.x = wall->sectors[0];
+		if (wall->sectors[1] >= 0)
+			cr->idsec.y = wall->sectors[1];
+	}
+}
+
+static void			remove_sectors_ag(t_core *cr, t_wall *wall, int id, int pr2)
+{
+	(void)pr2;
+	if (wall->sectors[0] == cr->idsec.x || wall->sectors[0] == cr->idsec.y)
+		wall->sectors[0] = -1;
+	if (wall->sectors[1] == cr->idsec.x || wall->sectors[0] == cr->idsec.y)
+		wall->sectors[1] = -1;
+}
+
+void			remove_sectors(t_core *cr, int id)
+{
+	cr->idsec.x = -2;
+	cr->idsec.y = -2;
+	iter_wall(cr, id, 0, &remove_sectors_search);
+	iter_wall(cr, id, 0, &remove_sectors_ag);
+	iter_wall(cr, 0, 0, &redraw_color);
+}
+
 static int				calc_angle(t_core *cr, t_wall *ref, t_coord *wp, int id, t_coord *refpoint, t_coord *refstart)
 {
 	float	c;

@@ -128,6 +128,7 @@ typedef struct		s_core
 	int							shift_button;
 	int							ctrl_button;
 	int							multi_sel;
+	t_coord					idsec;
 }									t_core;
 
 void							init(t_core		*cr);
@@ -174,5 +175,7 @@ void							draw_nodes(t_core *cr, t_wall *wall, int pr1, int pr2);
 void							find_multi_sel(t_core *cr);
 void							check_menu_events(t_core *cr, int x, int y);
 void							switch_isportal(t_core *cr, t_wall *wall, int switchval, int pr2);
+void							remove_sectors(t_core *cr, int id);
+void        	    save_map(t_core *cr);
 
 #endif

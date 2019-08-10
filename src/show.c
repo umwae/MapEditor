@@ -31,10 +31,10 @@ void					draw_nodes(t_core *cr, t_wall *wall, int pr1, int pr2)
 	xy.y = wall->p2.y - POINT_SIZE / 2;
 	draw_rectangle(cr, xy, ab, POINT_COLOR);
 //
-	// char *txt = malloc(sizeof(char) * 5);//Отображает номера стен, вызывает тормоза
-	// ft_strcpy(txt, ft_itoa(wall->index));
-	// mlx_string_put(cr->mlx, cr->win, min(wall->p2.x, wall->p1.x) + abs(wall->p2.x - wall->p1.x) / 2, \
-	// min(wall->p2.y, wall->p1.y) + abs(wall->p2.y - wall->p1.y) / 2, 0xffffff, txt);
+	char *txt = malloc(sizeof(char) * 5);//Отображает номера стен, вызывает тормоза
+	ft_strcpy(txt, ft_itoa(wall->index));
+	mlx_string_put(cr->mlx, cr->win, min(wall->p2.x, wall->p1.x) + abs(wall->p2.x - wall->p1.x) / 2, \
+	min(wall->p2.y, wall->p1.y) + abs(wall->p2.y - wall->p1.y) / 2, 0xffffff, txt);
 //
 // char *txt = malloc(sizeof(char) * 5);//Отображает номера секторов, вызывает тормоза
 // ft_strcpy(txt, ft_strjoin(ft_strjoin(ft_itoa(wall->sectors[0]), " "), ft_itoa(wall->sectors[1])));

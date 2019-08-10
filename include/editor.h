@@ -16,7 +16,7 @@
 # include "../libft/includes/get_next_line.h"
 # include "../minilibx_macos/mlx.h"
 
-# define WIN_WIDTH 1290
+# define WIN_WIDTH 1090
 # define WIN_HIGHT 900
 
 # define MAGNET_RADIUS 30
@@ -42,6 +42,9 @@
 # define MENU_XLEN 300
 # define MENU_YLEN 500
 # define CHECKBOX_SIZE 20
+
+# define ST_FLOOR_HIGHT 0
+# define ST_CEIL_HIGHT 75
 
 typedef struct		s_coord
 {
@@ -100,6 +103,7 @@ typedef struct		s_core
 	int							linesize;
 	//
 	t_wall					*wlist;
+	int							sectors[1000];
 	t_visual				vs;
 	t_elems					cmenu_elems;
 	int							lmb;//Left mouse button
@@ -176,6 +180,7 @@ void							find_multi_sel(t_core *cr);
 void							check_menu_events(t_core *cr, int x, int y);
 void							switch_isportal(t_core *cr, t_wall *wall, int switchval, int pr2);
 void							remove_sectors(t_core *cr, int id);
+void 							restore_sec_id(t_core *cr);
 void        	    save_map(t_core *cr);
 
 #endif

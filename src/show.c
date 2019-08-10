@@ -36,6 +36,10 @@ void					draw_nodes(t_core *cr, t_wall *wall, int pr1, int pr2)
 	// mlx_string_put(cr->mlx, cr->win, min(wall->p2.x, wall->p1.x) + abs(wall->p2.x - wall->p1.x) / 2, \
 	// min(wall->p2.y, wall->p1.y) + abs(wall->p2.y - wall->p1.y) / 2, 0xffffff, txt);
 //
+// char *txt = malloc(sizeof(char) * 5);//Отображает номера секторов, вызывает тормоза
+// ft_strcpy(txt, ft_strjoin(ft_strjoin(ft_itoa(wall->sectors[0]), " "), ft_itoa(wall->sectors[1])));
+// mlx_string_put(cr->mlx, cr->win, min(wall->p2.x, wall->p1.x) + abs(wall->p2.x - wall->p1.x) / 2, \
+// min(wall->p2.y, wall->p1.y) + abs(wall->p2.y - wall->p1.y) / 2, 0xffffff, txt);
 }
 
 void					straight_line(t_core *cr, int *x, int *y)

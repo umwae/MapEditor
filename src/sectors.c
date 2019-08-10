@@ -15,6 +15,62 @@
 #include "stdlib.h"
 #include "math.h"
 
+static			void	sec_id_replace(t_core *cr, t_wall *wall, int idold, int idnew)
+{
+	if (wall->sectors[0] == idold)
+		wall->sectors[0] = idnew;
+	else if (wall->sectors[1] == idold)
+		wall->sectors[1] = idnew;
+}
+
+static			int	does_sec_id_exist(t_core *cr, int idref)
+{
+	t_wall	*wall;
+
+	wall = cr->wlist;
+	while (wall)
+	{
+		if (wall->sectors[0] == idref || wall->sectors[1] == idref)
+		{
+			// printf("sec id %d exists\n", idref);
+			return (1);
+		}
+		wall = wall->next;
+	}
+	// printf("sec id %d does NOT exist\n", idref);
+	return (0);
+}
+
+static			void	get_last_sec(t_core *cr, t_wall *wall, int idref, int pr2)
+{
+	(void)pr2;
+	if (wall->sectors[0] > idref)
+		cr->idcurr = wall->sectors[0];
+	else if (wall->sectors[1] > idref)
+		cr->idcurr = wall->sectors[1];
+}
+
+void 						restore_sec_id(t_core *cr)
+{
+	int				i;
+
+	i = 0;
+	while (cr->idcurr != -1)
+	{
+		cr->idcurr = -1;
+		if (does_sec_id_exist(cr, i) == 0)
+		{
+			iter_wall(cr, i, -1, &get_last_sec);
+			// printf("last sec is %d\n", cr->idcurr);
+			// printf("replacing %d with %d\n", cr->idcurr, i);
+			if (cr->idcurr != -1)
+			iter_wall(cr, cr->idcurr, i, &sec_id_replace);
+		}
+		i++;
+	}
+	cr->sec_num = i;
+}
+
 static void			remove_sectors_search(t_core *cr, t_wall *wall, int id, int pr2)
 {
 	(void)pr2;
@@ -56,7 +112,7 @@ static int				calc_angle(t_core *cr, t_wall *ref, t_coord *wp, int id, t_coord *
 	a = calc_dist(refstart->x, refstart->y, wp->x, wp->y);
 	b = calc_dist(refpoint->x, refpoint->y, wp->x, wp->y);
 	angle = acos((b * b + c * c - a * a) / (2 * b * c));
-	printf("angle %f\n", angle);
+	// printf("angle %f\n", angle);
 	if (angle < cr->angle_mem)
 	{
 		cr->angle_mem = angle;
@@ -79,7 +135,7 @@ static int	compare_walls(t_core *cr, t_wall *ref, t_wall *wall, t_coord *refpoin
 	t_coord	wallpoint;
 	float		d;
 
-	printf("comparing ID%d and ID%d\n", ref->index, wall->index);
+	// printf("comparing ID%d and ID%d\n", ref->index, wall->index);
 	if (wall->index == ref->index)
 		return (0);
 	if ((wall->p1.x == refpoint->x) && (wall->p1.y == refpoint->y))
@@ -87,13 +143,13 @@ static int	compare_walls(t_core *cr, t_wall *ref, t_wall *wall, t_coord *refpoin
 		wallpoint.x = wall->p2.x;
 		wallpoint.y = wall->p2.y;
 		cr->wpoint_tmp = 2;
-		printf("connected with P1\n");
+		// printf("connected with P1\n");
 	}
 	else if ((wall->p2.x == refpoint->x) && (wall->p2.y == refpoint->y))
 	{
 		wallpoint.x = wall->p1.x;
 		wallpoint.y = wall->p1.y;
-		printf("connected with P2\n");
+		// printf("connected with P2\n");
 		cr->wpoint_tmp = 1;
 	}
 	else
@@ -101,7 +157,7 @@ static int	compare_walls(t_core *cr, t_wall *ref, t_wall *wall, t_coord *refpoin
 	d = (refpoint->x - refstart->x) * (wallpoint.y - refstart->y) - \
 	(refpoint->y - refstart->y) * (wallpoint.x - refstart->x);
 	// (bx-ax)*(py-ay)-(by-ay)*(px-ax)
-	printf("side %f\n", d);
+	// printf("side %f\n", d);
 	if ((d < 0 && cr->wside == 0) || (d > 0 && cr->wside == 1) || d == 0)
 	{
 		calc_angle(cr, ref, &wallpoint, wall->index, refpoint, refstart);
@@ -119,15 +175,14 @@ void				halfplane(t_core *cr, t_wall *ref)
 	cr->idcurr = 0;
 	if (ref->color == SEL_SEC_COLOR)
 		return ;
-	cr->sec_num++;
-	printf("=============\nclickside: %d || ", cr->wside);
+	// printf("=============\nclickside: %d || ", cr->wside);
 	if (cr->wpoint == 2)
 	{
 		refpoint.x = ref->p2.x;
 		refpoint.y = ref->p2.y;
 		refstart.x = ref->p1.x;
 		refstart.y = ref->p1.y;
-		printf("refpoint: 2\n");
+		// printf("refpoint: 2\n");
 	}
 	else
 	{
@@ -135,7 +190,7 @@ void				halfplane(t_core *cr, t_wall *ref)
 		refpoint.y = ref->p1.y;
 		refstart.x = ref->p2.x;
 		refstart.y = ref->p2.y;
-		printf("refpoint: 1\n");
+		// printf("refpoint: 1\n");
 	}
 	cr->wside = (refpoint.x - refstart.x) * (cr->click.y - refstart.y) - \
 	(refpoint.y - refstart.y) * (cr->click.x - refstart.x) > 0 ? 1 : 0;

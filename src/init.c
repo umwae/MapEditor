@@ -28,6 +28,7 @@ void				init(t_core		*cr)
 	cr->messages = (t_list **)malloc(sizeof(t_list **));
 	*(cr->messages) = NULL;
 	cr->highlight = 1;
+	cr->sec_num = 0;
 	img_new(cr);
 	redraw(cr);
 }

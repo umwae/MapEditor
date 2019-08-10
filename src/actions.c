@@ -35,8 +35,11 @@ int			key_action(int keycode, t_core *cr)
 		exit(0);
 	else if (keycode == 16)
 	{
-		iter_wall(cr, 0, 0, &apply_sector);
-		iter_wall(cr, 0, 0, &redraw_color);
+		printf("UUU%d\n", cr->sec_num);
+		iter_wall(cr, -1, -1, &apply_sector);
+		cr->sec_num++;
+		printf("AFF%d\n", cr->sec_num);
+		iter_wall(cr, -1, -1, &redraw_color);
 	}
 	else if (keycode == 257)
 		cr->shift_button = 1;

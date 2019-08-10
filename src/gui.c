@@ -39,7 +39,7 @@ static void	find_sector(void *td, int x, int y)
 		cr->click.x = x;
 		cr->click.y = y;
 		cr->wpoint = 2;
-		printf("---------------------SEL SEC CLICK---------------------\n");
+		// printf("---------------------SEL SEC CLICK---------------------\n");
 		halfplane(cr, find_by_index(cr, wall_id));
 		//
 		if (!find_msg_by_id(cr, 0))
@@ -76,6 +76,8 @@ void				draw_wall(void *td, int x, int y)
 	cr->vs.mem_x = cr->vs.x0;
 	cr->vs.mem_y = cr->vs.y0;
 }
+
+
 
 static			void restore_id(t_core *cr)
 {
@@ -118,6 +120,7 @@ void				eraser(void *td, int x, int y)
 		cr->wlist = wall->next;
 		free(rm);
 		restore_id(cr);
+		restore_sec_id(cr);
 		return ;
 	}
 	while (wall->next)
@@ -129,6 +132,7 @@ void				eraser(void *td, int x, int y)
 			wall->next = ((t_wall *)wall->next)->next;
 			free(rm);
 			restore_id(cr);
+			restore_sec_id(cr);
 			return ;
 		}
 		wall = wall->next;

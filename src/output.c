@@ -56,7 +56,7 @@ static void			find_any_wall_in_sec(t_core *cr, t_wall *wall, int refid, int pr2)
 static void			record_sectors(t_core *cr, char *line, int fd)
 {
 	char		*tmp;
-	char		*tmp2;
+	char		*conn;
 	int			i;
 	t_coord	cw;
 	int			curr;
@@ -64,7 +64,7 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 
 	i = 0;
 	tmp = NULL;
-	tmp2 = ft_strnew(100);
+	conn = ft_strnew(100);
 
 	while (i < cr->sec_num)
 	{
@@ -86,47 +86,51 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 				printf("IDCURR %d CURR %d\n", cr->idcurr, curr);
 				ft_strcpy(line, ft_itoa(curr));
 		    ft_putstr_fd(line, fd);
-				if (curr == cr->idcurr)
-				{
-					tmp2 = ft_strcat(tmp2, " -1");
-					break ;
-				}
-				ft_strcpy(line, " ");
-				ft_putstr_fd(line, fd);
 				if (find_by_index(cr, curr)->isportal == 1)
 				{
 					printf("%d IS PORTAL\n", curr);
 					if (find_by_index(cr, curr)->sectors[0] == i)
 					{
 						printf("SEC No0 IS CURR SEC\n");
-						tmp2 = ft_strcat(tmp2, " ");
-						tmp2 = ft_strcat(tmp2, ft_itoa(find_by_index(cr, curr)->sectors[1]));
+						// conn = ft_strcat(conn, " ");
+						conn = ft_strcat(conn, ft_itoa(find_by_index(cr, curr)->sectors[1]));
 					}
 					else if (find_by_index(cr, curr)->sectors[1] == i)
 					{
 						printf("SEC No1 IS CURR SEC\n");
-						tmp2 = ft_strcat(tmp2, " ");
-						tmp2 = ft_strcat(tmp2, ft_itoa(find_by_index(cr, curr)->sectors[0]));
+						// conn = ft_strcat(conn, " ");
+						conn = ft_strcat(conn, ft_itoa(find_by_index(cr, curr)->sectors[0]));
 					}
 				}
 				else
 				{
 					printf("%d IS NOT A PORTAL\n", curr);
-					tmp2 = ft_strcat(tmp2, " -1");
+					conn = ft_strcat(conn, "-1");
+				}
+				if (curr == cr->idcurr)
+				{
+					// conn = ft_strcat(conn, " -1");
+					break ;
+				}
+				else
+				{
+					ft_strcpy(line, " ");
+					conn = ft_strcat(conn, " ");
+					ft_putstr_fd(line, fd);
 				}
 			}
 		}
 		ft_strcpy(line, "|");
 		ft_putstr_fd(line, fd);
-		ft_putstr_fd(tmp2, fd);
-		ft_strclr(tmp2);
+		ft_putstr_fd(conn, fd);
+		ft_strclr(conn);
 		ft_strcpy(line, "|");
 		ft_putstr_fd(line, fd);
 		i++;
 	}
 		ft_strcpy(line, "\n");
 		ft_putstr_fd(line, fd);
-		free(tmp2);
+		free(conn);
 }
 
 static void			record_walls(t_core *cr, char *line, int fd)

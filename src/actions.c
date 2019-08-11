@@ -108,11 +108,12 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 		if (!choose_instrument(cr, x, y))
 		{
 			// printf("NOT AN INSTRUMENT\n");
-			(*cr->inst_func)(cr, x, y);
 			if (cr->menu_is_open == 1)
 			{
 				check_menu_events(cr, x, y);
 			}
+			else
+				(*cr->inst_func)(cr, x, y);
 		}
 	}
 	else if (button == 2)

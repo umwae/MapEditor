@@ -16,6 +16,26 @@
 #include "stdlib.h"
 #include "math.h"
 
+static int			find_vt_id(t_core *cr, int x, int y)
+{
+	int		fd;
+	char	*line;
+	int		i;
+
+	fd = open("./maps/testmap", O_RDONLY);
+	i = 0;
+	while (get_next_line(fd, &line) > 0)
+	{
+		if (line[0] != 'v')
+			return (0);
+		if (ft_atoi(line + 2) == x && \
+		ft_atoi(line + find_rep_symb(line, ' ', 2) + 1) == y)
+			return (i);
+		i++;
+	}
+	return (0);
+}
+
 static int			find_next_wall(t_core *cr, t_coord *cw, int prev, int secid)
 {
 	t_wall	*wall;
@@ -84,7 +104,8 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 			while ((curr = find_next_wall(cr, &cw, curr, i)) >= 0)
 			{
 				printf("IDCURR %d CURR %d\n", cr->idcurr, curr);
-				ft_strcpy(line, ft_itoa(curr));
+				// ft_strcpy(line, ft_itoa(curr));
+				ft_strcpy(line, ft_itoa(find_vt_id(cr, cw.x, cw.y)));
 		    ft_putstr_fd(line, fd);
 				if (find_by_index(cr, curr)->isportal == 1)
 				{
@@ -92,13 +113,11 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 					if (find_by_index(cr, curr)->sectors[0] == i)
 					{
 						printf("SEC No0 IS CURR SEC\n");
-						// conn = ft_strcat(conn, " ");
 						conn = ft_strcat(conn, ft_itoa(find_by_index(cr, curr)->sectors[1]));
 					}
 					else if (find_by_index(cr, curr)->sectors[1] == i)
 					{
 						printf("SEC No1 IS CURR SEC\n");
-						// conn = ft_strcat(conn, " ");
 						conn = ft_strcat(conn, ft_itoa(find_by_index(cr, curr)->sectors[0]));
 					}
 				}
@@ -133,6 +152,23 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 		free(conn);
 }
 
+static int			check_vt_dups(t_core *cr, int	x, int y)
+{
+	int		fd;
+	char	*line;
+
+	fd = open("./maps/testmap", O_RDONLY);
+	while (get_next_line(fd, &line) > 0)
+	{
+		printf("checking v dups: %d %d and %d %d\n", ft_atoi(line + 2), \
+		ft_atoi(line + find_rep_symb(line, ' ', 2) + 1), x, y);
+		if (ft_atoi(line + 2) == x && \
+		ft_atoi(line + find_rep_symb(line, ' ', 2) + 1) == y)
+			return (1);
+	}
+	return (0);
+}
+
 static void			record_walls(t_core *cr, char *line, int fd)
 {
 	t_wall	*wall;
@@ -142,27 +178,32 @@ static void			record_walls(t_core *cr, char *line, int fd)
 		return;
 	while (wall)
 	{
-    ft_strcpy(line, "v ");
-    ft_putstr_fd(line, fd);
-		ft_strcpy(line, ft_itoa(wall->p1.x));
-    ft_putstr_fd(line, fd);
-    ft_strcpy(line, " ");
-    ft_putstr_fd(line, fd);
-    ft_strcpy(line, ft_itoa(wall->p1.y));
-    ft_putstr_fd(line, fd);
-    ft_strcpy(line, " \n");
-    ft_putstr_fd(line, fd);
-    //
-    ft_strcpy(line, "v ");
-    ft_putstr_fd(line, fd);
-    ft_strcpy(line, ft_itoa(wall->p2.x));
-    ft_putstr_fd(line, fd);
-    ft_strcpy(line, " ");
-    ft_putstr_fd(line, fd);
-    ft_strcpy(line, ft_itoa(wall->p2.y));
-    ft_putstr_fd(line, fd);
-    ft_strcpy(line, " \n");
-    ft_putstr_fd(line, fd);
+		if (check_vt_dups(cr, wall->p1.x, wall->p1.y) == 0)
+		{
+			ft_strcpy(line, "v ");
+	    ft_putstr_fd(line, fd);
+			ft_strcpy(line, ft_itoa(wall->p1.x));
+			ft_putstr_fd(line, fd);
+	    ft_strcpy(line, " ");
+	    ft_putstr_fd(line, fd);
+			ft_strcpy(line, ft_itoa(wall->p1.y));
+	    ft_putstr_fd(line, fd);
+	    ft_strcpy(line, " \n");
+	    ft_putstr_fd(line, fd);
+		}
+		if (check_vt_dups(cr, wall->p2.x, wall->p2.y) == 0)
+		{
+			ft_strcpy(line, "v ");
+	    ft_putstr_fd(line, fd);
+	    ft_strcpy(line, ft_itoa(wall->p2.x));
+	    ft_putstr_fd(line, fd);
+	    ft_strcpy(line, " ");
+	    ft_putstr_fd(line, fd);
+	    ft_strcpy(line, ft_itoa(wall->p2.y));
+	    ft_putstr_fd(line, fd);
+	    ft_strcpy(line, " \n");
+	    ft_putstr_fd(line, fd);
+		}
 		wall = wall->next;
 	}
 }
@@ -172,7 +213,7 @@ void            save_map(t_core *cr)
   int   fd;
   char  *line;
 
-  line = (char *)malloc(sizeof(char) * ft_strlen("v 0000 0000") + 1);
+  line = (char *)malloc(sizeof(char) * ft_strlen("v 00000 00000") + 1);
 	fd = open("./maps/testmap", O_WRONLY | O_CREAT | O_TRUNC, 0777);
   record_walls(cr, line, fd);
 	record_sectors(cr, line, fd);

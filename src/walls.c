@@ -15,6 +15,16 @@
 #include "stdlib.h"
 #include "math.h"
 
+t_wall			*get_last_wall(t_core *cr)
+{
+	t_wall		*wall;
+
+	wall = cr->wlist;
+	while (wall->next)
+		wall = wall->next;
+	return (wall);
+}
+
 void			iter_wall(t_core *cr, int pr1, int pr2, void (*f)(t_core *, t_wall *, int, int))//Переписать на void* типы
 {
 		t_wall		*wall;

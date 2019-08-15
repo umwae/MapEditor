@@ -96,15 +96,11 @@ static			void restore_id(t_core *cr)
 	}
 }
 
-void				eraser(void *td, int x, int y)
+void						erase_by_id(t_core	*cr, int id)
 {
-	t_core	*cr;
-	int			id;
 	t_wall	*wall;
 	t_wall	*rm;
 
-	cr = td;
-	id = select_wall(cr, x, y);
 	wall = cr->wlist;
 	if (!wall)
 		return ;
@@ -138,6 +134,16 @@ void				eraser(void *td, int x, int y)
 		wall = wall->next;
 	}
 	redraw(cr);
+}
+
+void				eraser(void *td, int x, int y)
+{
+	t_core	*cr;
+	int			id;
+
+	cr = td;
+	id = select_wall(cr, x, y);
+	erase_by_id(cr, id);
 }
 
 int					choose_instrument(t_core *cr, int x, int y)

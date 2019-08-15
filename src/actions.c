@@ -45,6 +45,8 @@ int			key_action(int keycode, t_core *cr)
 		cr->ctrl_button = 1;
 	else if (keycode == 1)
 		save_map(cr);
+	else if (keycode == 37)
+		load_map(cr);
 	redraw(cr);
 	return (0);
 }

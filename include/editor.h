@@ -133,6 +133,8 @@ typedef struct		s_core
 	int							ctrl_button;
 	int							multi_sel;
 	t_coord					idsec;
+	t_coord					s[2];
+	int							mpsw;
 }									t_core;
 
 void							init(t_core		*cr);
@@ -182,5 +184,9 @@ void							switch_isportal(t_core *cr, t_wall *wall, int switchval, int pr2);
 void							remove_sectors(t_core *cr, int id);
 void 							restore_sec_id(t_core *cr);
 void        	    save_map(t_core *cr);
+void							load_map(t_core *cr);
+void							erase_by_id(t_core	*cr, int id);
+int    						find_rep_symb(char *line, char symb, int num);
+t_wall						*get_last_wall(t_core *cr);
 
 #endif

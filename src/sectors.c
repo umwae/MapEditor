@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/07/31 19:32:22 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/08/19 20:24:55 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "math.h"
+
+void	count_sectors(t_core *cr, t_wall *wall, int pr1, int pr2)
+{
+	(void)pr1;
+	(void)pr2;
+	if (wall->sectors[0] >= 0 && wall->sectors[0] > cr->sec_num - 1)
+		cr->sec_num = wall->sectors[0] + 1;
+	else if (wall->sectors[1] >= 0 && wall->sectors[1] > cr->sec_num - 1)
+		cr->sec_num = wall->sectors[1] + 1;
+}
 
 static			void	sec_id_replace(t_core *cr, t_wall *wall, int idold, int idnew)
 {

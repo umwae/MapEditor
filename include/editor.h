@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:16 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/07/31 19:19:52 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/08/19 19:08:13 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,5 +188,7 @@ void							load_map(t_core *cr);
 void							erase_by_id(t_core	*cr, int id);
 int    						find_rep_symb(char *line, char symb, int num);
 t_wall						*get_last_wall(t_core *cr);
+int								find_vt_id(t_core *cr, int x, int y);
+void							count_sectors(t_core *cr, t_wall *wall, int pr1, int pr2);
 
 #endif

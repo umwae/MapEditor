@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   walls.c                                            :+:      :+:    :+:   */
+/*   output.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/07/26 19:43:26 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/08/19 19:01:12 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "stdlib.h"
 #include "math.h"
 
-static int			find_vt_id(t_core *cr, int x, int y)
+int			find_vt_id(t_core *cr, int x, int y)
 {
 	int		fd;
 	char	*line;
@@ -85,8 +85,9 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 	i = 0;
 	tmp = NULL;
 	conn = ft_strnew(100);
-
-	while (i < cr->sec_num)
+	iter_wall(cr, 0, -1, &find_any_wall_in_sec);
+	curr = cr->idcurr;
+	while (i < cr->sec_num && cr->idcurr != -1)
 	{
 		ft_putstr_fd(tmp = ft_strjoin("\ns|", ft_itoa(ST_FLOOR_HIGHT)), fd);
 		free(tmp);
@@ -129,6 +130,7 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 				if (curr == cr->idcurr)
 				{
 					// conn = ft_strcat(conn, " -1");
+					// i++;
 					break ;
 				}
 				else

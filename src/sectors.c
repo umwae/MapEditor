@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/08/19 20:24:55 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/08/31 16:07:39 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,8 +202,8 @@ void				halfplane(t_core *cr, t_wall *ref)
 		refstart.y = ref->p2.y;
 		// printf("refpoint: 1\n");
 	}
-	cr->wside = (refpoint.x - refstart.x) * (cr->click.y - refstart.y) - \
-	(refpoint.y - refstart.y) * (cr->click.x - refstart.x) > 0 ? 1 : 0;
+	cr->wside = (refpoint.x - refstart.x) * (cr->click.y - (refstart.y + cr->offs.y)) - \
+	(refpoint.y - refstart.y) * (cr->click.x - (refstart.x + cr->offs.x)) > 0 ? 1 : 0;
 	//	(bx-ax)*(py-ay)-(by-ay)*(px-ax)
 	wall = cr->wlist;
 	if (!wall || !ref)

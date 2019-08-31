@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:16 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/08/19 19:08:13 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/08/31 18:34:38 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include "../libft/includes/get_next_line.h"
 # include "../minilibx_macos/mlx.h"
 
-# define WIN_WIDTH 1090
-# define WIN_HIGHT 900
+# define WIN_WIDTH 1500
+# define WIN_HIGHT 1300
 
 # define MAGNET_RADIUS 30
 # define SELECT_RADIUS 60
@@ -45,6 +45,8 @@
 
 # define ST_FLOOR_HIGHT 0
 # define ST_CEIL_HIGHT 75
+
+# define COMPRESSING 30
 
 typedef struct		s_coord
 {
@@ -135,6 +137,13 @@ typedef struct		s_core
 	t_coord					idsec;
 	t_coord					s[2];
 	int							mpsw;
+	//
+	t_coord					offs;
+	t_coord					msmem;
+	float					zoom;
+	int						dragl;
+	int						test;
+
 }									t_core;
 
 void							init(t_core		*cr);
@@ -155,7 +164,7 @@ void							magnet(t_core *cr, int *x, int *y, int check_start);
 float							calc_dist(int x0, int y0, int x1, int y1);
 int								select_wall(t_core *cr, int x, int y);
 t_wall						*find_by_index(t_core *cr, int index);
-int								is_near_wall(t_wall *wall, int x, int y);
+int								is_near_wall(t_core *cr, t_wall *wall, int x, int y);
 int				 				min(int a, int b);
 int 							max(int a, int b);
 void							draw_rectangle(t_core *cr, t_coord xy, t_coord ab, int color);
@@ -190,5 +199,6 @@ int    						find_rep_symb(char *line, char symb, int num);
 t_wall						*get_last_wall(t_core *cr);
 int								find_vt_id(t_core *cr, int x, int y);
 void							count_sectors(t_core *cr, t_wall *wall, int pr1, int pr2);
+int								check_bounds(t_core *cr, int x, int y);
 
 #endif

@@ -68,6 +68,8 @@ void		img_pxl(void *td, int x, int y, int color)
 	char	*p;
 
 	cr = (t_core *)(td);
+	x += cr->offs.x;
+	y += cr->offs.y;
 	if (x >= WIN_WIDTH || y >= WIN_HIGHT || \
 		x < 0 || y < 0)
 	{

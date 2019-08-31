@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   walls.c                                            :+:      :+:    :+:   */
+/*   selection.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/07/26 19:43:26 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/08/31 18:02:00 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 #include "stdlib.h"
 #include "math.h"
 
-int					is_near_wall(t_wall *wall, int x, int y)
+int					is_near_wall(t_core *cr, t_wall *wall, int x, int y)
 {
-	if (x < min(wall->p1.x, wall->p2.x) - SELECT_PADDING || \
-	x > max(wall->p1.x, wall->p2.x) + SELECT_PADDING || \
-	y < min(wall->p1.y, wall->p2.y) - SELECT_PADDING || \
-	y > max(wall->p1.y, wall->p2.y) + SELECT_PADDING)
+	if (x < min(wall->p1.x + cr->offs.x, wall->p2.x + cr->offs.x) - SELECT_PADDING || \
+	x > max(wall->p1.x + cr->offs.x, wall->p2.x + cr->offs.x) + SELECT_PADDING || \
+	y < min(wall->p1.y + cr->offs.y, wall->p2.y + cr->offs.y) - SELECT_PADDING || \
+	y > max(wall->p1.y + cr->offs.y, wall->p2.y + cr->offs.y) + SELECT_PADDING)
 		return (0);
 	return (1);
 }
@@ -41,10 +41,10 @@ int					select_wall(t_core *cr, int x, int y)
 		return (-1);
 	while (wall)
 	{
-		if (is_near_wall(wall, x, y))
+		if (is_near_wall(cr, wall, x, y))
 			{
-				a = calc_dist(x, y, wall->p1.x, wall->p1.y);
-				b = calc_dist(x, y, wall->p2.x, wall->p2.y);
+				a = calc_dist(x, y, wall->p1.x + cr->offs.x, wall->p1.y + cr->offs.y);
+				b = calc_dist(x, y, wall->p2.x + cr->offs.x, wall->p2.y + cr->offs.y);
 				p = (a + b + wall->len) / 2;
 				dist = 2 * sqrt(p * (p - a) * (p - b) * (p - wall->len)) / wall->len;
 				if (dist <= min_dist)

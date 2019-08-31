@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:20 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/07/31 17:58:43 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/08/31 17:55:51 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@ void				init(t_core		*cr)
 	*(cr->messages) = NULL;
 	cr->highlight = 1;
 	cr->sec_num = 0;
+	cr->mpsw = 0;
+	cr->offs.x = WIN_WIDTH / 2;
+	cr->offs.y = WIN_HIGHT / 2;
+	cr->test = -1;
+	cr->zoom = 1;
+	cr->ctrl_button = 0;
 	img_new(cr);
 	redraw(cr);
 }

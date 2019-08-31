@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/08/19 18:01:55 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/08/31 18:42:00 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,28 +24,28 @@ void					draw_nodes(t_core *cr, t_wall *wall, int pr1, int pr2)
 	(void)pr1;
 	ab.x = POINT_SIZE;
 	ab.y = POINT_SIZE;
-	xy.x = wall->p1.x - POINT_SIZE / 2;
-	xy.y = wall->p1.y - POINT_SIZE / 2;
+	xy.x = wall->p1.x - POINT_SIZE / 2 + cr->offs.x;
+	xy.y = wall->p1.y - POINT_SIZE / 2 + cr->offs.y;
 	draw_rectangle(cr, xy, ab, POINT_COLOR);
-	xy.x = wall->p2.x - POINT_SIZE / 2;
-	xy.y = wall->p2.y - POINT_SIZE / 2;
+	xy.x = wall->p2.x - POINT_SIZE / 2 + cr->offs.x;
+	xy.y = wall->p2.y - POINT_SIZE / 2 + cr->offs.y;
 	draw_rectangle(cr, xy, ab, POINT_COLOR);
 //
-	// char *txt = malloc(sizeof(char) * 5);//Отображает номера стен, вызывает тормоза
-	// ft_strcpy(txt, ft_itoa(wall->index));
+	char *txt = malloc(sizeof(char) * 5);//Отображает номера стен, вызывает тормоза
+	ft_strcpy(txt, ft_itoa(wall->index));
+	mlx_string_put(cr->mlx, cr->win, min(wall->p2.x + cr->offs.x, wall->p1.x + cr->offs.x) + abs(wall->p2.x - wall->p1.x) / 2, \
+	min(wall->p2.y + cr->offs.y, wall->p1.y + cr->offs.y) + abs(wall->p2.y - wall->p1.y) / 2, 0xffffff, txt);
+//
+	// char *txt = malloc(sizeof(char) * 5);//Отображает номера секторов, вызывает тормоза
+	// ft_strcpy(txt, ft_strjoin(ft_strjoin(ft_itoa(wall->sectors[0]), " "), ft_itoa(wall->sectors[1])));
 	// mlx_string_put(cr->mlx, cr->win, min(wall->p2.x, wall->p1.x) + abs(wall->p2.x - wall->p1.x) / 2, \
 	// min(wall->p2.y, wall->p1.y) + abs(wall->p2.y - wall->p1.y) / 2, 0xffffff, txt);
-//
-	char *txt = malloc(sizeof(char) * 5);//Отображает номера секторов, вызывает тормоза
-	ft_strcpy(txt, ft_strjoin(ft_strjoin(ft_itoa(wall->sectors[0]), " "), ft_itoa(wall->sectors[1])));
-	mlx_string_put(cr->mlx, cr->win, min(wall->p2.x, wall->p1.x) + abs(wall->p2.x - wall->p1.x) / 2, \
-	min(wall->p2.y, wall->p1.y) + abs(wall->p2.y - wall->p1.y) / 2, 0xffffff, txt);
 
 	// char *txt = malloc(sizeof(char) * 5);//Отображает номера точек друг поверх друга
 	ft_strcpy(txt, ft_itoa(find_vt_id(cr, wall->p1.x, wall->p1.y)));
-	mlx_string_put(cr->mlx, cr->win, wall->p1.x, wall->p1.y, 0xffffff, txt);
+	mlx_string_put(cr->mlx, cr->win, wall->p1.x + cr->offs.x, wall->p1.y + cr->offs.y, 0xffffff, txt);
 	ft_strcpy(txt, ft_itoa(find_vt_id(cr, wall->p2.x, wall->p2.y)));
-	mlx_string_put(cr->mlx, cr->win, wall->p2.x, wall->p2.y, 0xffffff, txt);
+	mlx_string_put(cr->mlx, cr->win, wall->p2.x + cr->offs.x, wall->p2.y + cr->offs.y, 0xffffff, txt);
 }
 
 void					straight_line(t_core *cr, int *x, int *y)
@@ -86,13 +86,13 @@ void			bresenham(t_core *cr, void (*print_func)(void *, int, int, int))
 	int	e2;
 
 	copy_vals(cr);
-	if (cr->vs.x1 <= 0 || cr->vs.x1 > WIN_WIDTH || cr->vs.y1 <= 0 || cr->vs.y1 > WIN_HIGHT ||
-	cr->vs.x0_copy <= 0 || cr->vs.x0_copy > WIN_WIDTH || cr->vs.y0_copy <= 0 || cr->vs.y0_copy > WIN_HIGHT)
-	{
-		printf("??? %d %d %d %d\n", cr->vs.x0_copy, cr->vs.y0_copy, cr->vs.x1, cr->vs.y1);
-	fflush(stdout);
-	return ;
-	}
+	// if (cr->vs.x1 <= 0 || cr->vs.x1 > WIN_WIDTH || cr->vs.y1 <= 0 || cr->vs.y1 > WIN_HIGHT ||
+	// cr->vs.x0_copy <= 0 || cr->vs.x0_copy > WIN_WIDTH || cr->vs.y0_copy <= 0 || cr->vs.y0_copy > WIN_HIGHT)
+	// {
+	// 	printf("??? %d %d %d %d\n", cr->vs.x0_copy, cr->vs.y0_copy, cr->vs.x1, cr->vs.y1);
+	// fflush(stdout);
+	// return ;
+	// }
 	// printf("%d %d : %d %d\n", cr->vs.x0_copy, cr->vs.y0_copy, cr->vs.x1, cr->vs.y1);
 	cr->vs.dx = abs(cr->vs.x1 - cr->vs.x0_copy);
 	cr->vs.dy = abs(cr->vs.y1 - cr->vs.y0_copy);

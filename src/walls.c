@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/08/19 18:36:24 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/08/31 13:48:53 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,19 +65,19 @@ void					magnet(t_core *cr, int *x, int *y, int check_start)//How do they work??
 		return ;
 	while (wall)
 	{
-		if ((dist = calc_dist(*x, *y, wall->p1.x, wall->p1.y)) <= min_dist)
+		if ((dist = calc_dist(*x + cr->offs.x, *y + cr->offs.y, wall->p1.x + cr->offs.x * 2, wall->p1.y + cr->offs.y * 2)) <= min_dist)
 		{
-			if (((wall->p1.x == cr->vs.mem_x && wall->p1.y == cr->vs.mem_y) || \
-			(wall->p2.x == cr->vs.mem_x && wall->p2.y == cr->vs.mem_y)) && check_start == 1)
+			if (((wall->p1.x + cr->offs.x == cr->vs.mem_x && wall->p1.y + cr->offs.y == cr->vs.mem_y) || \
+			(wall->p2.x + cr->offs.x == cr->vs.mem_x && wall->p2.y + cr->offs.y == cr->vs.mem_y)) && check_start == 1)
 				return ;
 			min_dist = dist;
 			closest_x = wall->p1.x;
 			closest_y = wall->p1.y;
 		}
-		if ((dist = calc_dist(*x, *y, wall->p2.x, wall->p2.y)) <= min_dist)
+		if ((dist = calc_dist(*x + cr->offs.x, *y + cr->offs.y, wall->p2.x + cr->offs.x * 2, wall->p2.y + cr->offs.y * 2)) <= min_dist)
 		{
-			if (((wall->p1.x == cr->vs.mem_x && wall->p1.y == cr->vs.mem_y) || \
-			(wall->p2.x == cr->vs.mem_x && wall->p2.y == cr->vs.mem_y)) && check_start == 1)
+			if (((wall->p1.x + cr->offs.x == cr->vs.mem_x && wall->p1.y + cr->offs.y == cr->vs.mem_y) || \
+			(wall->p2.x + cr->offs.x  == cr->vs.mem_x && wall->p2.y + cr->offs.y == cr->vs.mem_y)) && check_start == 1)
 				return ;
 			min_dist = dist;
 			closest_x = wall->p2.x;
@@ -87,8 +87,8 @@ void					magnet(t_core *cr, int *x, int *y, int check_start)//How do they work??
 	}
 	if (min_dist == MAGNET_RADIUS)
 		return ;
-	*x = closest_x;
-	*y = closest_y;
+	*x = closest_x + cr->offs.x;
+	*y = closest_y + cr->offs.y;
 }
 
 void					add_wall(t_core *cr)
@@ -127,6 +127,7 @@ void					add_wall(t_core *cr)
 	wall->len = calc_dist(wall->p1.x, wall->p1.y, wall->p2.x, wall->p2.y);
 	wall->sectors[0] = -1;
 	wall->sectors[1] = -1;
-	wall->isportal = 0;
+	wall->isportal = cr->mpsw;
+	cr->mpsw = 0;
 	iter_wall(cr, 0, 0, &redraw_color);
 }

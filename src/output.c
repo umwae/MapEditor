@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/08/19 19:01:12 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/08/31 18:20:24 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 	char		*conn;
 	int			i;
 	t_coord	cw;
+	t_coord	cwold;
 	int			curr;
 
 
@@ -102,12 +103,17 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 		{
 			cw.x = find_by_index(cr, cr->idcurr)->p1.x;
 			cw.y = find_by_index(cr, cr->idcurr)->p1.y;
+			cwold.x = cw.x;
+			cwold.y = cw.y;
+			printf("New sector. cw.x: %d, cw.y: %d\n", cw.x, cw.y);
 			while ((curr = find_next_wall(cr, &cw, curr, i)) >= 0)
 			{
 				printf("IDCURR %d CURR %d\n", cr->idcurr, curr);
 				// ft_strcpy(line, ft_itoa(curr));
-				ft_strcpy(line, ft_itoa(find_vt_id(cr, cw.x, cw.y)));
+				printf("cw.x: %d, cw.y: %d\n", cw.x, cw.y);
+				ft_strcpy(line, ft_itoa(find_vt_id(cr, cwold.x, cwold.y)));
 		    ft_putstr_fd(line, fd);
+				printf("CHECKING FOR PORTALS %d\n", curr);
 				if (find_by_index(cr, curr)->isportal == 1)
 				{
 					printf("%d IS PORTAL\n", curr);
@@ -139,6 +145,8 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 					conn = ft_strcat(conn, " ");
 					ft_putstr_fd(line, fd);
 				}
+				cwold.x = cw.x;
+				cwold.y = cw.y;
 			}
 		}
 		ft_strcpy(line, "|");
@@ -162,7 +170,7 @@ static int			check_vt_dups(t_core *cr, int	x, int y)
 	fd = open("./maps/testmap", O_RDONLY);
 	while (get_next_line(fd, &line) > 0)
 	{
-		printf("checking v dups: %d %d and %d %d\n", ft_atoi(line + 2), \
+		// printf("checking v dups: %d %d and %d %d\n", ft_atoi(line + 2), \
 		ft_atoi(line + find_rep_symb(line, ' ', 2) + 1), x, y);
 		if (ft_atoi(line + 2) == x && \
 		ft_atoi(line + find_rep_symb(line, ' ', 2) + 1) == y)
@@ -183,28 +191,28 @@ static void			record_walls(t_core *cr, char *line, int fd)
 		if (check_vt_dups(cr, wall->p1.x, wall->p1.y) == 0)
 		{
 			ft_strcpy(line, "v ");
-	    ft_putstr_fd(line, fd);
+			ft_putstr_fd(line, fd);
 			ft_strcpy(line, ft_itoa(wall->p1.x));
 			ft_putstr_fd(line, fd);
-	    ft_strcpy(line, " ");
-	    ft_putstr_fd(line, fd);
+			ft_strcpy(line, " ");
+			ft_putstr_fd(line, fd);
 			ft_strcpy(line, ft_itoa(wall->p1.y));
-	    ft_putstr_fd(line, fd);
-	    ft_strcpy(line, " \n");
-	    ft_putstr_fd(line, fd);
+			ft_putstr_fd(line, fd);
+			ft_strcpy(line, " \n");
+			ft_putstr_fd(line, fd);
 		}
 		if (check_vt_dups(cr, wall->p2.x, wall->p2.y) == 0)
 		{
 			ft_strcpy(line, "v ");
-	    ft_putstr_fd(line, fd);
-	    ft_strcpy(line, ft_itoa(wall->p2.x));
-	    ft_putstr_fd(line, fd);
-	    ft_strcpy(line, " ");
-	    ft_putstr_fd(line, fd);
-	    ft_strcpy(line, ft_itoa(wall->p2.y));
-	    ft_putstr_fd(line, fd);
-	    ft_strcpy(line, " \n");
-	    ft_putstr_fd(line, fd);
+			ft_putstr_fd(line, fd);
+			ft_strcpy(line, ft_itoa(wall->p2.x));
+			ft_putstr_fd(line, fd);
+			ft_strcpy(line, " ");
+			ft_putstr_fd(line, fd);
+			ft_strcpy(line, ft_itoa(wall->p2.y));
+			ft_putstr_fd(line, fd);
+			ft_strcpy(line, " \n");
+			ft_putstr_fd(line, fd);
 		}
 		wall = wall->next;
 	}

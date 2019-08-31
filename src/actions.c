@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:59 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/07/31 19:30:02 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/08/31 18:36:26 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,32 @@ int			key_action(int keycode, t_core *cr)
 		save_map(cr);
 	else if (keycode == 37)
 		load_map(cr);
+	else if (keycode == 123)
+		cr->offs.x += 20;
+	else if (keycode == 124)
+		cr->offs.x -= 20;
+	else if (keycode == 125)
+		cr->offs.y -= 20;
+	else if (keycode == 126)
+		cr->offs.y += 20;
+		//
+	else if (keycode == 67)
+		cr->test *= -1;
 	redraw(cr);
 	return (0);
 }
 
 int			mouse_move(int x, int y, t_core *cr)
 {
-	if (cr->lmb == 1)
+	if (cr->dragl == 1)
+	{
+		cr->offs.x += x - cr->msmem.x;
+		cr->offs.y += y - cr->msmem.y;
+		cr->msmem.x = x;
+		cr->msmem.y = y;
+		redraw(cr);
+	}
+	else if (cr->lmb == 1)
 	{
 		if (cr->shift_button == 1)
 			straight_line(cr, &x, &y);
@@ -73,6 +92,8 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 {
 	if (button == 1)
 	{
+		if (button == 1)
+			cr->dragl = 0;
 		if (cr->menu_is_open == 1)
 		{
 			cr->menu_is_open = 0;
@@ -87,6 +108,10 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 			cr->vs.x1 = x;
 			cr->vs.y1 = y;
 			magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
+			cr->vs.x1 -= cr->offs.x;
+			cr->vs.y1 -= cr->offs.y;
+			cr->vs.mem_x -= cr->offs.x;
+			cr->vs.mem_y -= cr->offs.y;
 			add_wall(cr);
 		}
 	}
@@ -105,7 +130,7 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 {
 	int		wall_id;
 
-	if (button == 1)
+	if (button == 1 && !check_bounds(cr, x, y))
 	{
 		if (!choose_instrument(cr, x, y))
 		{
@@ -114,11 +139,17 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 			{
 				check_menu_events(cr, x, y);
 			}
+			else if (cr->test == 1)
+			{
+				cr->msmem.x = x;
+				cr->msmem.y = y;
+				cr->dragl = 1;
+			}
 			else
 				(*cr->inst_func)(cr, x, y);
 		}
 	}
-	else if (button == 2)
+	else if (button == 2 && !check_bounds(cr, x, y))
 	{
 		cr->rmb = 1;
 		find_multi_sel(cr);
@@ -129,6 +160,28 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 			rmb_menu(cr, find_by_index(cr, wall_id), x, y);
 		}
 		cr->multi_sel = 0;
+	}
+	else if (button == 5)
+	{
+		printf("ZOOM %f\n", cr->zoom);
+		cr->msmem.x = WIN_WIDTH / 2;
+		cr->msmem.y = WIN_HIGHT / 2;
+		if (cr->zoom < 30000)
+			cr->zoom += cr->zoom / 2;
+		cr->offs.x += (cr->offs.x / 2 - (x - cr->msmem.x) / 2);
+		cr->offs.y += (cr->offs.y / 2 - (y - cr->msmem.y) / 2);
+		redraw(cr);
+	}
+	else if (button == 4)
+	{
+		printf("ZOOM %f\n", cr->zoom);
+		cr->msmem.x = WIN_WIDTH / 2;
+		cr->msmem.y = WIN_HIGHT / 2;
+		if (cr->zoom > 0.001)
+			cr->zoom -= cr->zoom / 3;
+		cr->offs.x -= cr->offs.x / 3 - (x - cr->msmem.x) / 3;
+		cr->offs.y -= cr->offs.y / 3 - (y - cr->msmem.y) / 3;
+		redraw(cr);
 	}
 	return (0);
 }

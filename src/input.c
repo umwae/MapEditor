@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/08/19 19:27:57 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/08/31 18:52:21 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static void     set_sectors(t_core *cr, t_coord inp1, t_coord inp2, int secnum)
     }
 }
 
-static void     process_walls(t_core *cr, char **pts, int secnum)
+static void     process_walls(t_core *cr, char **pts, char **prt, int secnum)
 {
   t_coord inp1;
   t_coord inp2;
@@ -90,46 +90,60 @@ static void     process_walls(t_core *cr, char **pts, int secnum)
   while (pts[i + 1])
   {
     num = ft_atoi(pts[i]);
-    printf("num %d\n", num);
+    // printf("num %d\n", num);
     fd2 = open("./maps/testmap", O_RDONLY);
     j = 0;
     while (j++ <= num)
     {
       get_next_line(fd2, &line);
-      printf("v pos: %s, num: %d, j: %d, fd; %d\n", line, num, j, fd2);
+      // printf("v pos: %s, num: %d, j: %d, fd; %d\n", line, num, j, fd2);
       if (j <= num)
         free(line);
     }
     v = ft_strsplit(line, ' ');
-    printf("atoi %s %s\n", v[1], v[2]);
+    // printf("atoi %s %s\n", v[1], v[2]);
     inp1.x = ft_atoi(v[1]);
     inp1.y = ft_atoi(v[2]);
+	if (cr->test == 1)
+	{
+		inp1.x *= COMPRESSING;
+		inp1.y *= COMPRESSING;
+	}
     ft_arrfree(&v, 3);
     num = ft_atoi(pts[i + 1]);
-    printf("num2 %d\n", num);
+    // printf("num2 %d\n", num);
     // close(fd2);
     fd2 = open("./maps/testmap", O_RDONLY);
     j = 0;
     while (j++ <= num)
     {
       get_next_line(fd2, &line);
-      printf("v2 pos: %s, num: %d, j: %d, fd: %d\n", line, num, j, fd2);
+      // printf("v2 pos: %s, num: %d, j: %d, fd: %d\n", line, num, j, fd2);
       if (j <= num)
         free(line);
     }
     v = ft_strsplit(line, ' ');
-    printf("atoi2 %s %s\n", v[1], v[2]);
+    // printf("atoi2 %s %s\n", v[1], v[2]);
     inp2.x = ft_atoi(v[1]);
     inp2.y = ft_atoi(v[2]);
+	if (cr->test == 1)
+	{
+		inp2.x *= COMPRESSING;
+		inp2.y *= COMPRESSING;
+	}
     ft_arrfree(&v, 3);
     // close(fd2);
     if (check_dups(cr, inp1, inp2) == 0)
     {
-      printf("Dups OK. secnum: %d\n", secnum);
+      // printf("Dups OK. secnum: %d\n", secnum);
       cr->vs.mem_x = inp1.x;
       cr->vs.mem_y = inp1.y;
       cr->vs.x1 = inp2.x;
       cr->vs.y1 = inp2.y;
+      // cr->mpsw = 0;
+      // printf("PRT cr %d %d\n", ft_atoi(prt[i]), ft_atoi(pts[i]));
+      if (ft_atoi(prt[i]) >= 0)
+        cr->mpsw = 1;
       add_wall(cr);
       // wall = get_last_wall(cr);
       // if (wall->sectors[0] == -1)
@@ -149,12 +163,13 @@ void            load_map(t_core *cr)
   char  *line;
 	int		i;
   char  **pts;
+  char  **prt;
   char  *tmp;
 
 	cr->sec_num = 0;
   delete_wlist(cr);
 	fd = open("./maps/testmap", O_RDONLY);
-	cr->mpsw = 0;
+	// cr->mpsw = 0;
 	i = -1;
 	while (get_next_line(fd, &line) > 0)
 	{
@@ -164,14 +179,26 @@ void            load_map(t_core *cr)
 				i = 0;
 			tmp = ft_strsub(line, find_rep_symb(line, '|', 2) + 1, \
 			find_rep_symb(line, '|', 3) - (find_rep_symb(line, '|', 2) + 1));
-			printf("%s\n", tmp);
+			// printf("%s\n", tmp);
 			tmp = ft_strjoin(tmp, " ");
 			tmp = ft_strjoin(tmp, ft_strsub(line, find_rep_symb(line, '|', 2) + 1, \
 			find_rep_symb(line, ' ', 2) - (find_rep_symb(line, '|', 2) + 1)));
-			printf("%s\n", tmp);
+			// printf("%s\n", tmp);
 			pts = ft_strsplit(tmp, ' ');
-			process_walls(cr, pts, i);
+      free(tmp);
+      //ports
+      tmp = ft_strsub(line, find_rep_symb(line, '|', 3) + 1, \
+			find_rep_symb(line, '|', 4) - (find_rep_symb(line, '|', 3) + 1));
+      // printf("PRT %s\n", tmp);
+      tmp = ft_strjoin(tmp, " ");
+      // printf("PRTd %d\n", find_rep_symb(line + find_rep_symb(line, '|', 3) + 1, ' ', 1));
+      tmp = ft_strjoin(tmp, ft_strsub(line, find_rep_symb(line, '|', 3) + 1, \
+      find_rep_symb(line + find_rep_symb(line, '|', 3) + 1, ' ', 1)));
+      // printf("PRT %s\n", tmp);
+      prt = ft_strsplit(tmp, ' ');
 			free(tmp);
+      //
+      process_walls(cr, pts, prt, i);
 			i++;
 		}
 		free(line);

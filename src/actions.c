@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:59 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/08/31 18:36:26 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/05 20:03:56 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ int			mouse_move(int x, int y, t_core *cr)
 		cr->vs.x0 = cr->vs.mem_x;
 		cr->vs.y0 = cr->vs.mem_y;
 		cr->vs.color = WALL_COLOR;
-		magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
+		grid_magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
+		// magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
 		bresenham(cr, &pxl_put_wrap);
 	}
 	return (0);
@@ -107,7 +108,8 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 				straight_line(cr, &x, &y);
 			cr->vs.x1 = x;
 			cr->vs.y1 = y;
-			magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
+			grid_magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
+			// magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
 			cr->vs.x1 -= cr->offs.x;
 			cr->vs.y1 -= cr->offs.y;
 			cr->vs.mem_x -= cr->offs.x;
@@ -130,7 +132,7 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 {
 	int		wall_id;
 
-	if (button == 1 && !check_bounds(cr, x, y))
+	if (button == 1 && !check_bounds(x, y))
 	{
 		if (!choose_instrument(cr, x, y))
 		{
@@ -149,7 +151,7 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 				(*cr->inst_func)(cr, x, y);
 		}
 	}
-	else if (button == 2 && !check_bounds(cr, x, y))
+	else if (button == 2 && !check_bounds(x, y))
 	{
 		cr->rmb = 1;
 		find_multi_sel(cr);
@@ -163,10 +165,10 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 	}
 	else if (button == 5)
 	{
-		printf("ZOOM %f\n", cr->zoom);
+		printf("ZOOM %d\n", cr->zoom);
 		cr->msmem.x = WIN_WIDTH / 2;
 		cr->msmem.y = WIN_HIGHT / 2;
-		if (cr->zoom < 30000)
+		if (cr->zoom < WIN_WIDTH)
 			cr->zoom += cr->zoom / 2;
 		cr->offs.x += (cr->offs.x / 2 - (x - cr->msmem.x) / 2);
 		cr->offs.y += (cr->offs.y / 2 - (y - cr->msmem.y) / 2);
@@ -174,10 +176,10 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 	}
 	else if (button == 4)
 	{
-		printf("ZOOM %f\n", cr->zoom);
+		printf("ZOOM %d\n", cr->zoom);
 		cr->msmem.x = WIN_WIDTH / 2;
 		cr->msmem.y = WIN_HIGHT / 2;
-		if (cr->zoom > 0.001)
+		if (cr->zoom > 1)
 			cr->zoom -= cr->zoom / 3;
 		cr->offs.x -= cr->offs.x / 3 - (x - cr->msmem.x) / 3;
 		cr->offs.y -= cr->offs.y / 3 - (y - cr->msmem.y) / 3;

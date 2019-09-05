@@ -72,7 +72,8 @@ void				draw_wall(void *td, int x, int y)
 	cr->vs.y0 = y;
 	cr->vs.x1 = x;
 	cr->vs.y1 = y;
-	magnet(cr, &cr->vs.x0, &cr->vs.y0, 0);
+	grid_magnet(cr, &cr->vs.x0, &cr->vs.y0, 0);
+	// magnet(cr, &cr->vs.x0, &cr->vs.y0, 0);
 	cr->vs.mem_x = cr->vs.x0;
 	cr->vs.mem_y = cr->vs.y0;
 }

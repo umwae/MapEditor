@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   walls.c                                            :+:      :+:    :+:   */
+/*   colors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/07/26 19:43:26 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/05 20:06:52 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void			apply_sector(t_core *cr, t_wall *wall, int pr1, int pr2)
 
 void			turn_color(t_core *cr, t_wall *wall, int color1, int color2)
 {
+	(void)cr;
 	if (wall->color == color1)
 		wall->color = color2;
 }

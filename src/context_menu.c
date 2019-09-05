@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   walls.c                                            :+:      :+:    :+:   */
+/*   context_menu.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/07/26 19:43:26 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/05 20:05:10 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 void			switch_isportal(t_core *cr, t_wall *wall, int switchval, int pr2)
 {
 	(void)pr2;
+	(void)cr;
 	if (wall->color != SELECT_COLOR)
 		return ;
 	wall->isportal = switchval;

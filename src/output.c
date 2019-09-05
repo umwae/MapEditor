@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/08/31 18:20:24 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/05 20:14:02 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,29 @@
 #include "stdlib.h"
 #include "math.h"
 
-int			find_vt_id(t_core *cr, int x, int y)
+int			find_vt_id(t_core *cr, float x, float y)
 {
 	int		fd;
 	char	*line;
 	int		i;
 
+	(void)cr;
+	// printf("looking for v id: %f %f\n", x, y);
 	fd = open("./maps/testmap", O_RDONLY);
 	i = 0;
 	while (get_next_line(fd, &line) > 0)
 	{
 		if (line[0] != 'v')
 			return (0);
-		if (ft_atoi(line + 2) == x && \
-		ft_atoi(line + find_rep_symb(line, ' ', 2) + 1) == y)
+		if (ft_atof(line + 2) == y && \
+		ft_atof(line + find_rep_symb(line, ' ', 2) + 1) == x)
 			return (i);
 		i++;
 	}
 	return (0);
 }
 
-static int			find_next_wall(t_core *cr, t_coord *cw, int prev, int secid)
+static int			find_next_wall(t_core *cr, t_fcoord *cw, int prev, int secid)
 {
 	t_wall	*wall;
 
@@ -45,18 +47,18 @@ static int			find_next_wall(t_core *cr, t_coord *cw, int prev, int secid)
 		return (-1);
 	while (wall)
 	{
-		if (wall->p1.x == cw->x && wall->p1.y == cw->y && wall->index != prev && \
+		if (wall->p1.x == cw->x * cr->zoom / UNIT_SIZE && wall->p1.y == cw->y * cr->zoom / UNIT_SIZE && wall->index != prev && \
 			(wall->sectors[0] == secid || wall->sectors[1] == secid))
 		{
-			cw->x = wall->p2.x;
-			cw->y = wall->p2.y;
+			cw->x = wall->p2.x / cr->zoom * UNIT_SIZE;
+			cw->y = wall->p2.y / cr->zoom * UNIT_SIZE;
 			return (wall->index);
 		}
-		else if (wall->p2.x == cw->x && wall->p2.y == cw->y && wall->index != prev && \
+		else if (wall->p2.x == cw->x * cr->zoom / UNIT_SIZE && wall->p2.y == cw->y * cr->zoom / UNIT_SIZE && wall->index != prev && \
 			(wall->sectors[0] == secid || wall->sectors[1] == secid))
 		{
-			cw->x = wall->p1.x;
-			cw->y = wall->p1.y;
+			cw->x = wall->p1.x / cr->zoom * UNIT_SIZE;
+			cw->y = wall->p1.y / cr->zoom * UNIT_SIZE;
 			return (wall->index);
 		}
 		wall = wall->next;
@@ -78,8 +80,8 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 	char		*tmp;
 	char		*conn;
 	int			i;
-	t_coord	cw;
-	t_coord	cwold;
+	t_fcoord	cw;
+	// t_fcoord	cwold;
 	int			curr;
 
 
@@ -90,29 +92,25 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 	curr = cr->idcurr;
 	while (i < cr->sec_num && cr->idcurr != -1)
 	{
-		ft_putstr_fd(tmp = ft_strjoin("\ns|", ft_itoa(ST_FLOOR_HIGHT)), fd);
+		ft_putstr_fd(tmp = ft_strjoin("\ns|", ft_ftoa(ST_FLOOR_HIGHT)), fd);
 		free(tmp);
 		ft_strcpy(line, " ");
     ft_putstr_fd(line, fd);
-		ft_putstr_fd(tmp = ft_strjoin(ft_itoa(ST_CEIL_HIGHT), "|"), fd);
+		ft_putstr_fd(tmp = ft_strjoin(ft_ftoa(ST_CEIL_HIGHT), "|"), fd);
 		free(tmp);
 		//
 		cr->idcurr = -1;
 		iter_wall(cr, i, -1, &find_any_wall_in_sec);
 		if (cr->idcurr != -1)
 		{
-			cw.x = find_by_index(cr, cr->idcurr)->p1.x;
-			cw.y = find_by_index(cr, cr->idcurr)->p1.y;
-			cwold.x = cw.x;
-			cwold.y = cw.y;
-			printf("New sector. cw.x: %d, cw.y: %d\n", cw.x, cw.y);
+			cw.x = (float)find_by_index(cr, cr->idcurr)->p1.x / cr->zoom * UNIT_SIZE;
+			cw.y = (float)find_by_index(cr, cr->idcurr)->p1.y / cr->zoom * UNIT_SIZE;
+			// cwold.x = cw.x;
+			// cwold.y = cw.y;
 			while ((curr = find_next_wall(cr, &cw, curr, i)) >= 0)
 			{
-				printf("IDCURR %d CURR %d\n", cr->idcurr, curr);
-				// ft_strcpy(line, ft_itoa(curr));
-				printf("cw.x: %d, cw.y: %d\n", cw.x, cw.y);
-				ft_strcpy(line, ft_itoa(find_vt_id(cr, cwold.x, cwold.y)));
-		    ft_putstr_fd(line, fd);
+				ft_strcpy(line, ft_itoa(find_vt_id(cr, cw.x, cw.y)));
+		    	ft_putstr_fd(line, fd);
 				printf("CHECKING FOR PORTALS %d\n", curr);
 				if (find_by_index(cr, curr)->isportal == 1)
 				{
@@ -145,8 +143,8 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 					conn = ft_strcat(conn, " ");
 					ft_putstr_fd(line, fd);
 				}
-				cwold.x = cw.x;
-				cwold.y = cw.y;
+				// cwold.x = cw.x;
+				// cwold.y = cw.y;
 			}
 		}
 		ft_strcpy(line, "|");
@@ -162,18 +160,18 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 		free(conn);
 }
 
-static int			check_vt_dups(t_core *cr, int	x, int y)
+static int			check_vt_dups(t_core *cr, float	x, float y)
 {
 	int		fd;
 	char	*line;
 
+	x = (float)x / cr->zoom * UNIT_SIZE;
+	y = (float)y / cr->zoom * UNIT_SIZE;
 	fd = open("./maps/testmap", O_RDONLY);
 	while (get_next_line(fd, &line) > 0)
 	{
-		// printf("checking v dups: %d %d and %d %d\n", ft_atoi(line + 2), \
-		ft_atoi(line + find_rep_symb(line, ' ', 2) + 1), x, y);
-		if (ft_atoi(line + 2) == x && \
-		ft_atoi(line + find_rep_symb(line, ' ', 2) + 1) == y)
+		if (ft_atof(line + 2) == y && \
+		ft_atof(line + find_rep_symb(line, ' ', 2) + 1) == x)
 			return (1);
 	}
 	return (0);
@@ -192,11 +190,11 @@ static void			record_walls(t_core *cr, char *line, int fd)
 		{
 			ft_strcpy(line, "v ");
 			ft_putstr_fd(line, fd);
-			ft_strcpy(line, ft_itoa(wall->p1.x));
+			ft_strcpy(line, ft_ftoa((float)wall->p1.y / cr->zoom * UNIT_SIZE));
 			ft_putstr_fd(line, fd);
 			ft_strcpy(line, " ");
 			ft_putstr_fd(line, fd);
-			ft_strcpy(line, ft_itoa(wall->p1.y));
+			ft_strcpy(line, ft_ftoa((float)wall->p1.x / cr->zoom * UNIT_SIZE));
 			ft_putstr_fd(line, fd);
 			ft_strcpy(line, " \n");
 			ft_putstr_fd(line, fd);
@@ -205,11 +203,11 @@ static void			record_walls(t_core *cr, char *line, int fd)
 		{
 			ft_strcpy(line, "v ");
 			ft_putstr_fd(line, fd);
-			ft_strcpy(line, ft_itoa(wall->p2.x));
+			ft_strcpy(line, ft_ftoa((float)wall->p2.y / cr->zoom * UNIT_SIZE));
 			ft_putstr_fd(line, fd);
 			ft_strcpy(line, " ");
 			ft_putstr_fd(line, fd);
-			ft_strcpy(line, ft_itoa(wall->p2.y));
+			ft_strcpy(line, ft_ftoa((float)wall->p2.x / cr->zoom * UNIT_SIZE));
 			ft_putstr_fd(line, fd);
 			ft_strcpy(line, " \n");
 			ft_putstr_fd(line, fd);

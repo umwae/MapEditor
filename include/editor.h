@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:16 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/08/31 18:34:38 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/05 20:05:01 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include "../libft/includes/get_next_line.h"
 # include "../minilibx_macos/mlx.h"
 
-# define WIN_WIDTH 1500
-# define WIN_HIGHT 1300
+# define WIN_WIDTH 1080
+# define WIN_HIGHT 880
 
 # define MAGNET_RADIUS 30
 # define SELECT_RADIUS 60
@@ -32,6 +32,7 @@
 # define POINT_COLOR 0xFFFFFF
 # define PORTAL_COLOR 0xA600E7
 # define APP_PORTAL_COLOR 0xBF8EEA
+# define GRID_COLOR 0x464646
 
 # define PI_CEIL 4
 # define PI_4 3.1415f
@@ -47,12 +48,19 @@
 # define ST_CEIL_HIGHT 75
 
 # define COMPRESSING 30
+# define UNIT_SIZE 0.5f
 
 typedef struct		s_coord
 {
 	int							x;
 	int							y;
 }									t_coord;
+
+typedef struct		s_fcoord
+{
+	float							x;
+	float							y;
+}									t_fcoord;
 
 typedef struct		s_wall
 {
@@ -140,7 +148,7 @@ typedef struct		s_core
 	//
 	t_coord					offs;
 	t_coord					msmem;
-	float					zoom;
+	int							zoom;
 	int						dragl;
 	int						test;
 
@@ -197,8 +205,13 @@ void							load_map(t_core *cr);
 void							erase_by_id(t_core	*cr, int id);
 int    						find_rep_symb(char *line, char symb, int num);
 t_wall						*get_last_wall(t_core *cr);
-int								find_vt_id(t_core *cr, int x, int y);
+int								find_vt_id(t_core *cr, float x, float y);
 void							count_sectors(t_core *cr, t_wall *wall, int pr1, int pr2);
-int								check_bounds(t_core *cr, int x, int y);
+int								check_bounds(int x, int y);
+void							grid(t_core *cr);
+void							grid_magnet(t_core *cr, int *x, int *y, int check_start);
+//
+double						ft_atof(const char *str);
+char							*ft_ftoa(float num);
 
 #endif

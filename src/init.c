@@ -33,7 +33,7 @@ void				init(t_core		*cr)
 	cr->offs.x = WIN_WIDTH / 2;
 	cr->offs.y = WIN_HIGHT / 2;
 	cr->test = -1;
-	cr->zoom = 1;
+	cr->zoom = 20;
 	cr->ctrl_button = 0;
 	img_new(cr);
 	redraw(cr);

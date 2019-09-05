@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/08/31 16:07:39 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/05 20:06:30 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	count_sectors(t_core *cr, t_wall *wall, int pr1, int pr2)
 
 static			void	sec_id_replace(t_core *cr, t_wall *wall, int idold, int idnew)
 {
+	(void)cr;
 	if (wall->sectors[0] == idold)
 		wall->sectors[0] = idnew;
 	else if (wall->sectors[1] == idold)
@@ -93,8 +94,9 @@ static void			remove_sectors_search(t_core *cr, t_wall *wall, int id, int pr2)
 	}
 }
 
-static void			remove_sectors_ag(t_core *cr, t_wall *wall, int id, int pr2)
+static void			remove_sectors_ag(t_core *cr, t_wall *wall, int pr1, int pr2)
 {
+	(void)pr1;
 	(void)pr2;
 	if (wall->sectors[0] == cr->idsec.x || wall->sectors[0] == cr->idsec.y)
 		wall->sectors[0] = -1;

@@ -38,6 +38,49 @@ int			find_vt_id(t_core *cr, float x, float y)
 	return (0);
 }
 
+static void			choose_direction(t_core *cr, t_fcoord *cw, t_wall *start, int secid)
+{
+	t_wall		*wall;
+	t_coord		p3;
+	int				side;
+
+	wall = cr->wlist;
+	if (!wall)
+		return ;
+	while (wall)
+	{
+		if (wall->p1.x == start->p1.x && wall->p1.y == start->p1.y && wall->index != start->index && \
+			(wall->sectors[0] == secid || wall->sectors[1] == secid))
+		{
+			printf("START %d W ID%d P1\n", start->index, wall->index);
+			p3 = wall->p2;
+			break ;
+		}
+		else if (wall->p2.x == start->p1.x && wall->p2.y == start->p1.y && wall->index != start->index && \
+			(wall->sectors[0] == secid || wall->sectors[1] == secid))
+		{
+			printf("START %d W ID%d P2\n", start->index, wall->index);
+			p3 = wall->p1;
+			break ;
+		}
+		wall = wall->next;
+	}
+	if ((side = (start->p1.x - start->p2.x) * (p3.y - start->p2.y) - \
+	(start->p1.y - start->p2.y) * (p3.x - start->p2.x)) > 0)
+	{
+		cw->x = start->p1.x / cr->zoom * UNIT_SIZE;
+		cw->y = start->p1.y / cr->zoom * UNIT_SIZE;
+	}
+	else if (side < 0)
+	{
+		cw->x = start->p2.x / cr->zoom * UNIT_SIZE;
+		cw->y = start->p2.y / cr->zoom * UNIT_SIZE;
+	}
+	else
+		choose_direction(cr, cw, find_by_index(cr, ), int secid)
+	printf("SIDE: %d\n", side);
+}
+
 static int			find_next_wall(t_core *cr, t_fcoord *cw, int prev, int secid)
 {
 	t_wall	*wall;
@@ -89,7 +132,7 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 	tmp = NULL;
 	conn = ft_strnew(100);
 	iter_wall(cr, 0, -1, &find_any_wall_in_sec);
-	curr = cr->idcurr;
+	// curr = cr->idcurr;
 	while (i < cr->sec_num && cr->idcurr != -1)
 	{
 		ft_putstr_fd(tmp = ft_strjoin("\ns|", ft_ftoa(ST_FLOOR_HIGHT)), fd);
@@ -101,10 +144,12 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 		//
 		cr->idcurr = -1;
 		iter_wall(cr, i, -1, &find_any_wall_in_sec);
+		curr = cr->idcurr;
 		if (cr->idcurr != -1)
 		{
-			cw.x = (float)find_by_index(cr, cr->idcurr)->p1.x / cr->zoom * UNIT_SIZE;
-			cw.y = (float)find_by_index(cr, cr->idcurr)->p1.y / cr->zoom * UNIT_SIZE;
+			choose_direction(cr, &cw, find_by_index(cr, cr->idcurr), i);
+			// cw.x = (float)find_by_index(cr, cr->idcurr)->p1.x / cr->zoom * UNIT_SIZE;
+			// cw.y = (float)find_by_index(cr, cr->idcurr)->p1.y / cr->zoom * UNIT_SIZE;
 			// cwold.x = cw.x;
 			// cwold.y = cw.y;
 			while ((curr = find_next_wall(cr, &cw, curr, i)) >= 0)
@@ -164,15 +209,21 @@ static int			check_vt_dups(t_core *cr, float	x, float y)
 {
 	int		fd;
 	char	*line;
+	float testx;
+	float testy;
 
 	x = (float)x / cr->zoom * UNIT_SIZE;
 	y = (float)y / cr->zoom * UNIT_SIZE;
 	fd = open("./maps/testmap", O_RDONLY);
 	while (get_next_line(fd, &line) > 0)
 	{
-		if (ft_atof(line + 2) == y && \
-		ft_atof(line + find_rep_symb(line, ' ', 2) + 1) == x)
+		testy = ft_atof(line + 2);
+		testx = ft_atof(line + find_rep_symb(line, ' ', 2) + 1);
+		if (testy == y && testx == x)
 			return (1);
+		// if (ft_atof(line + 2) == y && \
+		// ft_atof(line + find_rep_symb(line, ' ', 2) + 1) == x)
+		// 	return (1);
 	}
 	return (0);
 }

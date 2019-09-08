@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/05 20:05:10 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/08 16:52:09 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void			switch_isportal(t_core *cr, t_wall *wall, int switchval, int pr2)
 
 void			check_menu_events(t_core *cr, int x, int y)
 {
-	if (x > cr->click.x + MENU_XLEN / 7 && x < cr->click.x + MENU_XLEN / 7 + CHECKBOX_SIZE && \
+	if (x > cr->click.x + MENU_XLEN / 7 && x < cr->click.x + MENU_XLEN / 7 * 6 && \
 	y > cr->click.y + MENU_YLEN / 14 && y < cr->click.y + MENU_YLEN / 14 + CHECKBOX_SIZE)
 	{
 		// printf("MENU CLICK\n");
@@ -39,6 +39,12 @@ void			check_menu_events(t_core *cr, int x, int y)
 		else
 			iter_wall(cr, 1, 0, &switch_isportal);
 		cr->cmenu_elems.isportal = cr->cmenu_elems.isportal > 0 ? 0 : 1;
+	}
+	else if (x > cr->click.x + MENU_XLEN / 7 && x < cr->click.x + MENU_XLEN / 7 * 6 && \
+	y > cr->click.y + MENU_YLEN / 14 * 2 && y < cr->click.y + MENU_YLEN / 14 * 2 + CHECKBOX_SIZE)
+	{
+		cr->player.coord.x = cr->click.x - WIN_WIDTH / 2;
+		cr->player.coord.y = cr->click.y - WIN_HIGHT / 2;
 	}
 }
 
@@ -91,4 +97,8 @@ void			rmb_menu(t_core *cr, t_wall *wall, int x, int y)
 	}
 	else
 		cr->cmenu_elems.isportal = 0;
+	//
+	ft_strcpy(text, "Place player");
+	mlx_string_put(cr->mlx, cr->win, x + MENU_XLEN / 7, \
+	y + MENU_YLEN / 14 * 2, 0, text);
 }

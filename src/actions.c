@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:59 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/05 20:03:56 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/08 20:00:33 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,13 @@ int			key_action(int keycode, t_core *cr)
 	else if (keycode == 37)
 		load_map(cr);
 	else if (keycode == 123)
-		cr->offs.x += 20;
+		cr->player.coord.x -= 20;
 	else if (keycode == 124)
-		cr->offs.x -= 20;
+		cr->player.coord.x += 20;
 	else if (keycode == 125)
-		cr->offs.y -= 20;
+		cr->player.coord.y += 20;
 	else if (keycode == 126)
-		cr->offs.y += 20;
-		//
+		cr->player.coord.y -= 20;
 	else if (keycode == 67)
 		cr->test *= -1;
 	redraw(cr);

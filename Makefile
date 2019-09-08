@@ -6,7 +6,7 @@
 #    By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/06 15:55:47 by jsteuber          #+#    #+#              #
-#    Updated: 2019/09/05 20:02:12 by jsteuber         ###   ########.fr        #
+#    Updated: 2019/09/08 16:43:09 by jsteuber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ FT_PATH=./libft
 BIN_PATH=./bin
 
 SRC= main.c image.c init.c show.c actions.c walls.c selection.c utilities.c \
-context_menu.c gui.c sectors.c messages.c colors.c output.c input.c grid.c
+context_menu.c gui.c sectors.c messages.c colors.c output.c input.c grid.c \
+objects.c
 OBJ:= $(addprefix $(BIN_PATH)/,$(SRC:.c=.o))
 
 .PHONY: all clean fclean re

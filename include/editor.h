@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:16 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/05 20:05:01 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/08 20:38:37 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # define SELECT_PADDING 30
 # define POINT_SIZE 4
 
+# define OBJECT_SIZE 8
+
 # define WALL_COLOR 0xECF7FF
 # define SELECT_COLOR 0xFFD200
 # define MENU_COLOR 0xA0A0A0
@@ -33,6 +35,7 @@
 # define PORTAL_COLOR 0xA600E7
 # define APP_PORTAL_COLOR 0xBF8EEA
 # define GRID_COLOR 0x464646
+# define PLAYER_COLOR 0x00FF00
 
 # define PI_CEIL 4
 # define PI_4 3.1415f
@@ -102,6 +105,13 @@ typedef struct		s_elems
 	int							isportal;
 }									t_elems;
 
+typedef struct					s_player
+{
+	t_coord						coord;
+	float							angle;
+	int								sec;
+}									t_player;
+
 typedef struct		s_core
 {
 	void						*mlx;
@@ -145,13 +155,19 @@ typedef struct		s_core
 	t_coord					idsec;
 	t_coord					s[2];
 	int							mpsw;
-	//
+
 	t_coord					offs;
 	t_coord					msmem;
 	int							zoom;
 	int						dragl;
 	int						test;
 
+	t_player				player;
+	t_coord					dir;
+	t_coord					hit;
+	float					dist;
+	int						secmem[2];
+	t_coord					debug;
 }									t_core;
 
 void							init(t_core		*cr);
@@ -210,8 +226,10 @@ void							count_sectors(t_core *cr, t_wall *wall, int pr1, int pr2);
 int								check_bounds(int x, int y);
 void							grid(t_core *cr);
 void							grid_magnet(t_core *cr, int *x, int *y, int check_start);
-//
-double						ft_atof(const char *str);
+double							ft_atof(const char *str);
 char							*ft_ftoa(float num);
+
+void							draw_player(t_core *cr);
+void							record_player(t_core *cr, int fd);
 
 #endif

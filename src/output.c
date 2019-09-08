@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/05 20:14:02 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/08 20:37:25 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ static void			choose_direction(t_core *cr, t_fcoord *cw, t_wall *start, int seci
 		cw->x = start->p2.x / cr->zoom * UNIT_SIZE;
 		cw->y = start->p2.y / cr->zoom * UNIT_SIZE;
 	}
-	else
-		choose_direction(cr, cw, find_by_index(cr, ), int secid)
+	// else
+	// 	choose_direction(cr, cw, find_by_index(cr, ), int secid)
 	printf("SIDE: %d\n", side);
 }
 
@@ -274,8 +274,9 @@ void            save_map(t_core *cr)
 
   line = (char *)malloc(sizeof(char) * ft_strlen("v 00000 00000") + 1);
 	fd = open("./maps/testmap", O_WRONLY | O_CREAT | O_TRUNC, 0777);
-  record_walls(cr, line, fd);
+	record_walls(cr, line, fd);
 	record_sectors(cr, line, fd);
+	record_player(cr, fd);
 	free(line);
 	close(fd);
 }

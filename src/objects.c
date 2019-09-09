@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/08 20:47:13 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/09 20:20:21 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,38 @@ static void	calc(t_core *cr, t_wall *wall, t_coord ray)
 	float b1;
 	float b2;
 	float dist = cr->dist;
-	t_coord lesser;
-	t_coord	greater;
 
-	m1 = (float)(wall->p1.y - wall->p2.y) / (wall->p1.x - wall->p2.x);
-	m2 = (float)(ray.y - cr->player.coord.y) / (ray.x - cr->player.coord.x);
+
+
+	//если первый отрезок вертикальный
+	if (wall->p1.x - wall->p2.x == 0)
+	{
+		if (cr->player.coord.y > min(wall->p1.y, wall->p2.y) && \
+		cr->player.coord.y < max(wall->p1.y, wall->p2.y) && \
+		((ray.x > cr->player.coord.x && cr->player.coord.x <= wall->p1.x) || \
+		(ray.x < cr->player.coord.x && cr->player.coord.x >= wall->p1.x)))
+		{
+			cr->hit.x = wall->p1.x;
+			cr->hit.y = cr->player.coord.y;
+			dist = cr->hit.x > cr->player.coord.x ? cr->hit.x - cr->player.coord.x : cr->player.coord.x - cr->hit.x;
+			if (dist < cr->dist)
+			{
+				cr->dist = dist;
+				cr->secmem[0] = wall->sectors[0];
+				cr->secmem[1] = wall->sectors[1];
+				cr->debug = cr->hit;
+			}
+		}
+		return ;
+	}
+	m1 = (float)(wall->p1.y - wall->p2.y) / (wall->p1.x - wall->p2.x != 0 ? wall->p1.x - wall->p2.x : 0.01);
+	m2 = (float)(ray.y - cr->player.coord.y) / (ray.x - cr->player.coord.x != 0 ? ray.x - cr->player.coord.x : 0.01);
 	b1 = wall->p1.y - m1 * wall->p1.x;
 	b2 = ray.y - m2 * ray.x;
 	if (m1 == m2)
     return ;
 	cr->hit.x = (b2 - b1) / (m1 - m2);
-	lesser.x = wall->p1.x < wall->p2.x ? wall->p1.x : wall->p2.x;
-	greater.x = wall->p1.x < wall->p2.x ? wall->p2.x : wall->p1.x;
-	if (cr->hit.x < lesser.x || cr->hit.x > greater.x)
+	if (cr->hit.x < min(wall->p1.x, wall->p2.x) || cr->hit.x > max(wall->p1.x, wall->p2.x))
 		return ;
 	if ((cr->hit.x - cr->player.coord.x < 0 && cr->dir.x > 0) || (cr->hit.x - cr->player.coord.x > 0 && cr->dir.x< 0))
 		return ;
@@ -86,7 +105,7 @@ void			draw_player(t_core *cr)
 	draw_rectangle(cr, xy, ab, PLAYER_COLOR);
 }
 
-static void			spot_sector_around(t_core *cr)
+void			spot_sector_around(t_core *cr)
 {
 	int			mem[2];
 
@@ -116,9 +135,9 @@ void			record_player(t_core *cr, int fd)
 	text = ft_strnew(ft_strlen("p|0.0 0.0|0|0.0|") + 1);
 	spot_sector_around(cr);
 	ft_strcat(text, "p|");
-	ft_strcat(text, ft_ftoa(cr->player.coord.y));
+	ft_strcat(text, ft_ftoa(cr->player.coord.y / cr->zoom * UNIT_SIZE));
 	ft_strcat(text, " ");
-	ft_strcat(text, ft_ftoa(cr->player.coord.x));
+	ft_strcat(text, ft_ftoa(cr->player.coord.x / cr->zoom * UNIT_SIZE));
 	ft_strcat(text, "|");
 	ft_strcat(text, ft_itoa(cr->player.sec));
 	ft_strcat(text, "|");

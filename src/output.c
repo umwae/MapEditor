@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/08 20:37:25 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/09 17:31:56 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,17 +209,14 @@ static int			check_vt_dups(t_core *cr, float	x, float y)
 {
 	int		fd;
 	char	*line;
-	float testx;
-	float testy;
 
 	x = (float)x / cr->zoom * UNIT_SIZE;
 	y = (float)y / cr->zoom * UNIT_SIZE;
 	fd = open("./maps/testmap", O_RDONLY);
 	while (get_next_line(fd, &line) > 0)
 	{
-		testy = ft_atof(line + 2);
-		testx = ft_atof(line + find_rep_symb(line, ' ', 2) + 1);
-		if (testy == y && testx == x)
+		if (ft_atof(line + 2) == y && \
+		ft_atof(line + find_rep_symb(line, ' ', 2) + 1) == x)
 			return (1);
 		// if (ft_atof(line + 2) == y && \
 		// ft_atof(line + find_rep_symb(line, ' ', 2) + 1) == x)
@@ -272,8 +269,9 @@ void            save_map(t_core *cr)
   int   fd;
   char  *line;
 
-  line = (char *)malloc(sizeof(char) * ft_strlen("v 00000 00000") + 1);
-	fd = open("./maps/testmap", O_WRONLY | O_CREAT | O_TRUNC, 0777);
+  	line = (char *)malloc(sizeof(char) * ft_strlen("v 00000 00000") + 1);
+	if ((fd = open("./maps/testmap", O_WRONLY | O_CREAT | O_TRUNC, 0777)) < 0)
+		printf("ERROR\n");
 	record_walls(cr, line, fd);
 	record_sectors(cr, line, fd);
 	record_player(cr, fd);

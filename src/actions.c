@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:59 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/08 20:00:33 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/09 21:14:24 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,7 @@ int			key_action(int keycode, t_core *cr)
 	if (keycode == 53)
 		exit(0);
 	else if (keycode == 16)
-	{
-		iter_wall(cr, -1, -1, &apply_sector);
-		cr->sec_num++;
-		iter_wall(cr, -1, -1, &redraw_color);
-	}
+		new_sector(cr);
 	else if (keycode == 257)
 		cr->shift_button = 1;
 	else if (keycode == 256)

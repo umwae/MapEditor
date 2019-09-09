@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/08 20:50:29 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/09 20:34:59 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,16 +133,6 @@ static void		draw_walls(t_core *cr)
 	}
 }
 
-// static void		draw_zero_coord(t_core *cr)
-// {
-// 	cr->vs.x0 = 0 + cr->offs.x;
-// 	cr->vs.y0 = 0 + cr->offs.y;
-// 	cr->vs.x1 = 10 + cr->offs.x;
-// 	cr->vs.y1 = 10 + cr->offs.y;
-// 	cr->vs.color = 0xff0000;
-// 	bresenham(cr, &pxl_put_wrap);
-// }
-
 void			redraw(t_core *cr)
 {
 	mlx_clear_window(cr->mlx, cr->win);
@@ -153,8 +143,7 @@ void			redraw(t_core *cr)
 	iter_wall(cr, 0, 0, &draw_nodes);
 	display_instruments(cr);
 	highlight(cr);
-	// draw_zero_coord(cr);
 	draw_player(cr);
-	// record_player(cr);
+	spot_sector_around(cr);
 	// show_messages(cr);
 }

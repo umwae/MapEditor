@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/05 20:06:30 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/09 21:18:16 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "math.h"
+
+void		new_sector(t_core *cr)
+{
+	cr->detect_cl = 0;
+	iter_wall(cr, SEL_SEC_COLOR, -1, &is_there_color);
+	if (!cr->detect_cl)
+		return ;
+	iter_wall(cr, -1, -1, &apply_sector);
+	cr->sec_num++;
+	iter_wall(cr, -1, -1, &redraw_color);
+}
 
 void	count_sectors(t_core *cr, t_wall *wall, int pr1, int pr2)
 {

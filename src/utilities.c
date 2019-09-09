@@ -80,14 +80,24 @@ char		*ft_ftoa(float num)
 	return (str);
 }
 
+
+
 double	ft_atof(const char *str)
 {
 	double	res;
 	double	res2;
 	char	*c;
 	int		len;
+	int		sign;
 
+	sign = 1;
 	c = (char *)str;
+	while (!ft_isdigit(*c) && *c)
+	{
+		if (*c == '-')
+			sign = -1;
+		c++;
+	}
 	res = (double)ft_atoi(c);
 	while (*c && *c != '.')
 		c++;
@@ -98,5 +108,5 @@ double	ft_atof(const char *str)
 	len = 2;
 	while (len--)
 		res2 /= 10;
-	return (res + ((res > 0) ? res2 : -res2));
+	return ((res + res2) * sign);
 }

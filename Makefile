@@ -6,13 +6,13 @@
 #    By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/06 15:55:47 by jsteuber          #+#    #+#              #
-#    Updated: 2019/09/08 16:43:09 by jsteuber         ###   ########.fr        #
+#    Updated: 2019/09/09 20:16:58 by jsteuber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME=Editor
 
-CFLAGS=-Wall -Wextra -Werror
+CFLAGS=#-Wall -Wextra -Werror
 FFLAGS=-framework OpenGL -framework AppKit
 #FFLAGS= -lXext -lX11 -lm
 

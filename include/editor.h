@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:16 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/08 20:38:37 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/09 21:18:05 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,7 @@ typedef struct		s_core
 	float					dist;
 	int						secmem[2];
 	t_coord					debug;
+	int						detect_cl;
 }									t_core;
 
 void							init(t_core		*cr);
@@ -231,5 +232,9 @@ char							*ft_ftoa(float num);
 
 void							draw_player(t_core *cr);
 void							record_player(t_core *cr, int fd);
+void							spot_sector_around(t_core *cr);
+
+void							new_sector(t_core *cr);
+void							is_there_color(t_core *cr, t_wall *wall, int color, int pr2);
 
 #endif

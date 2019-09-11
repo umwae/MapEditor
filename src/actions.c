@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:59 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/09 21:14:24 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/11 21:22:22 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,11 @@ int			key_action(int keycode, t_core *cr)
 	else if (keycode == 126)
 		cr->player.coord.y -= 20;
 	else if (keycode == 67)
+	{
+		del_object(cr, 2);
 		cr->test *= -1;
+	}
+		// cr->test *= -1;
 	redraw(cr);
 	return (0);
 }

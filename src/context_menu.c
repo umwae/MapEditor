@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/08 16:52:09 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/11 21:19:18 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,11 @@ void			check_menu_events(t_core *cr, int x, int y)
 	{
 		cr->player.coord.x = cr->click.x - WIN_WIDTH / 2;
 		cr->player.coord.y = cr->click.y - WIN_HIGHT / 2;
+	}
+	else if (x > cr->click.x + MENU_XLEN / 7 && x < cr->click.x + MENU_XLEN / 7 * 6 && \
+	y > cr->click.y + MENU_YLEN / 14 * 3 && y < cr->click.y + MENU_YLEN / 14 * 3 + CHECKBOX_SIZE)
+	{
+		add_object(cr, cr->click.x - WIN_WIDTH / 2, cr->click.y - WIN_HIGHT / 2);
 	}
 }
 
@@ -101,4 +106,8 @@ void			rmb_menu(t_core *cr, t_wall *wall, int x, int y)
 	ft_strcpy(text, "Place player");
 	mlx_string_put(cr->mlx, cr->win, x + MENU_XLEN / 7, \
 	y + MENU_YLEN / 14 * 2, 0, text);
+	//
+	ft_strcpy(text, "Place object");
+	mlx_string_put(cr->mlx, cr->win, x + MENU_XLEN / 7, \
+	y + MENU_YLEN / 14 * 3, 0, text);
 }

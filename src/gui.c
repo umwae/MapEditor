@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/08/31 17:15:09 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/11 18:28:19 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,10 @@ void				draw_wall(void *td, int x, int y)
 	cr->vs.y0 = y;
 	cr->vs.x1 = x;
 	cr->vs.y1 = y;
+	// cr->vs.x0 = x + cr->offs.x - WIN_WIDTH / 2;
+	// cr->vs.y0 = y + cr->offs.y - WIN_HIGHT / 2;
+	// cr->vs.x1 = x + cr->offs.x - WIN_WIDTH / 2;
+	// cr->vs.y1 = y + cr->offs.y - WIN_HIGHT / 2;
 	grid_magnet(cr, &cr->vs.x0, &cr->vs.y0, 0);
 	// magnet(cr, &cr->vs.x0, &cr->vs.y0, 0);
 	cr->vs.mem_x = cr->vs.x0;
@@ -118,7 +122,7 @@ void						erase_by_id(t_core	*cr, int id)
 		cr->wlist = wall->next;
 		free(rm);
 		restore_id(cr);
-		restore_sec_id(cr);
+		restore_sec_id_v2(cr);
 		return ;
 	}
 	while (wall->next)
@@ -130,7 +134,7 @@ void						erase_by_id(t_core	*cr, int id)
 			wall->next = ((t_wall *)wall->next)->next;
 			free(rm);
 			restore_id(cr);
-			restore_sec_id(cr);
+			restore_sec_id_v2(cr);
 			return ;
 		}
 		wall = wall->next;

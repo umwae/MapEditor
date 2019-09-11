@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/09 21:18:16 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/11 17:45:54 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,33 @@ void 						restore_sec_id(t_core *cr)
 		i++;
 	}
 	cr->sec_num = i;
+}
+
+void 						restore_sec_id_v2(t_core *cr)
+{
+	int				i;
+	int				scount;
+	int				sw;
+
+	i = 0;
+	scount = -1;
+	sw = 0;
+	iter_wall(cr, i, -1, &get_last_sec);
+	while (i <= cr->idcurr)
+	{
+		if ((does_sec_id_exist(cr, i) == 1))
+		{
+			scount++;
+			iter_wall(cr, i, scount, &sec_id_replace);
+			sw = 1;
+		}
+		i++;
+	}
+	if (sw == 1)
+		cr->sec_num = scount + 1;
+	else
+		cr->sec_num = 0;
+	printf("SECNUM +++ %d\n", scount);
 }
 
 static void			remove_sectors_search(t_core *cr, t_wall *wall, int id, int pr2)

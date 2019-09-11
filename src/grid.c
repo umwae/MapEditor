@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/05 20:09:02 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/11 19:42:37 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,23 @@ void			grid_magnet(t_core *cr, int *x, int *y, int check_start)
   // else
   //   *y = cr->offs.y - WIN_HIGHT / 2 + *y + cr->zoom - (cr->offs.y + *y) % cr->zoom;
 
+  // if ((cr->offs.x + *x) % cr->zoom < (float)cr->zoom / 2)
+  //   *x = cr->offs.x - WIN_WIDTH / 2 + *x - (cr->offs.x + *x) % cr->zoom;
+  // else
+  //   *x = cr->offs.x - WIN_WIDTH / 2 + *x + cr->zoom - (cr->offs.x + *x) % cr->zoom;
+  // *y = cr->offs.y - WIN_HIGHT / 2 + *y - (cr->offs.y + *y) % cr->zoom;
+
+  // if ((cr->offs.x + *x) % cr->zoom < (float)cr->zoom / 2)
+  //   *x = (cr->offs.x - WIN_WIDTH / 2 + *x) - (cr->offs.x + *x) % cr->zoom;
+  // else
+	// *x = (cr->offs.x - WIN_HIGHT / 2 + *x + cr->zoom) - (cr->offs.x + *x) % cr->zoom;
+  // *y = *y - (cr->offs.y + *y) % cr->zoom;
+
   if ((cr->offs.x + *x) % cr->zoom < cr->zoom / 2)
-    *x = cr->offs.x - WIN_WIDTH / 2 + *x - (cr->offs.x + *x) % cr->zoom;
+	*x = *x - (cr->offs.x + *x) % cr->zoom;
   else
-    *x = cr->offs.x - WIN_WIDTH / 2 + *x + cr->zoom - (cr->offs.x + *x) % cr->zoom;
-  *y = cr->offs.y - WIN_HIGHT / 2 + *y - (cr->offs.y + *y) % cr->zoom;
+	*x = *x + cr->zoom - (cr->offs.x + *x) % cr->zoom;
+  *y = *y - (cr->offs.y + *y) % cr->zoom;
 }
 
 void			grid(t_core *cr)

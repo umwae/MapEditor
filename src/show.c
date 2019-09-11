@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/09 20:34:59 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/11 20:48:29 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,9 +141,10 @@ void			redraw(t_core *cr)
 	draw_walls(cr);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->image, 0, 0);
 	iter_wall(cr, 0, 0, &draw_nodes);
+	draw_objects(cr);
+	draw_player(cr);
 	display_instruments(cr);
 	highlight(cr);
-	draw_player(cr);
 	spot_sector_around(cr);
 	// show_messages(cr);
 }

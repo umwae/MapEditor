@@ -6,7 +6,7 @@
 #    By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/06 15:55:47 by jsteuber          #+#    #+#              #
-#    Updated: 2019/09/09 20:16:58 by jsteuber         ###   ########.fr        #
+#    Updated: 2019/09/11 19:54:37 by jsteuber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ BIN_PATH=./bin
 
 SRC= main.c image.c init.c show.c actions.c walls.c selection.c utilities.c \
 context_menu.c gui.c sectors.c messages.c colors.c output.c input.c grid.c \
-objects.c
+objects.c player.c
 OBJ:= $(addprefix $(BIN_PATH)/,$(SRC:.c=.o))
 
 .PHONY: all clean fclean re

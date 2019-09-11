@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/05 21:02:45 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/11 19:54:22 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,11 +179,12 @@ void            load_map(t_core *cr)
       process_walls(cr, pts, prt, i);
 			i++;
 		}
-		free(line);
+		// free(line);
 	}
   // load_walls(cr, line, fd);
 	// load_sectors(cr, line, fd);
   // load_portals(cr, line, fd);
+  load_player(cr, &line);
   iter_wall(cr, -1, -1, &count_sectors);
   iter_wall(cr, -1, -1, &redraw_color);
 	// free(line);

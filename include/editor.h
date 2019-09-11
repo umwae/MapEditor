@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:16 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/09 21:18:05 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/11 21:22:06 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@
 # define SELECT_PADDING 30
 # define POINT_SIZE 4
 
-# define OBJECT_SIZE 8
+# define OBJECT_SIZE 6
+# define PLAYER_SIZE 8
 
 # define WALL_COLOR 0xECF7FF
 # define SELECT_COLOR 0xFFD200
@@ -36,6 +37,7 @@
 # define APP_PORTAL_COLOR 0xBF8EEA
 # define GRID_COLOR 0x464646
 # define PLAYER_COLOR 0x00FF00
+# define OBJECT_COLOR 0xFF703C
 
 # define PI_CEIL 4
 # define PI_4 3.1415f
@@ -112,6 +114,15 @@ typedef struct					s_player
 	int								sec;
 }									t_player;
 
+typedef struct					s_obj
+{
+	int								id;
+	t_fcoord						fcoord;
+	float							angle;
+	int								sec;
+	void							*next;
+}									t_obj;
+
 typedef struct		s_core
 {
 	void						*mlx;
@@ -123,6 +134,7 @@ typedef struct		s_core
 	int							linesize;
 	//
 	t_wall					*wlist;
+	t_obj					*olist;
 	int							sectors[1000];
 	t_visual				vs;
 	t_elems					cmenu_elems;
@@ -236,5 +248,10 @@ void							spot_sector_around(t_core *cr);
 
 void							new_sector(t_core *cr);
 void							is_there_color(t_core *cr, t_wall *wall, int color, int pr2);
+void 							restore_sec_id_v2(t_core *cr);
+void							load_player(t_core *cr, char **line);
+void							draw_objects(t_core *cr);
+void							add_object(t_core *cr, int x, int y);
+void							del_object(t_core *cr, int idref);
 
 #endif

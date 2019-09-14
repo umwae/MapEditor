@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:16 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/14 15:45:30 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/14 20:44:38 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include "../libft/includes/get_next_line.h"
 # include "../minilibx_macos/mlx.h"
 
-# define WIN_WIDTH 1080
-# define WIN_HIGHT 880
+# define WIN_WIDTH 1500
+# define WIN_HIGHT 1300
 
 # define MAGNET_RADIUS 30
 # define SELECT_RADIUS 60
@@ -26,6 +26,8 @@
 
 # define OBJECT_SIZE 6
 # define PLAYER_SIZE 8
+
+# define DEFAULT_OBJ_TYPE 0
 
 # define WALL_COLOR 0xECF7FF
 # define SELECT_COLOR 0xFFD200
@@ -50,6 +52,7 @@
 # define I_MENU_XLEN 300
 # define I_MENU_YLEN 200
 # define CHECKBOX_SIZE 20
+# define ICON_SIZE 50
 
 # define ST_FLOOR_HIGHT 0
 # define ST_CEIL_HIGHT 75
@@ -119,6 +122,7 @@ typedef struct					s_player
 typedef struct					s_obj
 {
 	int								id;
+	int								type;
 	t_fcoord						fcoord;
 	float							angle;
 	int								sec;
@@ -136,7 +140,7 @@ typedef struct		s_core
 	int							linesize;
 	//
 	t_wall					*wlist;
-	t_obj					*olist;
+	t_obj					**olist;
 	int							sectors[1000];
 	t_visual				vs;
 	t_elems					cmenu_elems;
@@ -185,6 +189,7 @@ typedef struct		s_core
 	int						secmem[2];
 	t_coord					debug;
 	int						detect_cl;
+	t_obj					*closest_obj;
 }									t_core;
 
 void							init(t_core		*cr);
@@ -258,5 +263,9 @@ void							draw_objects(t_core *cr);
 void							add_object(t_core *cr, int x, int y);
 void							del_object(t_core *cr, int idref);
 void							info_menu(t_core *cr, t_wall *wall);
+void							record_objects(t_core *cr, int fd);
+void							obj_info_menu(t_core *cr, t_obj *obj);
+float							sel_object(t_core *cr, int x, int y);
+void							check_obj_events(t_core *cr, int x, int y, t_obj *obj);
 
 #endif

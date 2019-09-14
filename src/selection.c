@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/08/31 18:02:00 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/14 20:16:58 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,13 @@ int					select_wall(t_core *cr, int x, int y)
 			}
 			wall = wall->next;
 	}
+	//
+	if (sel_object(cr, x, y) < min_dist)
+	{
+		obj_info_menu(cr, cr->closest_obj);
+		return (-1);
+	}
+	//
 	if (min_dist == SELECT_RADIUS)
 	{
 		iter_wall(cr, -1, -1, &redraw_color);
@@ -67,6 +74,5 @@ int					select_wall(t_core *cr, int x, int y)
 		else
 			iter_wall(cr, SELECT_COLOR, -1, &redraw_color);
 	}
-
 	return (closest_wall);
 }

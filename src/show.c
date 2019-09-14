@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/14 15:27:34 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/14 20:21:43 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,5 +148,7 @@ void			redraw(t_core *cr)
 	spot_sector_around(cr);
 	if (cr->i_menu_is_open == 1)
 		info_menu(cr, cr->i_menu_wall);
+	else if (cr->i_menu_is_open == 2)
+		obj_info_menu(cr, cr->closest_obj);
 	// show_messages(cr);
 }

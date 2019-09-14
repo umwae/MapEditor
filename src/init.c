@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:20 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/11 20:28:24 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/14 19:23:14 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ void				init(t_core		*cr)
 	if (!(cr->win = mlx_new_window(cr->mlx, WIN_WIDTH, WIN_HIGHT, "Editor")))
 		err_ex(0);
 	cr->wlist = NULL;
-	cr->olist = NULL;
+	// cr->olist = NULL;
+	cr->olist = (t_obj **)malloc(sizeof(t_obj *));
+	*cr->olist = NULL;
 	load_gui(cr);
 	cr->inst_func = draw_wall;
 	cr->messages = (t_list **)malloc(sizeof(t_list **));
@@ -36,6 +38,10 @@ void				init(t_core		*cr)
 	cr->test = -1;
 	cr->zoom = 20;
 	cr->ctrl_button = 0;
+	cr->player.coord.x = 0;
+	cr->player.coord.y = 0;
+	cr->player.sec = 0;
+	cr->player.angle = 0;
 	img_new(cr);
 	redraw(cr);
 }

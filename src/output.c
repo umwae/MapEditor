@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/09 17:31:56 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/14 17:40:14 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,6 +274,7 @@ void            save_map(t_core *cr)
 		printf("ERROR\n");
 	record_walls(cr, line, fd);
 	record_sectors(cr, line, fd);
+	record_objects(cr, fd);
 	record_player(cr, fd);
 	free(line);
 	close(fd);

@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:59 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/14 15:36:19 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/14 20:56:30 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,9 @@ int			key_action(int keycode, t_core *cr)
 	else if (keycode == 126)
 		cr->player.coord.y -= 20;
 	else if (keycode == 67)
-	{
-		// del_object(cr, 2);
 		cr->test *= -1;
-	}
-		// cr->test *= -1;
+	else if (keycode == 117)
+		del_object(cr, 0);
 	redraw(cr);
 	return (0);
 }
@@ -95,12 +93,12 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 		if (button == 1)
 			cr->dragl = 0;
 		//
-		cr->detect_cl = 0;//Переписать на !менеджер событий в инфо меню
-		iter_wall(cr, SELECT_COLOR, -1, &is_there_color);
-		if (cr->detect_cl == 0)
-		{
-			cr->i_menu_is_open = 0;
-		}
+		// cr->detect_cl = 0;//Переписать на !менеджер событий в инфо меню
+		// iter_wall(cr, SELECT_COLOR, -1, &is_there_color);
+		// if (cr->detect_cl == 0 && cr->i_menu_is_open != 2)
+		// {
+		// 	cr->i_menu_is_open = 0;
+		// }
 		//
 		if (cr->menu_is_open == 1)
 		{
@@ -156,6 +154,10 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 			}
 			else
 			{
+				if (cr->i_menu_is_open == 2)
+				{
+					check_obj_events(cr, x, y, cr->closest_obj);
+				}
 				(*cr->inst_func)(cr, x, y);
 			}
 		}

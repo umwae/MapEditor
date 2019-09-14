@@ -89,6 +89,7 @@ double	ft_atof(const char *str)
 	char	*c;
 	int		len;
 	int		sign;
+	char	*r2;
 
 	sign = 1;
 	c = (char *)str;
@@ -103,9 +104,10 @@ double	ft_atof(const char *str)
 		c++;
 	if (*c == '.')
 		c++;
+	*(c + 1) = ' ';
 	res2 = (double)ft_atoi(c);
 	//len = ft_strlen(c);
-	len = 2;
+	len = 1;
 	while (len--)
 		res2 /= 10;
 	return ((res + res2) * sign);

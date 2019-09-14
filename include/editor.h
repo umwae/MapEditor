@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:16 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/11 21:22:06 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/14 15:45:30 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@
 # define INST_NUM 4
 # define MENU_XLEN 300
 # define MENU_YLEN 500
+# define I_MENU_XLEN 300
+# define I_MENU_YLEN 200
 # define CHECKBOX_SIZE 20
 
 # define ST_FLOOR_HIGHT 0
@@ -146,6 +148,8 @@ typedef struct		s_core
 	void						*icons_data;
 	void						*hl_data;
 	int							menu_is_open;
+	int							i_menu_is_open;
+	t_wall						*i_menu_wall;
 	int							wside;
 	t_coord					click;
 	int							idcurr;
@@ -253,5 +257,6 @@ void							load_player(t_core *cr, char **line);
 void							draw_objects(t_core *cr);
 void							add_object(t_core *cr, int x, int y);
 void							del_object(t_core *cr, int idref);
+void							info_menu(t_core *cr, t_wall *wall);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/11 18:28:19 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/14 15:20:08 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,15 @@ static void	find_sector(void *td, int x, int y)
 static void	select_wall_wrap(void *td, int x, int y)
 {
 	t_core	*cr;
+	t_wall	*wall;
 
 	cr = td;
 	if (select_wall(cr, x, y) >= 0)
-		find_by_index(cr, select_wall(cr, x, y))->color = SELECT_COLOR;
+	{
+		wall = find_by_index(cr, select_wall(cr, x, y));
+		wall->color = SELECT_COLOR;
+		info_menu(cr, wall);
+	}
 }
 
 void				draw_wall(void *td, int x, int y)

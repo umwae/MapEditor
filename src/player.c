@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/11 21:19:59 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/14 15:54:43 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,10 +157,11 @@ void			load_player(t_core *cr, char **line)
 	{
 		if (*line[0] == 'p')
 		{
+			printf("LOAD PL %s\n", *line);
 			parr = ft_strsplit(*line, '|');
-			printf("LOAD PL %s :: %s\n", parr[1], ft_strchr(parr[1], ' '));
 			cr->player.coord.y = ft_atof(parr[1]) * cr->zoom / UNIT_SIZE;
 			cr->player.coord.x = ft_atof(ft_strchr(parr[1], ' ') + 1) * cr->zoom / UNIT_SIZE;
+			printf("LOAD PL %d %d\n", cr->player.coord.y, cr->player.coord.x);
 			cr->player.sec = ft_atoi(parr[2]);
 			cr->player.angle = ft_atof(parr[3]);
 			close(fd);

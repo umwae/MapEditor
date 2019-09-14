@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/11 20:48:29 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/14 15:27:34 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ void					draw_nodes(t_core *cr, t_wall *wall, int pr1, int pr2)
 	// mlx_string_put(cr->mlx, cr->win, min(wall->p2.x + cr->offs.x, wall->p1.x + cr->offs.x) + abs(wall->p2.x - wall->p1.x) / 2, \
 	// min(wall->p2.y + cr->offs.y, wall->p1.y + cr->offs.y) + abs(wall->p2.y - wall->p1.y) / 2, 0xffffff, txt);
 //
-	char *txt = malloc(sizeof(char) * 5);//Отображает номера секторов, вызывает тормоза
-	ft_strcpy(txt, ft_strjoin(ft_strjoin(ft_itoa(wall->sectors[0]), " "), ft_itoa(wall->sectors[1])));
-	mlx_string_put(cr->mlx, cr->win, min(wall->p2.x, wall->p1.x) + abs(wall->p2.x - wall->p1.x) / 2 + cr->offs.x, \
-	min(wall->p2.y, wall->p1.y) + abs(wall->p2.y - wall->p1.y) / 2 + cr->offs.y, 0xffffff, txt);
+	// char *txt = malloc(sizeof(char) * 5);//Отображает номера секторов, вызывает тормоза
+	// ft_strcpy(txt, ft_strjoin(ft_strjoin(ft_itoa(wall->sectors[0]), " "), ft_itoa(wall->sectors[1])));
+	// mlx_string_put(cr->mlx, cr->win, min(wall->p2.x, wall->p1.x) + abs(wall->p2.x - wall->p1.x) / 2 + cr->offs.x, \
+	// min(wall->p2.y, wall->p1.y) + abs(wall->p2.y - wall->p1.y) / 2 + cr->offs.y, 0xffffff, txt);
 
-	// char *txt = malloc(sizeof(char) * 5);//Отображает номера точек друг поверх друга
+	char *txt = malloc(sizeof(char) * 5);//Отображает номера точек друг поверх друга
 	ft_strcpy(txt, ft_itoa(find_vt_id(cr, wall->p1.x / cr->zoom * UNIT_SIZE, wall->p1.y / cr->zoom * UNIT_SIZE)));
 	mlx_string_put(cr->mlx, cr->win, wall->p1.x + cr->offs.x, wall->p1.y + cr->offs.y, 0xffffff, txt);
 	ft_strcpy(txt, ft_itoa(find_vt_id(cr, wall->p2.x / cr->zoom * UNIT_SIZE, wall->p2.y / cr->zoom * UNIT_SIZE)));
@@ -146,5 +146,7 @@ void			redraw(t_core *cr)
 	display_instruments(cr);
 	highlight(cr);
 	spot_sector_around(cr);
+	if (cr->i_menu_is_open == 1)
+		info_menu(cr, cr->i_menu_wall);
 	// show_messages(cr);
 }

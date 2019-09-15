@@ -220,4 +220,17 @@ void				load_gui(t_core *cr)
 	&x, &y);
 	cr->hl_data = (int *)mlx_get_data_addr(cr->hl_trash, \
 	&cr->bpp, &(cr->linesize), &(cr->endian));
+	//
+	if (!(cr->arrowl_trash = (int *)malloc(sizeof(int))))
+		err_ex(0);
+	if (!(cr->arrowr_trash = (int *)malloc(sizeof(int))))
+		err_ex(0);
+	cr->arrowl_trash = mlx_xpm_file_to_image(cr->mlx, "./gui/arrow_left.xpm", \
+	&x, &y);
+	cr->arrowr_trash = mlx_xpm_file_to_image(cr->mlx, "./gui/arrow_right.xpm", \
+	&x, &y);
+	cr->arrowl_data = (int *)mlx_get_data_addr(cr->arrowl_trash, \
+	&cr->bpp, &(cr->linesize), &(cr->endian));
+	cr->arrowr_data = (int *)mlx_get_data_addr(cr->arrowr_trash, \
+	&cr->bpp, &(cr->linesize), &(cr->endian));
 }

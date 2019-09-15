@@ -120,27 +120,29 @@ static void			find_any_wall_in_sec(t_core *cr, t_wall *wall, int refid, int pr2)
 
 static void			record_sectors(t_core *cr, char *line, int fd)
 {
+	char		*txt;
 	char		*tmp;
 	char		*conn;
 	int			i;
 	t_fcoord	cw;
-	// t_fcoord	cwold;
 	int			curr;
-
+	t_sec		*sec;
 
 	i = 0;
-	tmp = NULL;
-	conn = ft_strnew(100);
+	txt = ft_strnew(200);
+	conn = ft_strnew(200);
 	iter_wall(cr, 0, -1, &find_any_wall_in_sec);
 	// curr = cr->idcurr;
 	while (i < cr->sec_num && cr->idcurr != -1)
 	{
-		ft_putstr_fd(tmp = ft_strjoin("\ns|", ft_ftoa(ST_FLOOR_HIGHT)), fd);
+		sec = find_sec_list(cr, i);
+		ft_strcat(txt, "\ns|");
+		ft_strcat(txt, (tmp = ft_ftoa(sec->floor)));
 		free(tmp);
 		ft_strcpy(line, " ");
-    ft_putstr_fd(line, fd);
-		ft_putstr_fd(tmp = ft_strjoin(ft_ftoa(ST_CEIL_HIGHT), "|"), fd);
+		ft_strcat(txt, (tmp = ft_ftoa(sec->ceiling)));
 		free(tmp);
+		ft_strcat(txt, "|");
 		//
 		cr->idcurr = -1;
 		iter_wall(cr, i, -1, &find_any_wall_in_sec);
@@ -148,14 +150,10 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 		if (cr->idcurr != -1)
 		{
 			choose_direction(cr, &cw, find_by_index(cr, cr->idcurr), i);
-			// cw.x = (float)find_by_index(cr, cr->idcurr)->p1.x / cr->zoom * UNIT_SIZE;
-			// cw.y = (float)find_by_index(cr, cr->idcurr)->p1.y / cr->zoom * UNIT_SIZE;
-			// cwold.x = cw.x;
-			// cwold.y = cw.y;
 			while ((curr = find_next_wall(cr, &cw, curr, i)) >= 0)
 			{
-				ft_strcpy(line, ft_itoa(find_vt_id(cr, cw.x, cw.y)));
-		    	ft_putstr_fd(line, fd);
+				ft_strcat(txt, (tmp = ft_itoa(find_vt_id(cr, cw.x, cw.y))));
+				free(tmp);
 				printf("CHECKING FOR PORTALS %d\n", curr);
 				if (find_by_index(cr, curr)->isportal == 1)
 				{
@@ -163,12 +161,14 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 					if (find_by_index(cr, curr)->sectors[0] == i)
 					{
 						printf("SEC No0 IS CURR SEC\n");
-						conn = ft_strcat(conn, ft_itoa(find_by_index(cr, curr)->sectors[1]));
+						conn = ft_strcat(conn, (tmp = ft_itoa(find_by_index(cr, curr)->sectors[1])));
+						free(tmp);
 					}
 					else if (find_by_index(cr, curr)->sectors[1] == i)
 					{
 						printf("SEC No1 IS CURR SEC\n");
-						conn = ft_strcat(conn, ft_itoa(find_by_index(cr, curr)->sectors[0]));
+						conn = ft_strcat(conn, (tmp = ft_itoa(find_by_index(cr, curr)->sectors[0])));
+						free(tmp);
 					}
 				}
 				else
@@ -184,24 +184,26 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 				}
 				else
 				{
-					ft_strcpy(line, " ");
-					conn = ft_strcat(conn, " ");
-					ft_putstr_fd(line, fd);
+					ft_strcat(txt, " ");
+					ft_strcat(conn, " ");
 				}
-				// cwold.x = cw.x;
-				// cwold.y = cw.y;
 			}
 		}
-		ft_strcpy(line, "|");
-		ft_putstr_fd(line, fd);
+		ft_strcat(txt, "|");
+		ft_putstr_fd(txt, fd);
+		ft_strcat(conn, "|");
+		if (sec->illum > 0)
+		{
+			ft_strcat(conn, (tmp = ft_ftoa(sec->illum)));
+			free(tmp);
+			ft_strcat(conn, "|");
+		}
 		ft_putstr_fd(conn, fd);
+		ft_strclr(txt);
 		ft_strclr(conn);
-		ft_strcpy(line, "|");
-		ft_putstr_fd(line, fd);
 		i++;
 	}
-		ft_strcpy(line, "\n");
-		ft_putstr_fd(line, fd);
+		free(txt);
 		free(conn);
 }
 

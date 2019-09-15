@@ -24,6 +24,8 @@ void		new_sector(t_core *cr)
 	iter_wall(cr, -1, -1, &apply_sector);
 	cr->sec_num++;
 	iter_wall(cr, -1, -1, &redraw_color);
+	add_sec_list(cr);
+	name_sec_list(cr);
 }
 
 void	count_sectors(t_core *cr, t_wall *wall, int pr1, int pr2)
@@ -72,27 +74,6 @@ static			void	get_last_sec(t_core *cr, t_wall *wall, int idref, int pr2)
 		cr->idcurr = wall->sectors[1];
 }
 
-void 						restore_sec_id(t_core *cr)
-{
-	int				i;
-
-	i = 0;
-	while (cr->idcurr != -1)
-	{
-		cr->idcurr = -1;
-		if (does_sec_id_exist(cr, i) == 0)
-		{
-			iter_wall(cr, i, -1, &get_last_sec);
-			// printf("last sec is %d\n", cr->idcurr);
-			// printf("replacing %d with %d\n", cr->idcurr, i);
-			if (cr->idcurr != -1)
-			iter_wall(cr, cr->idcurr, i, &sec_id_replace);
-		}
-		i++;
-	}
-	cr->sec_num = i;
-}
-
 void 						restore_sec_id_v2(t_core *cr)
 {
 	int				i;
@@ -109,6 +90,7 @@ void 						restore_sec_id_v2(t_core *cr)
 		{
 			scount++;
 			iter_wall(cr, i, scount, &sec_id_replace);
+			sec_list_id_replace(cr, scount, i);
 			sw = 1;
 		}
 		i++;
@@ -147,6 +129,8 @@ void			remove_sectors(t_core *cr, int id)
 	cr->idsec.x = -2;
 	cr->idsec.y = -2;
 	iter_wall(cr, id, 0, &remove_sectors_search);
+	del_sec_list(cr, cr->idsec.x);
+	del_sec_list(cr, cr->idsec.y);
 	iter_wall(cr, id, 0, &remove_sectors_ag);
 	iter_wall(cr, 0, 0, &redraw_color);
 }

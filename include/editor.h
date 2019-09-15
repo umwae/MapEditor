@@ -16,8 +16,8 @@
 # include "../libft/includes/get_next_line.h"
 # include "../minilibx_macos/mlx.h"
 
-# define WIN_WIDTH 1500
-# define WIN_HIGHT 1300
+# define WIN_WIDTH 1300
+# define WIN_HIGHT 980
 
 # define MAGNET_RADIUS 30
 # define SELECT_RADIUS 60
@@ -56,6 +56,7 @@
 
 # define ST_FLOOR_HIGHT 0
 # define ST_CEIL_HIGHT 75
+# define ST_ILLUMINATION 0.75f
 
 # define COMPRESSING 30
 # define UNIT_SIZE 0.5f
@@ -72,6 +73,12 @@ typedef struct		s_fcoord
 	float							y;
 }									t_fcoord;
 
+// typedef struct		s_st
+// {
+// 	int							s;
+// 	int							t;
+// }									t_st;
+
 typedef struct		s_wall
 {
 	t_coord					p1;
@@ -80,7 +87,9 @@ typedef struct		s_wall
 	float						len;
 	int							color;
 	int							sectors[2];
+
 	int							isportal;
+	int							isdoor;
 	void						*next;
 }									t_wall;
 
@@ -129,6 +138,15 @@ typedef struct					s_obj
 	void							*next;
 }									t_obj;
 
+typedef struct					s_sec
+{
+	int								id;
+	float							floor;
+	float							ceiling;
+	float							illum;
+	void							*next;
+}												t_sec;
+
 typedef struct		s_core
 {
 	void						*mlx;
@@ -140,8 +158,8 @@ typedef struct		s_core
 	int							linesize;
 	//
 	t_wall					*wlist;
-	t_obj					**olist;
-	int							sectors[1000];
+	t_obj						**olist;
+	t_sec						**slist;
 	t_visual				vs;
 	t_elems					cmenu_elems;
 	int							lmb;//Left mouse button
@@ -151,6 +169,11 @@ typedef struct		s_core
 	void						*hl_trash;
 	void						*icons_data;
 	void						*hl_data;
+	void						*arrowl_trash;
+	void						*arrowr_trash;
+	void						*arrowl_data;
+	void						*arrowr_data;
+	//
 	int							menu_is_open;
 	int							i_menu_is_open;
 	t_wall						*i_menu_wall;
@@ -267,5 +290,11 @@ void							record_objects(t_core *cr, int fd);
 void							obj_info_menu(t_core *cr, t_obj *obj);
 float							sel_object(t_core *cr, int x, int y);
 void							check_obj_events(t_core *cr, int x, int y, t_obj *obj);
+
+void							sec_list_id_replace(t_core *cr, int new, int old);
+void							del_sec_list(t_core *cr, int idref);
+void							add_sec_list(t_core *cr);
+void							name_sec_list(t_core *cr);
+t_sec							*find_sec_list(t_core *cr, int idref);
 
 #endif

@@ -69,9 +69,9 @@ void			obj_info_menu(t_core *cr, t_obj *obj)
 	I_MENU_YLEN / 10, 0, text);
 	free(text);
 	//Заменить хайлайт на иконку
-	mlx_put_image_to_window(cr->mlx, cr->win, cr->hl_trash, \
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
 		xy.x, I_MENU_YLEN / 10);
-	mlx_put_image_to_window(cr->mlx, cr->win, cr->hl_trash, \
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowr_trash, \
 		xy.x + I_MENU_XLEN - ICON_SIZE, I_MENU_YLEN / 10);
 }
 

@@ -26,6 +26,8 @@ void				init(t_core		*cr)
 	// cr->olist = NULL;
 	cr->olist = (t_obj **)malloc(sizeof(t_obj *));
 	*cr->olist = NULL;
+	cr->slist = (t_sec **)malloc(sizeof(t_sec *));
+	*cr->slist = NULL;
 	load_gui(cr);
 	cr->inst_func = draw_wall;
 	cr->messages = (t_list **)malloc(sizeof(t_list **));

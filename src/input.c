@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/11 19:54:22 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/16 21:28:14 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ static void     set_sectors(t_core *cr, t_coord inp1, t_coord inp2, int secnum)
       if (((inp1.x == wall->p1.x && inp1.y == wall->p1.y) && (inp2.x == wall->p2.x && inp2.y == wall->p2.y)) || \
       ((inp1.x == wall->p2.x && inp1.y == wall->p2.y) && (inp2.x == wall->p1.x && inp2.y == wall->p1.y)))
       {
-		  if (wall->sectors[0] == -1)
-			wall->sectors[0] = secnum;
-		  else if (wall->sectors[1] == -1)
-			wall->sectors[1] = secnum;
+		  if (wall->sectors[0].s == -1)
+			wall->sectors[0].s = secnum;
+		  else if (wall->sectors[1].s == -1)
+			wall->sectors[1].s = secnum;
 	  }
       wall = wall->next;
     }
@@ -138,6 +138,8 @@ void            load_map(t_core *cr)
   char  *tmp;
   char	*p;
 
+  // load_sec_list(cr);
+	//
 	cr->sec_num = 0;
   delete_wlist(cr);
 	fd = open("./maps/testmap", O_RDONLY);
@@ -147,20 +149,27 @@ void            load_map(t_core *cr)
 	{
 		if (line[0] == 's')
 		{
+			cr->sec_num++;
 			if (i == -1)
 				i = 0;
 			// s|0.00 75.00|2 1 0 3|-1 -1 1 -1|
-
-
+			add_sec_list(cr);
+			pts = ft_strsplit(line, '|');
+      		// find_sec_list(cr, i)->floor = 99;
+			find_sec_list(cr, i)->floor = ft_atof(pts[1]);
+			find_sec_list(cr, i)->ceiling = ft_atof(ft_strchr(pts[1], ' ') + 1);
+			printf("§§§§§§§ %f %f\n", find_sec_list(cr, i)->floor, find_sec_list(cr, i)->ceiling);
+			if (pts[4])
+				find_sec_list(cr, i)->illum = ft_atof(pts[4]);
+			free(pts);
+			//
 			p = line + find_rep_symb(line, '|', 3);
 	  	  while (*p != ' ')
 	  	  	p--;
-	  	printf("PPPPPPPP %s //////// %s\n", line, ft_strsub(p + 1, 0, ft_strchr(p, '|') - p - 1));
 	  	  tmp = ft_strsub(p + 1, 0, ft_strchr(p, '|') - p - 1);
 	  	  tmp = ft_strjoin(tmp, " ");
 	  	  tmp = ft_strjoin(tmp, ft_strsub(line, find_rep_symb(line, '|', 2) + 1, \
 	  			find_rep_symb(line, '|', 3) - (find_rep_symb(line, '|', 2) + 1)));
-	  		printf("TTTTTTTT %s\n", tmp);
 	        pts = ft_strsplit(tmp, ' ');
 			ft_strclr(tmp);
 		//
@@ -184,6 +193,10 @@ void            load_map(t_core *cr)
   // load_walls(cr, line, fd);
 	// load_sectors(cr, line, fd);
   // load_portals(cr, line, fd);
+  load_sec_info(cr);
+  while (*cr->olist)
+  	del_object(cr, 0);
+load_objects(cr);
   load_player(cr, &line);
   iter_wall(cr, -1, -1, &count_sectors);
   iter_wall(cr, -1, -1, &redraw_color);

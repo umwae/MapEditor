@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/14 20:58:32 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/16 21:21:35 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void		add_object(t_core *cr, int x, int y)
 	obj->fcoord.y = y;
 	obj->type = DEFAULT_OBJ_TYPE;
 	obj->id = count_obj(cr);
+	obj->color = OBJECT_COLOR;
 	*cr->olist = obj;
 }
 
@@ -59,7 +60,7 @@ void		draw_objects(t_core *cr)
 	{
 		xy.x = obj->fcoord.x - OBJECT_SIZE / 2 + cr->offs.x;
 		xy.y = obj->fcoord.y - OBJECT_SIZE / 2 + cr->offs.y;
-		draw_rectangle(cr, xy, ab, OBJECT_COLOR);
+		draw_rectangle(cr, xy, ab, obj->color);
 		//
 		char *txt = malloc(sizeof(char) * 5);
 		ft_strcpy(txt, ft_itoa(obj->id));
@@ -149,30 +150,45 @@ void			record_objects(t_core *cr, int fd)
 	free(text);
 }
 
-void			load_objects(t_core *cr, char **line)
+void			load_objects(t_core *cr)
 {
 	char		**oarr;
 	int			fd;
 	t_obj		*obj;
+	char		*line;
 
 	fd = open("./maps/testmap", O_RDONLY);
-	while (get_next_line(fd, line) > 0)
+	while (get_next_line(fd, &line) > 0)
 	{
-		if (*line[0] == 'o')
+		if (line[0] == 'o')
 		{
-			oarr = ft_strsplit(*line, '|');
+			oarr = ft_strsplit(line, '|');
 			obj = (t_obj *)malloc(sizeof(t_obj));
 			obj->sec = ft_atoi(oarr[1]);
 			obj->fcoord.y = ft_atof(oarr[2]) * cr->zoom / UNIT_SIZE;
 			obj->fcoord.x = ft_atof(ft_strchr(oarr[2], ' ') + 1) * cr->zoom / UNIT_SIZE;
 			obj->type = ft_atoi(oarr[3]);
 			obj->id = count_obj(cr);
+			obj->color = OBJECT_COLOR;
 			obj->next = *cr->olist;
+			*cr->olist = obj;
 		}
 	}
 	close(fd);
-	ft_arrfree(&oarr, 4);
+	// ft_arrfree(&oarr, 4);
 	return ;
+}
+
+static void		restore_obj_color(t_core *cr)
+{
+	t_obj	*obj;
+
+	obj = *cr->olist;
+	while (obj)
+	{
+		obj->color = OBJECT_COLOR;
+		obj = obj->next;
+	}
 }
 
 float			sel_object(t_core *cr, int x, int y)
@@ -183,6 +199,7 @@ float			sel_object(t_core *cr, int x, int y)
 
 	min_dist = SELECT_RADIUS;
 	obj = *cr->olist;
+	restore_obj_color(cr);
 	while (obj)
 	{
 		if ((res = calc_dist(x, y, obj->fcoord.x + cr->offs.x, obj->fcoord.y + cr->offs.y)) < min_dist)

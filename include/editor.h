@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:16 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/14 20:44:38 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/16 21:11:09 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,12 @@
 # define ST_FLOOR_HIGHT 0
 # define ST_CEIL_HIGHT 75
 # define ST_ILLUMINATION 0.75f
+# define ST_TEXTURE 2
 
 # define COMPRESSING 30
 # define UNIT_SIZE 0.5f
+
+# define SKY 555
 
 typedef struct		s_coord
 {
@@ -73,11 +76,11 @@ typedef struct		s_fcoord
 	float							y;
 }									t_fcoord;
 
-// typedef struct		s_st
-// {
-// 	int							s;
-// 	int							t;
-// }									t_st;
+typedef struct		s_st
+{
+	int							s;
+	int							t;
+}									t_st;
 
 typedef struct		s_wall
 {
@@ -86,8 +89,7 @@ typedef struct		s_wall
 	int							index;
 	float						len;
 	int							color;
-	int							sectors[2];
-
+	t_st						sectors[2];
 	int							isportal;
 	int							isdoor;
 	void						*next;
@@ -135,6 +137,7 @@ typedef struct					s_obj
 	t_fcoord						fcoord;
 	float							angle;
 	int								sec;
+	int								color;
 	void							*next;
 }									t_obj;
 
@@ -142,7 +145,9 @@ typedef struct					s_sec
 {
 	int								id;
 	float							floor;
+	int								ftex;
 	float							ceiling;
+	int								ctex;
 	float							illum;
 	void							*next;
 }												t_sec;
@@ -290,11 +295,14 @@ void							record_objects(t_core *cr, int fd);
 void							obj_info_menu(t_core *cr, t_obj *obj);
 float							sel_object(t_core *cr, int x, int y);
 void							check_obj_events(t_core *cr, int x, int y, t_obj *obj);
+void							load_objects(t_core *cr);
 
 void							sec_list_id_replace(t_core *cr, int new, int old);
 void							del_sec_list(t_core *cr, int idref);
 void							add_sec_list(t_core *cr);
 void							name_sec_list(t_core *cr);
 t_sec							*find_sec_list(t_core *cr, int idref);
+void					print_sec_num(t_core *cr);
+void							load_sec_info(t_core *cr);
 
 #endif

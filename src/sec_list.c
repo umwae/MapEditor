@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   secects.c                                          :+:      :+:    :+:   */
+/*   sec_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/14 20:58:32 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/16 20:57:06 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,12 @@ void		add_sec_list(t_core *cr)
 
 	sec = (t_sec *)malloc(sizeof(t_sec));
 	sec->next = *cr->slist;
-	sec->illum = 0.75;
+	sec->illum = ST_ILLUMINATION;
 	sec->floor = ST_FLOOR_HIGHT;
 	sec->ceiling = ST_CEIL_HIGHT;
+	sec->ftex = -1;
+	sec->ctex = -1;
+	// if (idtd == -1)
 	sec->id = cr->sec_num - 1;
 	*cr->slist = sec;
 }
@@ -47,9 +50,15 @@ void				sec_list_id_replace(t_core *cr, int new, int old)
 	t_sec		*sec;
 
 	sec = *cr->slist;
-	while (sec->next && sec->id != old)
+	while (sec->next)
+	{
+		if (sec->id == old)
+		{
+			sec->id = new;
+			return ;
+		}
 		sec = sec->next;
-	sec->id = new;
+	}
 }
 
 void		del_sec_list(t_core *cr, int idref)
@@ -99,28 +108,68 @@ t_sec				*find_sec_list(t_core *cr, int idref)
 	return (sec);
 }
 
-// void			record_textures(t_core *cr, int fd)
-// {
-// 	char	*text;
-// 	t_sec	*sec;
-//
-// 	text = ft_strnew(100);
-// 	sec = *cr->slist;
-// 	ft_putstr_fd("\n", fd);
-// 	while (sec)
-// 	{
-// 		text = ft_strnew(100);
-// 		ft_strcat(text, "o|");
-// 		ft_strcat(text, ft_itoa(sec->sec));
-// 		ft_strcat(text, "|");
-// 		ft_strcat(text, ft_ftoa(sec->fcoord.y / cr->zoom * UNIT_SIZE));
-// 		ft_strcat(text, " ");
-// 		ft_strcat(text, ft_ftoa(sec->fcoord.x / cr->zoom * UNIT_SIZE));
-// 		ft_strcat(text, "|");
-// 		ft_strcat(text, ft_itoa(sec->type));
-// 		ft_strcat(text, "|\n");
-// 		ft_putstr_fd(text, fd);
-// 		sec = sec->next;
-// 	}
-// 	free(text);
-// }
+void					print_sec_num(t_core *cr)
+{
+	t_wall		*wall;
+	int			am;
+	int			i;
+	t_coord		summ;
+	char 		*txt;
+
+	txt = ft_strnew(10);
+	i = 0;
+	while (i < cr->sec_num)
+	{
+		am = 0;
+		summ.x = 0;
+		summ.y = 0;
+		wall = cr->wlist;
+		while (wall)
+		{
+			if (wall->sectors[0].s == i || wall->sectors[1].s == i)
+			{
+				am += 2;
+				summ.x += (wall->p1.x + wall->p2.x);
+				summ.y += (wall->p1.y + wall->p2.y);
+			}
+			wall = wall->next;
+		}
+		summ.x = (float)summ.x / am;
+		summ.y = (float)summ.y / am;
+		// ft_strcat(txt, "[");
+		ft_strcat(txt, ft_itoa(i));
+		// ft_strcat(txt, "]");
+		mlx_string_put(cr->mlx, cr->win, summ.x + cr->offs.x, \
+		summ.y + cr->offs.y, 0x00ffb5, txt);
+		ft_strclr(txt);
+		i++;
+	}
+}
+
+void		load_sec_info(t_core *cr)
+{
+	int		fd;
+	char 	*line;
+	t_sec	*sec;
+	char  	**pts;
+	int		i;
+
+	i = 0;
+	fd = open("./maps/testmap", O_RDONLY);
+	while (get_next_line(fd, &line) > 0)
+	{
+		if (line[0] == 't')
+		{
+			pts = ft_strsplit(line, '|');
+			sec = find_sec_list(cr, ft_atoi(pts[1]));
+			sec->ftex = ft_atoi(pts[2]);
+			if (ft_strncmp(ft_strchr(pts[2], ' '), "sky", 3) == 0)
+				sec->ctex = SKY;
+			else
+				sec->ctex = ft_atoi(ft_strchr(pts[2], ' '));
+		}
+		free(line);
+	}
+	free(line);
+	close(fd);
+}

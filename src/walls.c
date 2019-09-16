@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/08/31 13:48:53 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/16 20:37:06 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,9 +125,12 @@ void					add_wall(t_core *cr)
 	wall->color = WALL_COLOR;
 	wall->index = i;
 	wall->len = calc_dist(wall->p1.x, wall->p1.y, wall->p2.x, wall->p2.y);
-	wall->sectors[0] = -1;
-	wall->sectors[1] = -1;
+	wall->sectors[0].s = -1;
+	wall->sectors[1].s = -1;
+	wall->sectors[0].t = 0;
+	wall->sectors[1].t = 2;
 	wall->isportal = cr->mpsw;
 	cr->mpsw = 0;
+	printf("w>>>%d %d\n", wall->sectors[0].t, wall->sectors[1].t);
 	iter_wall(cr, 0, 0, &redraw_color);
 }

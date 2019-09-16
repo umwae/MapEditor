@@ -32,19 +32,23 @@ void	count_sectors(t_core *cr, t_wall *wall, int pr1, int pr2)
 {
 	(void)pr1;
 	(void)pr2;
-	if (wall->sectors[0] >= 0 && wall->sectors[0] > cr->sec_num - 1)
-		cr->sec_num = wall->sectors[0] + 1;
-	else if (wall->sectors[1] >= 0 && wall->sectors[1] > cr->sec_num - 1)
-		cr->sec_num = wall->sectors[1] + 1;
+	if (wall->sectors[0].s >= 0 && wall->sectors[0].s > cr->sec_num - 1)
+		cr->sec_num = wall->sectors[0].s + 1;
+	else if (wall->sectors[1].s >= 0 && wall->sectors[1].s > cr->sec_num - 1)
+		cr->sec_num = wall->sectors[1].s + 1;
 }
 
 static			void	sec_id_replace(t_core *cr, t_wall *wall, int idold, int idnew)
 {
 	(void)cr;
-	if (wall->sectors[0] == idold)
-		wall->sectors[0] = idnew;
-	else if (wall->sectors[1] == idold)
-		wall->sectors[1] = idnew;
+	if (wall->sectors[0].s == idold)
+	{
+		wall->sectors[0].s = idnew;
+	}
+	else if (wall->sectors[1].s == idold)
+	{
+		wall->sectors[1].s = idnew;
+	}
 }
 
 static			int	does_sec_id_exist(t_core *cr, int idref)
@@ -54,7 +58,7 @@ static			int	does_sec_id_exist(t_core *cr, int idref)
 	wall = cr->wlist;
 	while (wall)
 	{
-		if (wall->sectors[0] == idref || wall->sectors[1] == idref)
+		if (wall->sectors[0].s == idref || wall->sectors[1].s == idref)
 		{
 			// printf("sec id %d exists\n", idref);
 			return (1);
@@ -68,10 +72,10 @@ static			int	does_sec_id_exist(t_core *cr, int idref)
 static			void	get_last_sec(t_core *cr, t_wall *wall, int idref, int pr2)
 {
 	(void)pr2;
-	if (wall->sectors[0] > idref)
-		cr->idcurr = wall->sectors[0];
-	else if (wall->sectors[1] > idref)
-		cr->idcurr = wall->sectors[1];
+	if (wall->sectors[0].s > idref)
+		cr->idcurr = wall->sectors[0].s;
+	else if (wall->sectors[1].s > idref)
+		cr->idcurr = wall->sectors[1].s;
 }
 
 void 						restore_sec_id_v2(t_core *cr)
@@ -107,10 +111,10 @@ static void			remove_sectors_search(t_core *cr, t_wall *wall, int id, int pr2)
 	(void)pr2;
 	if (wall->index == id)
 	{
-		if (wall->sectors[0] >= 0)
-			cr->idsec.x = wall->sectors[0];
-		if (wall->sectors[1] >= 0)
-			cr->idsec.y = wall->sectors[1];
+		if (wall->sectors[0].s >= 0)
+			cr->idsec.x = wall->sectors[0].s;
+		if (wall->sectors[1].s >= 0)
+			cr->idsec.y = wall->sectors[1].s;
 	}
 }
 
@@ -118,10 +122,16 @@ static void			remove_sectors_ag(t_core *cr, t_wall *wall, int pr1, int pr2)
 {
 	(void)pr1;
 	(void)pr2;
-	if (wall->sectors[0] == cr->idsec.x || wall->sectors[0] == cr->idsec.y)
-		wall->sectors[0] = -1;
-	if (wall->sectors[1] == cr->idsec.x || wall->sectors[0] == cr->idsec.y)
-		wall->sectors[1] = -1;
+	if (wall->sectors[0].s == cr->idsec.x || wall->sectors[0].s == cr->idsec.y)
+	{
+		wall->sectors[0].s = -1;
+		wall->sectors[0].t = -1;
+	}
+	if (wall->sectors[1].s == cr->idsec.x || wall->sectors[0].s == cr->idsec.y)
+	{
+		wall->sectors[1].s = -1;
+		wall->sectors[1].t = -1;
+	}
 }
 
 void			remove_sectors(t_core *cr, int id)

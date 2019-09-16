@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/14 17:40:14 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/16 18:00:33 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,14 @@ static void			choose_direction(t_core *cr, t_fcoord *cw, t_wall *start, int seci
 	while (wall)
 	{
 		if (wall->p1.x == start->p1.x && wall->p1.y == start->p1.y && wall->index != start->index && \
-			(wall->sectors[0] == secid || wall->sectors[1] == secid))
+			(wall->sectors[0].s == secid || wall->sectors[1].s == secid))
 		{
 			printf("START %d W ID%d P1\n", start->index, wall->index);
 			p3 = wall->p2;
 			break ;
 		}
 		else if (wall->p2.x == start->p1.x && wall->p2.y == start->p1.y && wall->index != start->index && \
-			(wall->sectors[0] == secid || wall->sectors[1] == secid))
+			(wall->sectors[0].s == secid || wall->sectors[1].s == secid))
 		{
 			printf("START %d W ID%d P2\n", start->index, wall->index);
 			p3 = wall->p1;
@@ -91,14 +91,14 @@ static int			find_next_wall(t_core *cr, t_fcoord *cw, int prev, int secid)
 	while (wall)
 	{
 		if (wall->p1.x == cw->x * cr->zoom / UNIT_SIZE && wall->p1.y == cw->y * cr->zoom / UNIT_SIZE && wall->index != prev && \
-			(wall->sectors[0] == secid || wall->sectors[1] == secid))
+			(wall->sectors[0].s == secid || wall->sectors[1].s == secid))
 		{
 			cw->x = wall->p2.x / cr->zoom * UNIT_SIZE;
 			cw->y = wall->p2.y / cr->zoom * UNIT_SIZE;
 			return (wall->index);
 		}
 		else if (wall->p2.x == cw->x * cr->zoom / UNIT_SIZE && wall->p2.y == cw->y * cr->zoom / UNIT_SIZE && wall->index != prev && \
-			(wall->sectors[0] == secid || wall->sectors[1] == secid))
+			(wall->sectors[0].s == secid || wall->sectors[1].s == secid))
 		{
 			cw->x = wall->p1.x / cr->zoom * UNIT_SIZE;
 			cw->y = wall->p1.y / cr->zoom * UNIT_SIZE;
@@ -112,9 +112,9 @@ static int			find_next_wall(t_core *cr, t_fcoord *cw, int prev, int secid)
 static void			find_any_wall_in_sec(t_core *cr, t_wall *wall, int refid, int pr2)
 {
 	(void)pr2;
-	if (wall->sectors[0] == refid)
+	if (wall->sectors[0].s == refid)
 		cr->idcurr = wall->index;
-	else if (wall->sectors[1] == refid)
+	else if (wall->sectors[1].s == refid)
 		cr->idcurr = wall->index;
 }
 
@@ -123,6 +123,12 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 	char		*txt;
 	char		*tmp;
 	char		*conn;
+	//
+	char		*wtx;
+	int			doprint_wtx = 0;
+	t_wall		*wtmp;
+	int			itmp;
+	//
 	int			i;
 	t_fcoord	cw;
 	int			curr;
@@ -131,6 +137,7 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 	i = 0;
 	txt = ft_strnew(200);
 	conn = ft_strnew(200);
+	wtx = ft_strnew(200);
 	iter_wall(cr, 0, -1, &find_any_wall_in_sec);
 	// curr = cr->idcurr;
 	while (i < cr->sec_num && cr->idcurr != -1)
@@ -139,10 +146,21 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 		ft_strcat(txt, "\ns|");
 		ft_strcat(txt, (tmp = ft_ftoa(sec->floor)));
 		free(tmp);
-		ft_strcpy(line, " ");
+		ft_strcat(txt, " ");
 		ft_strcat(txt, (tmp = ft_ftoa(sec->ceiling)));
 		free(tmp);
 		ft_strcat(txt, "|");
+		//
+		ft_strcat(wtx, "\nt|");
+		ft_strcat(wtx, (tmp = ft_itoa(i)));
+		free(tmp);
+		ft_strcat(wtx, "|");
+		ft_strcat(wtx, (tmp = ft_itoa(find_sec_list(cr, i)->ftex)));
+		free(tmp);
+		ft_strcat(wtx, " ");
+		ft_strcat(wtx, (tmp = ft_itoa(find_sec_list(cr, i)->ctex)));
+		free(tmp);
+		ft_strcat(wtx, "|");
 		//
 		cr->idcurr = -1;
 		iter_wall(cr, i, -1, &find_any_wall_in_sec);
@@ -152,28 +170,32 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 			choose_direction(cr, &cw, find_by_index(cr, cr->idcurr), i);
 			while ((curr = find_next_wall(cr, &cw, curr, i)) >= 0)
 			{
+				wtmp = find_by_index(cr, curr);
+				//
 				ft_strcat(txt, (tmp = ft_itoa(find_vt_id(cr, cw.x, cw.y))));
+				//
+				if (wtmp->sectors[0].t != -1 || \
+				wtmp->sectors[1].t != -1)
+					doprint_wtx = 1;
+				printf("%d %d \n", wtmp->sectors[0].t, wtmp->sectors[1].t);
+				ft_strcat(wtx, ft_itoa(wtmp->sectors[0].s == i ? wtmp->sectors[0].t : wtmp->sectors[1].t));
+				//
 				free(tmp);
-				printf("CHECKING FOR PORTALS %d\n", curr);
-				if (find_by_index(cr, curr)->isportal == 1)
+				if (wtmp->isportal == 1)
 				{
-					printf("%d IS PORTAL\n", curr);
-					if (find_by_index(cr, curr)->sectors[0] == i)
+					if (wtmp->sectors[0].s == i)
 					{
-						printf("SEC No0 IS CURR SEC\n");
-						conn = ft_strcat(conn, (tmp = ft_itoa(find_by_index(cr, curr)->sectors[1])));
+						conn = ft_strcat(conn, (tmp = ft_itoa(wtmp->sectors[1].s)));
 						free(tmp);
 					}
-					else if (find_by_index(cr, curr)->sectors[1] == i)
+					else if (wtmp->sectors[1].s == i)
 					{
-						printf("SEC No1 IS CURR SEC\n");
-						conn = ft_strcat(conn, (tmp = ft_itoa(find_by_index(cr, curr)->sectors[0])));
+						conn = ft_strcat(conn, (tmp = ft_itoa(wtmp->sectors[0].s)));
 						free(tmp);
 					}
 				}
 				else
 				{
-					printf("%d IS NOT A PORTAL\n", curr);
 					conn = ft_strcat(conn, "-1");
 				}
 				if (curr == cr->idcurr)
@@ -186,14 +208,15 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 				{
 					ft_strcat(txt, " ");
 					ft_strcat(conn, " ");
+					ft_strcat(wtx, " ");
 				}
 			}
 		}
 		ft_strcat(txt, "|");
 		ft_putstr_fd(txt, fd);
-		ft_strcat(conn, "|");
 		if (sec->illum > 0)
 		{
+			ft_strcat(conn, "|");
 			ft_strcat(conn, (tmp = ft_ftoa(sec->illum)));
 			free(tmp);
 			ft_strcat(conn, "|");
@@ -201,10 +224,21 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 		ft_putstr_fd(conn, fd);
 		ft_strclr(txt);
 		ft_strclr(conn);
+		//
+		ft_strcat(wtx, "|");
+		
 		i++;
 	}
 		free(txt);
 		free(conn);
+		ft_putstr_fd("\n", fd);
+		//
+		if (doprint_wtx == 1)
+		{
+			ft_putstr_fd(wtx, fd);
+			ft_putstr_fd("\n", fd);
+		}
+		free(wtx);
 }
 
 static int			check_vt_dups(t_core *cr, float	x, float y)

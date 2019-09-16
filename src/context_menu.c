@@ -25,7 +25,7 @@ void			switch_isportal(t_core *cr, t_wall *wall, int switchval, int pr2)
 	if (switchval == 1)
 		wall->color = PORTAL_COLOR;
 	else
-		wall->color = wall->sectors[0] < 0 && wall->sectors[1] < 0 ? WALL_COLOR : APP_SEC_COLOR;
+		wall->color = wall->sectors[0].s < 0 && wall->sectors[1].s < 0 ? WALL_COLOR : APP_SEC_COLOR;
 }
 
 void			check_menu_events(t_core *cr, int x, int y)

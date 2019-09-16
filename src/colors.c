@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/09 21:19:55 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/16 18:19:58 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,14 @@ void			apply_sector(t_core *cr, t_wall *wall, int pr1, int pr2)
 	if (wall->color != SEL_SEC_COLOR)
 		return ;
 	wall->color = APP_SEC_COLOR;
-	if (wall->sectors[0] < 0)
-		wall->sectors[0] = cr->sec_num;
-	else if (wall->sectors[1] < 0)
-		wall->sectors[1] = cr->sec_num;
+	if (wall->sectors[0].s < 0)
+	{
+		wall->sectors[0].s = cr->sec_num;
+	}
+	else if (wall->sectors[1].s < 0)
+	{
+		wall->sectors[1].s = cr->sec_num;
+	}
 }
 
 void			turn_color(t_core *cr, t_wall *wall, int color1, int color2)
@@ -61,7 +65,7 @@ void			redraw_color(t_core *cr, t_wall *wall, int exc1, int exc2)
 {
 	if (wall->color == exc1 || wall->color == exc2)
 		return ;
-	if (wall->sectors[0] < 0 && wall->sectors[1] < 0)
+	if (wall->sectors[0].s < 0 && wall->sectors[1].s < 0)
 		wall->color = wall->isportal == 0 ? WALL_COLOR : PORTAL_COLOR;
 	else if (cr->multi_sel == 0)
 		wall->color = wall->isportal == 0 ? APP_SEC_COLOR : APP_PORTAL_COLOR;

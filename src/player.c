@@ -40,8 +40,8 @@ static void	calc(t_core *cr, t_wall *wall, t_coord ray)
 			if (dist < cr->dist)
 			{
 				cr->dist = dist;
-				cr->secmem[0] = wall->sectors[0];
-				cr->secmem[1] = wall->sectors[1];
+				cr->secmem[0] = wall->sectors[0].s;
+				cr->secmem[1] = wall->sectors[1].s;
 				cr->debug = cr->hit;
 			}
 		}
@@ -63,8 +63,8 @@ static void	calc(t_core *cr, t_wall *wall, t_coord ray)
 	if (dist < cr->dist)
 	{
 		cr->dist = dist;
-		cr->secmem[0] = wall->sectors[0];
-		cr->secmem[1] = wall->sectors[1];
+		cr->secmem[0] = wall->sectors[0].s;
+		cr->secmem[1] = wall->sectors[1].s;
 		cr->debug = cr->hit;
 	}
 }

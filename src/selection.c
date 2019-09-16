@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/14 20:16:58 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/16 16:27:39 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int					select_wall(t_core *cr, int x, int y)
 	//
 	if (sel_object(cr, x, y) < min_dist)
 	{
+		cr->closest_obj->color = SELECT_COLOR;
 		obj_info_menu(cr, cr->closest_obj);
 		return (-1);
 	}

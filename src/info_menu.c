@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/14 20:53:41 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/16 21:36:58 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void			info_menu(t_core *cr, t_wall *wall)
 	ft_strcat(text, ft_itoa(wall->p1.y));
 	ft_strcat(text, " ");
 	ft_strcat(text, ft_itoa(wall->p1.x));
-	printf("DDDDDDDDDDDDDDDDD %s\n", text);
 	mlx_string_put(cr->mlx, cr->win, xy.x + I_MENU_XLEN / 10, \
 	I_MENU_YLEN / 10, 0, text);
 	ft_strclr(text);
@@ -44,9 +43,19 @@ void			info_menu(t_core *cr, t_wall *wall)
 	ft_strcat(text, ft_itoa(wall->p2.x));
 	mlx_string_put(cr->mlx, cr->win, xy.x + I_MENU_XLEN / 10, \
 	I_MENU_YLEN / 10 * 2, 0, text);
+	ft_strclr(text);
+	//
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
+		xy.x, I_MENU_YLEN / 2);
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowr_trash, \
+		xy.x + I_MENU_XLEN - ICON_SIZE, I_MENU_YLEN / 2);
+	ft_strcat(text, "Sec ");
+	ft_strcat(text, ft_itoa(wall->sectors[0].s));
+	ft_strcat(text, " texture: ");
+	ft_strcat(text, ft_itoa(wall->sectors[0].t));
+	mlx_string_put(cr->mlx, cr->win, xy.x + I_MENU_XLEN / 5, \
+	I_MENU_YLEN / 2, 0, text);
 	free(text);
-	// ft_strcat(text, ft_ftoa((float)wall->p1.y / cr->zoom * UNIT_SIZE));
-	// int			find_vt_id(t_core *cr, float x, float y)
 }
 
 void			obj_info_menu(t_core *cr, t_obj *obj)

@@ -100,7 +100,7 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 		// 	cr->i_menu_is_open = 0;
 		// }
 		//
-		if (cr->menu_is_open == 1)
+		if (cr->menu_is_open == 1 || cr->menu_is_open == 3)
 		{
 			cr->menu_is_open = 0;
 			redraw(cr);
@@ -142,7 +142,7 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 		if (!choose_instrument(cr, x, y))
 		{
 			// printf("NOT AN INSTRUMENT\n");
-			if (cr->menu_is_open == 1)
+			if (cr->menu_is_open == 1 || cr->menu_is_open == 3)
 			{
 				check_menu_events(cr, x, y);
 			}
@@ -171,6 +171,11 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 			find_by_index(cr, wall_id)->color = SELECT_COLOR;
 			redraw(cr);
 			rmb_menu(cr, find_by_index(cr, wall_id), x, y);
+		}
+		else
+		{
+			redraw(cr);
+			rmb_menu(cr, NULL, x, y);
 		}
 		cr->multi_sel = 0;
 	}

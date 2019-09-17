@@ -47,11 +47,13 @@
 # define INST_PANEL_X 0
 # define INST_PANEL_Y WIN_HIGHT / 5
 # define INST_NUM 4
-# define MENU_XLEN 300
-# define MENU_YLEN 500
+# define MENU_XLEN 150
+# define MENU_YLEN 120
 # define I_MENU_XLEN 300
 # define I_MENU_YLEN 200
 # define CHECKBOX_SIZE 20
+# define LINE_SIZE_X 120
+# define LINE_SIZE_Y 30
 # define ICON_SIZE 50
 
 # define ST_FLOOR_HIGHT 0

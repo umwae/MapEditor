@@ -30,8 +30,21 @@ void			switch_isportal(t_core *cr, t_wall *wall, int switchval, int pr2)
 
 void			check_menu_events(t_core *cr, int x, int y)
 {
-	if (x > cr->click.x + MENU_XLEN / 7 && x < cr->click.x + MENU_XLEN / 7 * 6 && \
-	y > cr->click.y + MENU_YLEN / 14 && y < cr->click.y + MENU_YLEN / 14 + CHECKBOX_SIZE)
+	if (x > cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 && x < cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 * 6 && \
+	y > cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 1 && y < cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 1 + CHECKBOX_SIZE)
+	{
+		cr->player.coord.x = cr->click.x - WIN_WIDTH / 2;
+		cr->player.coord.y = cr->click.y - WIN_HIGHT / 2;
+	}
+	else if (x > cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 && x < cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 * 6 && \
+	y > cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 2 && y < cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 2) / 2 + LINE_SIZE_Y * 2 + CHECKBOX_SIZE)
+	{
+		add_object(cr, cr->click.x - WIN_WIDTH / 2, cr->click.y - WIN_HIGHT / 2);
+	}
+	else if (cr->menu_is_open == 3)
+		return ;
+	else if (x > cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 && x < cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 * 6 && \
+	y > cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 0 && y < cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 0 + CHECKBOX_SIZE)
 	{
 		// printf("MENU CLICK\n");
 		if (cr->cmenu_elems.isportal == 1)
@@ -39,17 +52,6 @@ void			check_menu_events(t_core *cr, int x, int y)
 		else
 			iter_wall(cr, 1, 0, &switch_isportal);
 		cr->cmenu_elems.isportal = cr->cmenu_elems.isportal > 0 ? 0 : 1;
-	}
-	else if (x > cr->click.x + MENU_XLEN / 7 && x < cr->click.x + MENU_XLEN / 7 * 6 && \
-	y > cr->click.y + MENU_YLEN / 14 * 2 && y < cr->click.y + MENU_YLEN / 14 * 2 + CHECKBOX_SIZE)
-	{
-		cr->player.coord.x = cr->click.x - WIN_WIDTH / 2;
-		cr->player.coord.y = cr->click.y - WIN_HIGHT / 2;
-	}
-	else if (x > cr->click.x + MENU_XLEN / 7 && x < cr->click.x + MENU_XLEN / 7 * 6 && \
-	y > cr->click.y + MENU_YLEN / 14 * 3 && y < cr->click.y + MENU_YLEN / 14 * 3 + CHECKBOX_SIZE)
-	{
-		add_object(cr, cr->click.x - WIN_WIDTH / 2, cr->click.y - WIN_HIGHT / 2);
 	}
 }
 
@@ -82,15 +84,27 @@ void			rmb_menu(t_core *cr, t_wall *wall, int x, int y)
 	ab.x = MENU_XLEN;
 	ab.y = MENU_YLEN;
 	draw_rectangle(cr, xy, ab, MENU_COLOR);
-	xy.x = x + MENU_XLEN / 7;
-	xy.y = y + MENU_YLEN / 14;
+	text = (char *)malloc(sizeof(char) * 7);
+	//
+	ft_strcpy(text, "Place player");
+	mlx_string_put(cr->mlx, cr->win, x + (MENU_XLEN - LINE_SIZE_X) / 2, \
+	y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 1, 0, text);
+	//
+	ft_strcpy(text, "Place object");
+	mlx_string_put(cr->mlx, cr->win, x + (MENU_XLEN - LINE_SIZE_X) / 2, \
+	y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 2, 0, text);
+	//
+	if (!wall)
+		return ;
+	//
+	xy.x = x + (MENU_XLEN - LINE_SIZE_X) / 2;
+	xy.y = y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 0;
 	ab.x = CHECKBOX_SIZE;
 	ab.y = CHECKBOX_SIZE;
 	draw_rectangle(cr, xy, ab, 0xffffff);
-	text = (char *)malloc(sizeof(char) * 7);
 	ft_strcpy(text, "Portal");
-	mlx_string_put(cr->mlx, cr->win, x + MENU_XLEN / 7 + ab.x * 2, \
-	y + MENU_YLEN / 14, 0, text);
+	mlx_string_put(cr->mlx, cr->win, x + (MENU_XLEN - LINE_SIZE_X) / 2 + ab.x * 2, \
+	y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 0, 0, text);
 	if (wall->isportal == 1)
 	{
 		xy.x = xy.x + ab.x * 0.1;
@@ -102,12 +116,4 @@ void			rmb_menu(t_core *cr, t_wall *wall, int x, int y)
 	}
 	else
 		cr->cmenu_elems.isportal = 0;
-	//
-	ft_strcpy(text, "Place player");
-	mlx_string_put(cr->mlx, cr->win, x + MENU_XLEN / 7, \
-	y + MENU_YLEN / 14 * 2, 0, text);
-	//
-	ft_strcpy(text, "Place object");
-	mlx_string_put(cr->mlx, cr->win, x + MENU_XLEN / 7, \
-	y + MENU_YLEN / 14 * 3, 0, text);
 }

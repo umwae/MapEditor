@@ -128,6 +128,7 @@ void			record_objects(t_core *cr, int fd)
 
 	text = ft_strnew(100);
 	obj = *cr->olist;
+	spot_sector_around(cr, obj);
 	ft_putstr_fd("\n", fd);
 	while (obj)
 	{

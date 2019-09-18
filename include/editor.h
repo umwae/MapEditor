@@ -125,13 +125,6 @@ typedef struct		s_elems
 	int							isportal;
 }									t_elems;
 
-typedef struct					s_player
-{
-	t_coord						coord;
-	float							angle;
-	int								sec;
-}									t_player;
-
 typedef struct					s_obj
 {
 	int								id;
@@ -212,7 +205,7 @@ typedef struct		s_core
 	int						dragl;
 	int						test;
 
-	t_player				player;
+	t_obj				player;
 	t_coord					dir;
 	t_coord					hit;
 	float					dist;
@@ -284,7 +277,7 @@ char							*ft_ftoa(float num);
 
 void							draw_player(t_core *cr);
 void							record_player(t_core *cr, int fd);
-void							spot_sector_around(t_core *cr);
+void							spot_sector_around(t_core *cr, t_obj *obj);
 
 void							new_sector(t_core *cr);
 void							is_there_color(t_core *cr, t_wall *wall, int color, int pr2);

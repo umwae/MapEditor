@@ -147,7 +147,7 @@ void			redraw(t_core *cr)
 	draw_player(cr);
 	display_instruments(cr);
 	highlight(cr);
-	spot_sector_around(cr);
+	spot_sector_around(cr, &cr->player);
 	if (cr->i_menu_is_open == 1)
 		info_menu(cr, cr->i_menu_wall);
 	else if (cr->i_menu_is_open == 2)

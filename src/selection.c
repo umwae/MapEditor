@@ -29,7 +29,7 @@ int					select_wall(t_core *cr, int x, int y)
 {
 	t_wall		*wall;
 	float		dist;
-	int			closest_wall;
+	int			closest_wall = -2;
 	float		min_dist;
 	float		p;
 	float		a;
@@ -37,8 +37,8 @@ int					select_wall(t_core *cr, int x, int y)
 
 	min_dist = SELECT_RADIUS;
 	wall = cr->wlist;
-	if (!wall)
-		return (-1);
+	// if (!wall)
+	// 	return (-2);
 	while (wall)
 	{
 		if (is_near_wall(cr, wall, x, y))
@@ -66,7 +66,7 @@ int					select_wall(t_core *cr, int x, int y)
 	if (min_dist == SELECT_RADIUS)
 	{
 		iter_wall(cr, -1, -1, &redraw_color);
-		return (-1);
+		return (-2);
 	}
 	if (!cr->ctrl_button && !cr->multi_sel)
 	{

@@ -40,8 +40,8 @@ void				init(t_core		*cr)
 	cr->test = -1;
 	cr->zoom = 20;
 	cr->ctrl_button = 0;
-	cr->player.coord.x = 0;
-	cr->player.coord.y = 0;
+	cr->player.fcoord.x = 0;
+	cr->player.fcoord.y = 0;
 	cr->player.sec = 0;
 	cr->player.angle = 0;
 	img_new(cr);

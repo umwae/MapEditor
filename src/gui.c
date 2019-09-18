@@ -154,7 +154,10 @@ void				eraser(void *td, int x, int y)
 
 	cr = td;
 	id = select_wall(cr, x, y);
-	erase_by_id(cr, id);
+	if (id == -1)
+		del_object(cr, cr->closest_obj->id);
+	else if (id != -2)
+		erase_by_id(cr, id);
 }
 
 int					choose_instrument(t_core *cr, int x, int y)

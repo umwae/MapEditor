@@ -44,13 +44,13 @@ int			key_action(int keycode, t_core *cr)
 	else if (keycode == 37)
 		load_map(cr);
 	else if (keycode == 123)
-		cr->player.coord.x -= 20;
+		cr->player.fcoord.x -= 20;
 	else if (keycode == 124)
-		cr->player.coord.x += 20;
+		cr->player.fcoord.x += 20;
 	else if (keycode == 125)
-		cr->player.coord.y += 20;
+		cr->player.fcoord.y += 20;
 	else if (keycode == 126)
-		cr->player.coord.y -= 20;
+		cr->player.fcoord.y -= 20;
 	else if (keycode == 67)
 		cr->test *= -1;
 	else if (keycode == 117)

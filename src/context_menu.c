@@ -33,8 +33,8 @@ void			check_menu_events(t_core *cr, int x, int y)
 	if (x > cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 && x < cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 * 6 && \
 	y > cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 1 && y < cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 1 + CHECKBOX_SIZE)
 	{
-		cr->player.coord.x = cr->click.x - WIN_WIDTH / 2;
-		cr->player.coord.y = cr->click.y - WIN_HIGHT / 2;
+		cr->player.fcoord.x = cr->click.x - WIN_WIDTH / 2;
+		cr->player.fcoord.y = cr->click.y - WIN_HIGHT / 2;
 	}
 	else if (x > cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 && x < cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 * 6 && \
 	y > cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 2 && y < cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 2) / 2 + LINE_SIZE_Y * 2 + CHECKBOX_SIZE)

@@ -50,7 +50,7 @@
 # define MENU_XLEN 150
 # define MENU_YLEN 120
 # define I_MENU_XLEN 300
-# define I_MENU_YLEN 200
+# define I_MENU_YLEN 170
 # define CHECKBOX_SIZE 20
 # define LINE_SIZE_X 120
 # define LINE_SIZE_Y 30
@@ -220,6 +220,7 @@ typedef struct		s_core
 	t_coord					debug;
 	int						detect_cl;
 	t_obj					*closest_obj;
+
 }									t_core;
 
 void							init(t_core		*cr);
@@ -306,5 +307,8 @@ void							name_sec_list(t_core *cr);
 t_sec							*find_sec_list(t_core *cr, int idref);
 void					print_sec_num(t_core *cr);
 void							load_sec_info(t_core *cr);
+void							check_obj_events_mwheel(t_core *cr, t_coord click, int button, t_obj *obj);
+void							check_wall_events_mwheel(t_core *cr, t_coord click, int button, t_wall *wall);
+void							check_wall_events(t_core *cr, int x, int y, t_wall *wall);
 
 #endif

@@ -136,7 +136,10 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 int			mouse_press(int button, int x, int y, t_core *cr)
 {
 	int		wall_id;
+	t_coord	click;
 
+	click.x = x;
+	click.y = y;
 	if (button == 1 && !check_bounds(x, y))
 	{
 		if (!choose_instrument(cr, x, y))
@@ -157,6 +160,10 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 				if (cr->i_menu_is_open == 2)
 				{
 					check_obj_events(cr, x, y, cr->closest_obj);
+				}
+				if (cr->i_menu_is_open == 1)
+				{
+					check_wall_events(cr, x, y, cr->i_menu_wall);
 				}
 				(*cr->inst_func)(cr, x, y);
 			}
@@ -179,27 +186,18 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 		}
 		cr->multi_sel = 0;
 	}
-	else if (button == 5)
+	else if ((button == 5 || button == 4) && !check_bounds(x, y))
 	{
-		printf("ZOOM %d\n", cr->zoom);
-		cr->msmem.x = WIN_WIDTH / 2;
-		cr->msmem.y = WIN_HIGHT / 2;
-		if (cr->zoom < WIN_WIDTH)
-			cr->zoom += cr->zoom / 2;
-		cr->offs.x += (cr->offs.x / 2 - (x - cr->msmem.x) / 2);
-		cr->offs.y += (cr->offs.y / 2 - (y - cr->msmem.y) / 2);
-		redraw(cr);
-	}
-	else if (button == 4)
-	{
-		printf("ZOOM %d\n", cr->zoom);
-		cr->msmem.x = WIN_WIDTH / 2;
-		cr->msmem.y = WIN_HIGHT / 2;
-		if (cr->zoom > 1)
-			cr->zoom -= cr->zoom / 3;
-		cr->offs.x -= cr->offs.x / 3 - (x - cr->msmem.x) / 3;
-		cr->offs.y -= cr->offs.y / 3 - (y - cr->msmem.y) / 3;
-		redraw(cr);
+		if (cr->i_menu_is_open == 2)
+		{
+			check_obj_events_mwheel(cr, click, button, cr->closest_obj);
+			redraw(cr);
+		}
+		else if (cr->i_menu_is_open == 1)
+		{
+			check_wall_events_mwheel(cr, click, button, cr->i_menu_wall);
+			redraw(cr);
+		}
 	}
 	return (0);
 }

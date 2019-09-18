@@ -46,16 +46,77 @@ void			info_menu(t_core *cr, t_wall *wall)
 	ft_strclr(text);
 	//
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
-		xy.x, I_MENU_YLEN / 2);
+		xy.x, I_MENU_YLEN / 3 + 10);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowr_trash, \
-		xy.x + I_MENU_XLEN - ICON_SIZE, I_MENU_YLEN / 2);
-	ft_strcat(text, "Sec ");
+		xy.x + I_MENU_XLEN - ICON_SIZE, I_MENU_YLEN / 3 + 10);
+	//
+	ft_strcat(text, " [ ");
 	ft_strcat(text, ft_itoa(wall->sectors[0].s));
+	ft_strcat(text, " ]");
 	ft_strcat(text, " texture: ");
 	ft_strcat(text, ft_itoa(wall->sectors[0].t));
 	mlx_string_put(cr->mlx, cr->win, xy.x + I_MENU_XLEN / 5, \
-	I_MENU_YLEN / 2, 0, text);
+	I_MENU_YLEN / 3 + 10, 0, text);
+	//
+	ft_strclr(text);
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
+		xy.x, I_MENU_YLEN / 3 + 10 + ICON_SIZE);
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowr_trash, \
+		xy.x + I_MENU_XLEN - ICON_SIZE, I_MENU_YLEN / 3 + 10 + ICON_SIZE);
+	//
+	ft_strcat(text, " [ ");
+	ft_strcat(text, ft_itoa(wall->sectors[1].s));
+	ft_strcat(text, " ]");
+	ft_strcat(text, " texture: ");
+	ft_strcat(text, ft_itoa(wall->sectors[1].t));
+	mlx_string_put(cr->mlx, cr->win, xy.x + I_MENU_XLEN / 5, \
+	I_MENU_YLEN / 3 + 10 + ICON_SIZE, 0, text);
+	//
 	free(text);
+}
+
+void			check_wall_events(t_core *cr, int x, int y, t_wall *wall)
+{
+	t_coord	xy;
+
+	xy.x = WIN_WIDTH - I_MENU_XLEN - 4;
+	xy.y = 0 + 4;
+	if (x > xy.x && x < xy.x + ICON_SIZE && \
+	y > I_MENU_YLEN / 3 + 10 && y < I_MENU_YLEN / 3 + 10 + ICON_SIZE)
+		wall->sectors[0].t--;
+	else if (x > xy.x + I_MENU_XLEN - ICON_SIZE && x < xy.x + I_MENU_XLEN && \
+	y > I_MENU_YLEN / 3 + 10 && y < I_MENU_YLEN / 3 + 10 + ICON_SIZE)
+		wall->sectors[0].t++;
+	else if (x > xy.x && x < xy.x + ICON_SIZE && \
+	y > I_MENU_YLEN / 3 + 10 + ICON_SIZE && y < I_MENU_YLEN / 3 + 10 + ICON_SIZE * 2)
+		wall->sectors[1].t--;
+	else if (x > xy.x + I_MENU_XLEN - ICON_SIZE && x < xy.x + I_MENU_XLEN && \
+	y > I_MENU_YLEN / 3 + 10 + ICON_SIZE && y < I_MENU_YLEN / 3 + 10 + ICON_SIZE * 2)
+		wall->sectors[1].t++;
+}
+
+void			check_wall_events_mwheel(t_core *cr, t_coord click, int button, t_wall *wall)
+{
+	t_coord	xy;
+
+	xy.x = WIN_WIDTH - I_MENU_XLEN - 4;
+	xy.y = 0 + 4;
+	if (click.x > xy.x && click.x < xy.x + I_MENU_XLEN && \
+	click.y > I_MENU_YLEN / 3 + 10 && click.y < I_MENU_YLEN / 3 + 10 + ICON_SIZE)
+	{
+		if (button == 5)
+			wall->sectors[0].t++;
+		else if (button == 4)
+			wall->sectors[0].t--;
+	}
+	else if (click.x > xy.x && click.x < xy.x + I_MENU_XLEN && \
+	click.y > I_MENU_YLEN / 3 + 10 + ICON_SIZE && click.y < I_MENU_YLEN / 3 + 10 + ICON_SIZE * 2)
+	{
+		if (button == 5)
+			wall->sectors[1].t++;
+		else if (button == 4)
+			wall->sectors[1].t--;
+	}
 }
 
 void			obj_info_menu(t_core *cr, t_obj *obj)
@@ -75,7 +136,7 @@ void			obj_info_menu(t_core *cr, t_obj *obj)
 	ft_strcat(text, " Type: ");
 	ft_strcat(text, ft_itoa(obj->type));
 	mlx_string_put(cr->mlx, cr->win, xy.x + I_MENU_XLEN / 3, \
-	I_MENU_YLEN / 10, 0, text);
+	I_MENU_YLEN / 9, 0, text);
 	free(text);
 	//Заменить хайлайт на иконку
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
@@ -100,5 +161,21 @@ void			check_obj_events(t_core *cr, int x, int y, t_obj *obj)
 	y > I_MENU_YLEN / 10 && y < I_MENU_YLEN / 10 + ICON_SIZE)
 	{
 		obj->type++;
+	}
+}
+
+void			check_obj_events_mwheel(t_core *cr, t_coord click, int button, t_obj *obj)
+{
+	t_coord	xy;
+
+	xy.x = WIN_WIDTH - I_MENU_XLEN - 4;
+	xy.y = 0 + 4;
+	if (click.x > xy.x && click.x < xy.x + I_MENU_XLEN && \
+	click.y > I_MENU_YLEN / 10 && click.y < I_MENU_YLEN / 10 + LINE_SIZE_Y)
+	{
+		if (button == 5)
+			obj->type++;
+		else if (button == 4)
+			obj->type--;
 	}
 }

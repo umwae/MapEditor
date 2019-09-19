@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/16 18:19:58 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/19 18:19:31 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void			is_there_color(t_core *cr, t_wall *wall, int color, int pr2)
 	if (wall->color == color)
 		cr->detect_cl = 1;
 }
+
 
 // void			reset_color(t_core *cr)
 // {

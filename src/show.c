@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/16 20:31:22 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/19 20:22:17 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,21 @@
 
 void					draw_nodes(t_core *cr, t_wall *wall, int pr1, int pr2)
 {
-	t_coord		xy;
-	t_coord		ab;
-
-	(void)pr1;
-	(void)pr2;
-	ab.x = POINT_SIZE;
-	ab.y = POINT_SIZE;
-	xy.x = wall->p1.x - POINT_SIZE / 2 + cr->offs.x;
-	xy.y = wall->p1.y - POINT_SIZE / 2 + cr->offs.y;
-	draw_rectangle(cr, xy, ab, POINT_COLOR);
-	xy.x = wall->p2.x - POINT_SIZE / 2 + cr->offs.x;
-	xy.y = wall->p2.y - POINT_SIZE / 2 + cr->offs.y;
-	draw_rectangle(cr, xy, ab, POINT_COLOR);
+// 	t_coord		xy;
+// 	t_coord		ab;
 //
-	char *txt = malloc(sizeof(char) * 5);//Отображает номера стен, вызывает тормоза
+// 	(void)pr1;
+// 	(void)pr2;
+// 	ab.x = POINT_SIZE;
+// 	ab.y = POINT_SIZE;
+// 	xy.x = wall->p1.x - POINT_SIZE / 2 + cr->offs.x;
+// 	xy.y = wall->p1.y - POINT_SIZE / 2 + cr->offs.y;
+// 	draw_rectangle(cr, xy, ab, POINT_COLOR);
+// 	xy.x = wall->p2.x - POINT_SIZE / 2 + cr->offs.x;
+// 	xy.y = wall->p2.y - POINT_SIZE / 2 + cr->offs.y;
+// 	draw_rectangle(cr, xy, ab, POINT_COLOR);
+// //
+// 	char *txt = malloc(sizeof(char) * 5);//Отображает номера стен, вызывает тормоза
 	// ft_strcpy(txt, ft_itoa(wall->index));
 	// mlx_string_put(cr->mlx, cr->win, min(wall->p2.x + cr->offs.x, wall->p1.x + cr->offs.x) + abs(wall->p2.x - wall->p1.x) / 2, \
 	// min(wall->p2.y + cr->offs.y, wall->p1.y + cr->offs.y) + abs(wall->p2.y - wall->p1.y) / 2, 0xffffff, txt);
@@ -42,10 +42,10 @@ void					draw_nodes(t_core *cr, t_wall *wall, int pr1, int pr2)
 	// min(wall->p2.y, wall->p1.y) + abs(wall->p2.y - wall->p1.y) / 2 + cr->offs.y, 0xffffff, txt);
 
 	// char *txt = malloc(sizeof(char) * 5);//Отображает номера точек друг поверх друга
-	ft_strcpy(txt, ft_itoa(find_vt_id(cr, wall->p1.x / cr->zoom * UNIT_SIZE, wall->p1.y / cr->zoom * UNIT_SIZE)));
-	mlx_string_put(cr->mlx, cr->win, wall->p1.x + cr->offs.x, wall->p1.y + cr->offs.y, 0xffffff, txt);
-	ft_strcpy(txt, ft_itoa(find_vt_id(cr, wall->p2.x / cr->zoom * UNIT_SIZE, wall->p2.y / cr->zoom * UNIT_SIZE)));
-	mlx_string_put(cr->mlx, cr->win, wall->p2.x + cr->offs.x, wall->p2.y + cr->offs.y, 0xffffff, txt);
+	// ft_strcpy(txt, ft_itoa(find_vt_id(cr, wall->p1.x / cr->zoom * UNIT_SIZE, wall->p1.y / cr->zoom * UNIT_SIZE)));
+	// mlx_string_put(cr->mlx, cr->win, wall->p1.x + cr->offs.x, wall->p1.y + cr->offs.y, 0xffffff, txt);
+	// ft_strcpy(txt, ft_itoa(find_vt_id(cr, wall->p2.x / cr->zoom * UNIT_SIZE, wall->p2.y / cr->zoom * UNIT_SIZE)));
+	// mlx_string_put(cr->mlx, cr->win, wall->p2.x + cr->offs.x, wall->p2.y + cr->offs.y, 0xffffff, txt);
 
 	print_sec_num(cr);
 }
@@ -152,5 +152,7 @@ void			redraw(t_core *cr)
 		info_menu(cr, cr->i_menu_wall);
 	else if (cr->i_menu_is_open == 2)
 		obj_info_menu(cr, cr->closest_obj);
+	else if (cr->i_menu_is_open == 4)
+		sec_info_menu(cr, cr->sel_sec_id);
 	// show_messages(cr);
 }

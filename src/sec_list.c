@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/16 20:57:06 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/19 19:51:07 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,9 @@ void		add_sec_list(t_core *cr)
 	sec->ceiling = ST_CEIL_HIGHT;
 	sec->ftex = -1;
 	sec->ctex = -1;
-	// if (idtd == -1)
 	sec->id = cr->sec_num - 1;
+	sec->isdoor = 0;
+	sec->isfinish = 0;
 	*cr->slist = sec;
 }
 

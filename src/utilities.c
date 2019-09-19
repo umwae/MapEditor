@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/05 20:02:57 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/19 19:58:46 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,4 +111,13 @@ double	ft_atof(const char *str)
 	while (len--)
 		res2 /= 10;
 	return ((res + res2) * sign);
+}
+
+void			checkbox_fill(t_core *cr, t_coord xy, t_coord ab)
+{
+	xy.x = xy.x + ab.x * 0.1;
+	xy.y = xy.y + ab.y * 0.1;
+	ab.x *= 0.8;
+	ab.y *= 0.8;
+	draw_rectangle(cr, xy, ab, 0);
 }

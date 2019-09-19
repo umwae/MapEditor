@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/16 16:27:39 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/19 19:42:44 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,41 @@ int					is_near_wall(t_core *cr, t_wall *wall, int x, int y)
 	y > max(wall->p1.y + cr->offs.y, wall->p2.y + cr->offs.y) + SELECT_PADDING)
 		return (0);
 	return (1);
+}
+
+void				select_sector(void *td, int x, int y)
+{
+	t_core 	*cr;
+	t_wall	*wall;
+	int		secmem;
+
+	// secmem[0] = -1;
+	// secmem[1] = -1;
+	secmem = -1;
+	cr = (t_core *)td;
+	cr->find_sec_color = SELECT_COLOR;
+	cr->searchtype = 0;
+	find_sector(td, x, y);
+	cr->searchtype = 1;
+	wall = cr->wlist;
+	if (!wall)
+		return;
+	while (wall)
+	{
+		if (wall->color == SELECT_COLOR)
+		{
+			if (wall->sectors[0].s != -1 && wall->sectors[0].s != secmem)
+			{
+				if (wall->sectors[1].s != -1 && wall->sectors[1].s != secmem)
+					secmem = wall->sectors[1].s;
+				else if (wall->sectors[0].s != -1)
+					secmem = wall->sectors[0].s;
+			}
+		}
+		wall = wall->next;
+	}
+	cr->sel_sec_id = secmem;
+	sec_info_menu(cr, secmem);
 }
 
 int					select_wall(t_core *cr, int x, int y)
@@ -56,7 +91,7 @@ int					select_wall(t_core *cr, int x, int y)
 			wall = wall->next;
 	}
 	//
-	if (sel_object(cr, x, y) < min_dist)
+	if (sel_object(cr, x, y) < min_dist && cr->searchtype == 1)
 	{
 		cr->closest_obj->color = SELECT_COLOR;
 		obj_info_menu(cr, cr->closest_obj);

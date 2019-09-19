@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/11 17:45:54 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/19 18:04:31 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,7 @@ void				halfplane(t_core *cr, t_wall *ref)
 
 	cr->angle_mem = PI_CEIL;
 	cr->idcurr = 0;
-	if (ref->color == SEL_SEC_COLOR)
+	if (ref->color == cr->find_sec_color)
 		return ;
 	// printf("=============\nclickside: %d || ", cr->wside);
 	if (cr->wpoint == 2)
@@ -247,6 +247,6 @@ void				halfplane(t_core *cr, t_wall *ref)
 		compare_walls(cr, ref, wall, &refpoint, &refstart);
 		wall = wall->next;
 	}
-	ref->color = SEL_SEC_COLOR;
+	ref->color = cr->find_sec_color;
 	halfplane(cr, find_by_index(cr, cr->idcurr));
 }

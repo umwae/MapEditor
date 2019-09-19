@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/16 18:00:33 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/19 21:06:10 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 		ft_strclr(conn);
 		//
 		ft_strcat(wtx, "|");
-		
+
 		i++;
 	}
 		free(txt);
@@ -300,6 +300,52 @@ static void			record_walls(t_core *cr, char *line, int fd)
 	}
 }
 
+static void		record_doors(t_core *cr, int fd)
+{
+	t_sec	*sec;
+	char	*text;
+	char	*tmp;
+
+	text = ft_strnew(10);
+	sec = *cr->slist;
+	while (sec)
+	{
+		if (sec->isdoor)
+		{
+			ft_strcat(text, "\nd|");
+			ft_strcat(text, tmp = ft_itoa(sec->id));
+			free(tmp);
+			ft_strcat(text, "|\n");
+			ft_putstr_fd(text, fd);
+		}
+		sec = sec->next;
+	}
+	free(text);
+}
+
+static void		record_finish(t_core *cr, int fd)
+{
+	t_sec	*sec;
+	char	*text;
+	char	*tmp;
+
+	text = ft_strnew(10);
+	sec = *cr->slist;
+	while (sec)
+	{
+		if (sec->isfinish)
+		{
+			ft_strcat(text, "\nf|");
+			ft_strcat(text, tmp = ft_itoa(sec->id));
+			free(tmp);
+			ft_strcat(text, "|\n");
+			ft_putstr_fd(text, fd);
+		}
+		sec = sec->next;
+	}
+	free(text);
+}
+
 void            save_map(t_core *cr)
 {
   int   fd;
@@ -311,6 +357,8 @@ void            save_map(t_core *cr)
 	record_walls(cr, line, fd);
 	record_sectors(cr, line, fd);
 	record_objects(cr, fd);
+	record_doors(cr, fd);
+	record_finish(cr, fd);
 	record_player(cr, fd);
 	free(line);
 	close(fd);

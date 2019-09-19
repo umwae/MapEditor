@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/14 15:54:43 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/19 20:14:40 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ void			spot_sector_around(t_core *cr, t_obj *obj)
 {
 	int			mem[2];
 
+	if (!obj)
+		return ;
 	cr->secmem[0] = -1;
 	cr->secmem[1] = -1;
 	mem[0] = -1;

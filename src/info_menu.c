@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/16 21:36:58 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/19 19:58:55 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,4 +178,113 @@ void			check_obj_events_mwheel(t_core *cr, t_coord click, int button, t_obj *obj
 		else if (button == 4)
 			obj->type--;
 	}
+}
+
+// f c fi ci il fin door
+
+// void			add_slider_int(t_core *cr, char *text, int val, int pos, t_coord borders)
+// {
+//
+// }
+
+void			sec_info_menu(t_core *cr, int secid)
+{
+	t_coord	xy;
+	t_coord	ab;
+	char		*text;
+	t_sec		*sec;
+
+	if (!(sec = find_sec_list(cr, secid)))
+		return ;
+	cr->i_menu_is_open = 4;
+	ab.x = I_MENU_XLEN;
+	ab.y = I_SEC_MENU_YLEN;
+	xy.x = WIN_WIDTH - ab.x - 4;
+	xy.y = 0 + 4;
+	draw_rectangle(cr, xy, ab, MENU_COLOR);
+	text = ft_strnew(100);
+	//
+	ft_strcat(text, "Floor lvl: ");
+	ft_strcat(text, ft_ftoa(sec->floor));
+	mlx_string_put(cr->mlx, cr->win, xy.x + 60, \
+	(xy.y + 4), 0, text);
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
+		xy.x, (xy.y + 4));
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowr_trash, \
+		xy.x + ab.x - ICON_SIZE, (xy.y + 4));
+	ft_strclr(text);
+	//
+	ft_strcat(text, "Ceiling lvl: ");
+	ft_strcat(text, ft_ftoa(sec->ceiling));
+	mlx_string_put(cr->mlx, cr->win, xy.x + 60, \
+	(xy.y + ICON_SIZE + 8), 0, text);
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
+		xy.x, (xy.y + ICON_SIZE + 8));
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowr_trash, \
+		xy.x + ab.x - ICON_SIZE, (xy.y + ICON_SIZE + 8));
+	ft_strclr(text);
+	//
+	ft_strcat(text, "Floor tex: ");
+	ft_strcat(text, ft_itoa(sec->ftex));
+	mlx_string_put(cr->mlx, cr->win, xy.x + 60, \
+	(xy.y + ICON_SIZE * 2 + 12), 0, text);
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
+		xy.x, (xy.y + ICON_SIZE * 2 + 12));
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowr_trash, \
+		xy.x + ab.x - ICON_SIZE, (xy.y + ICON_SIZE * 2 + 12));
+	ft_strclr(text);
+	//
+	ft_strcat(text, "Ceiling tex: ");
+	ft_strcat(text, ft_itoa(sec->ctex));
+	mlx_string_put(cr->mlx, cr->win, xy.x + 60, \
+	(xy.y + ICON_SIZE * 3 + 16), 0, text);
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
+		xy.x, (xy.y + ICON_SIZE * 3 + 16));
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowr_trash, \
+		xy.x + ab.x - ICON_SIZE, (xy.y + ICON_SIZE * 3 + 16));
+	ft_strclr(text);
+	//
+	ft_strcat(text, "Illumination: ");
+	ft_strcat(text, ft_itoa(sec->illum));
+	mlx_string_put(cr->mlx, cr->win, xy.x + 60, \
+	(xy.y + ICON_SIZE * 4 + 20), 0, text);
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
+		xy.x, (xy.y + ICON_SIZE * 4 + 20));
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowr_trash, \
+		xy.x + ab.x - ICON_SIZE, (xy.y + ICON_SIZE * 4 + 20));
+	ft_strclr(text);
+	//
+	ft_strcat(text, "Illumination: ");
+	ft_strcat(text, ft_itoa(sec->illum));
+	mlx_string_put(cr->mlx, cr->win, xy.x + 60, \
+	(xy.y + ICON_SIZE * 4 + 20), 0, text);
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
+		xy.x, (xy.y + ICON_SIZE * 4 + 20));
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowr_trash, \
+		xy.x + ab.x - ICON_SIZE, (xy.y + ICON_SIZE * 4 + 20));
+	ft_strclr(text);
+	//
+	xy.x += I_MENU_XLEN / 3;
+	xy.y = xy.y + ICON_SIZE * 5 + 24;
+	ab.x = CHECKBOX_SIZE;
+	ab.y = CHECKBOX_SIZE;
+	draw_rectangle(cr, xy, ab, 0xffffff);
+	ft_strcat(text, "Door");
+	mlx_string_put(cr->mlx, cr->win, xy.x + CHECKBOX_SIZE + 10, \
+	xy.y, 0, text);
+	if (sec->isdoor == 1)
+		checkbox_fill(cr, xy, ab);
+	ft_strclr(text);
+	//
+	xy.y += LINE_SIZE_Y;
+	ab.x = CHECKBOX_SIZE;
+	ab.y = CHECKBOX_SIZE;
+	draw_rectangle(cr, xy, ab, 0xffffff);
+	ft_strcat(text, "Finish");
+	mlx_string_put(cr->mlx, cr->win, xy.x + CHECKBOX_SIZE + 10, \
+	xy.y, 0, text);
+	if (sec->isfinish == 1)
+		checkbox_fill(cr, xy, ab);
+	ft_strclr(text);
+	free(text);
 }

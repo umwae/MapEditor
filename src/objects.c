@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/16 21:21:35 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/19 20:21:13 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void		draw_objects(t_core *cr)
 		draw_rectangle(cr, xy, ab, obj->color);
 		//
 		char *txt = malloc(sizeof(char) * 5);
-		ft_strcpy(txt, ft_itoa(obj->id));
+		ft_strcpy(txt, ft_itoa(obj->type));
 		mlx_string_put(cr->mlx, cr->win, xy.x, xy.y, 0xffffff, txt);
 		free(txt);
 		//
@@ -137,9 +137,9 @@ void			record_objects(t_core *cr, int fd)
 		ft_strcat(text, "o|");
 		ft_strcat(text, ft_itoa(obj->sec));
 		ft_strcat(text, "|");
-		ft_strcat(text, ft_ftoa(obj->fcoord.y / cr->zoom * UNIT_SIZE));
-		ft_strcat(text, " ");
 		ft_strcat(text, ft_ftoa(obj->fcoord.x / cr->zoom * UNIT_SIZE));
+		ft_strcat(text, " ");
+		ft_strcat(text, ft_ftoa(obj->fcoord.y / cr->zoom * UNIT_SIZE));
 		ft_strcat(text, "|");
 		ft_strcat(text, ft_itoa(obj->type));
 		// ft_strcat(text, "|");
@@ -166,8 +166,8 @@ void			load_objects(t_core *cr)
 			oarr = ft_strsplit(line, '|');
 			obj = (t_obj *)malloc(sizeof(t_obj));
 			obj->sec = ft_atoi(oarr[1]);
-			obj->fcoord.y = ft_atof(oarr[2]) * cr->zoom / UNIT_SIZE;
-			obj->fcoord.x = ft_atof(ft_strchr(oarr[2], ' ') + 1) * cr->zoom / UNIT_SIZE;
+			obj->fcoord.x = ft_atof(oarr[2]) * cr->zoom / UNIT_SIZE;
+			obj->fcoord.y = ft_atof(ft_strchr(oarr[2], ' ') + 1) * cr->zoom / UNIT_SIZE;
 			obj->type = ft_atoi(oarr[3]);
 			obj->id = count_obj(cr);
 			obj->color = OBJECT_COLOR;

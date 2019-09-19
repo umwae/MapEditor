@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/16 21:28:14 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/19 20:01:46 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,40 @@ static void     process_walls(t_core *cr, char **pts, char **prt, int secnum)
   }
 }
 
+static void		load_doors(t_core *cr)
+{
+	int			fd;
+	char		*line;
+
+	fd = open("./maps/testmap", O_RDONLY);
+	while (get_next_line(fd, &line) > 0)
+	{
+		if (line[0] == 'd')
+			find_sec_list(cr, ft_atoi(line + 2))->isdoor = 1;
+		free(line);
+	}
+	close(fd);
+	free(line);
+	return ;
+}
+
+static void		load_finish(t_core *cr)
+{
+	int			fd;
+	char		*line;
+
+	fd = open("./maps/testmap", O_RDONLY);
+	while (get_next_line(fd, &line) > 0)
+	{
+		if (line[0] == 'f')
+			find_sec_list(cr, ft_atoi(line + 2))->isfinish = 1;
+		free(line);
+	}
+	close(fd);
+	free(line);
+	return ;
+}
+
 void            load_map(t_core *cr)
 {
   int   fd;
@@ -200,6 +234,8 @@ load_objects(cr);
   load_player(cr, &line);
   iter_wall(cr, -1, -1, &count_sectors);
   iter_wall(cr, -1, -1, &redraw_color);
+  load_doors(cr);
+  load_finish(cr);
 	// free(line);
 	close(fd);
 }

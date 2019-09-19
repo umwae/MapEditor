@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/14 15:20:08 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/19 18:10:09 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void				highlight(t_core *cr)
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->hl_trash, pos.x, pos.y);
 }
 
-static void	find_sector(void *td, int x, int y)
+void	find_sector(void *td, int x, int y)
 {
 	t_core	*cr;
 	char		*text;
@@ -35,7 +35,7 @@ static void	find_sector(void *td, int x, int y)
 	cr = td;
 	if ((wall_id = select_wall(cr, x, y)) >= 0)
 	{
-		iter_wall(cr, APP_SEC_COLOR, 0, &redraw_color);
+		// iter_wall(cr, APP_SEC_COLOR, 0, &redraw_color);
 		cr->click.x = x;
 		cr->click.y = y;
 		cr->wpoint = 2;
@@ -186,10 +186,17 @@ int					choose_instrument(t_core *cr, int x, int y)
 		inst_num = 3;
 	}
 	else if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 3 && y < \
-		cr->inst_panel.y + cr->inst_panel_size.y)
+		cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 4)
 	{
+		cr->find_sec_color = SEL_SEC_COLOR;
 		cr->inst_func = find_sector;
 		inst_num = 4;
+	}
+	else if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 4 && y < \
+		cr->inst_panel.y + cr->inst_panel_size.y)
+	{
+		cr->inst_func = select_sector;
+		inst_num = 5;
 	}
 	cr->highlight = inst_num;
 	return (1);
@@ -208,6 +215,8 @@ void				load_gui(t_core *cr)
 	int	y;
 
 	i = 1;
+	// cr->inst_panel_size.x = INST_PANEL_SIZE_X;//Дублирует?
+	// cr->inst_panel_size.y = INST_PANEL_SIZE_Y;
 	if (!(cr->icons_trash = (int *)malloc(sizeof(int))))
 		err_ex(0);
 	cr->icons_trash = mlx_xpm_file_to_image(cr->mlx, "./gui/instruments.xpm", \

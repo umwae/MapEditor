@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:16 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/16 21:11:09 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/19 19:58:49 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,14 @@
 
 # define INST_PANEL_X 0
 # define INST_PANEL_Y WIN_HIGHT / 5
-# define INST_NUM 4
+# define INST_PANEL_SIZE_X 50
+# define INST_PANEL_SIZE_Y 257
+# define INST_NUM 5
 # define MENU_XLEN 150
 # define MENU_YLEN 120
 # define I_MENU_XLEN 300
 # define I_MENU_YLEN 170
+# define I_SEC_MENU_YLEN 338
 # define CHECKBOX_SIZE 20
 # define LINE_SIZE_X 120
 # define LINE_SIZE_Y 30
@@ -144,6 +147,8 @@ typedef struct					s_sec
 	float							ceiling;
 	int								ctex;
 	float							illum;
+	int								isdoor;
+	int								isfinish;
 	void							*next;
 }												t_sec;
 
@@ -213,6 +218,9 @@ typedef struct		s_core
 	t_coord					debug;
 	int						detect_cl;
 	t_obj					*closest_obj;
+	int						find_sec_color;
+	int						sel_sec_id;
+	int						searchtype;
 
 }									t_core;
 
@@ -303,5 +311,9 @@ void							load_sec_info(t_core *cr);
 void							check_obj_events_mwheel(t_core *cr, t_coord click, int button, t_obj *obj);
 void							check_wall_events_mwheel(t_core *cr, t_coord click, int button, t_wall *wall);
 void							check_wall_events(t_core *cr, int x, int y, t_wall *wall);
+void							find_sector(void *td, int x, int y);
+void							select_sector(void *td, int x, int y);
+void							sec_info_menu(t_core *cr, int secid);
+void							checkbox_fill(t_core *cr, t_coord xy, t_coord ab);
 
 #endif

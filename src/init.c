@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:20 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/14 19:23:14 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/19 19:42:06 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void				init(t_core		*cr)
 	cr->player.fcoord.y = 0;
 	cr->player.sec = 0;
 	cr->player.angle = 0;
+	cr->searchtype = 1;
 	img_new(cr);
 	redraw(cr);
 }

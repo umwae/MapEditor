@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/19 19:58:55 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/20 20:21:03 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,11 +182,6 @@ void			check_obj_events_mwheel(t_core *cr, t_coord click, int button, t_obj *obj
 
 // f c fi ci il fin door
 
-// void			add_slider_int(t_core *cr, char *text, int val, int pos, t_coord borders)
-// {
-//
-// }
-
 void			sec_info_menu(t_core *cr, int secid)
 {
 	t_coord	xy;
@@ -245,17 +240,7 @@ void			sec_info_menu(t_core *cr, int secid)
 	ft_strclr(text);
 	//
 	ft_strcat(text, "Illumination: ");
-	ft_strcat(text, ft_itoa(sec->illum));
-	mlx_string_put(cr->mlx, cr->win, xy.x + 60, \
-	(xy.y + ICON_SIZE * 4 + 20), 0, text);
-	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
-		xy.x, (xy.y + ICON_SIZE * 4 + 20));
-	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowr_trash, \
-		xy.x + ab.x - ICON_SIZE, (xy.y + ICON_SIZE * 4 + 20));
-	ft_strclr(text);
-	//
-	ft_strcat(text, "Illumination: ");
-	ft_strcat(text, ft_itoa(sec->illum));
+	ft_strcat(text, ft_ftoa(sec->illum));
 	mlx_string_put(cr->mlx, cr->win, xy.x + 60, \
 	(xy.y + ICON_SIZE * 4 + 20), 0, text);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
@@ -287,4 +272,102 @@ void			sec_info_menu(t_core *cr, int secid)
 		checkbox_fill(cr, xy, ab);
 	ft_strclr(text);
 	free(text);
+}
+
+void			check_sec_events_mwheel(t_core *cr, t_coord click, int button, int secid)
+{
+	t_coord		xy;
+	t_sec		*sec;
+
+	if (!(sec = find_sec_list(cr, secid)))
+		return ;
+	xy.x = WIN_WIDTH - I_MENU_XLEN - 4;
+	xy.y = 0 + 4;
+	if (click.x > xy.x && click.x < xy.x + I_MENU_XLEN && \
+	click.y > xy.y + 4 && click.y < xy.y + 4 + ICON_SIZE)
+	{
+		if (button == 5)
+			sec->floor++;
+		else if (button == 4)
+			sec->floor--;
+	}
+	else if (click.x > xy.x && click.x < xy.x + I_MENU_XLEN && \
+	click.y > xy.y + ICON_SIZE + 8 && click.y < xy.y + 8 + ICON_SIZE * 2)
+	{
+		if (button == 5)
+			sec->ceiling++;
+		else if (button == 4)
+			sec->ceiling--;
+	}
+	else if (click.x > xy.x && click.x < xy.x + I_MENU_XLEN && \
+	click.y > xy.y + ICON_SIZE * 2 + 12 && click.y < xy.y + 12 + ICON_SIZE * 3)
+	{
+		if (button == 5)
+			sec->ftex++;
+		else if (button == 4)
+			sec->ftex--;
+	}
+	else if (click.x > xy.x && click.x < xy.x + I_MENU_XLEN && \
+	click.y > xy.y + ICON_SIZE * 3 + 16 && click.y < xy.y + 16 + ICON_SIZE * 4)
+	{
+		if (button == 5)
+			sec->ctex++;
+		else if (button == 4)
+			sec->ctex--;
+	}
+	else if (click.x > xy.x && click.x < xy.x + I_MENU_XLEN && \
+	click.y > xy.y + ICON_SIZE * 4 + 20 && click.y < xy.y + 20 + ICON_SIZE * 5)
+	{
+		if (button == 5)
+			sec->illum += 0.1;
+		else if (button == 4)
+			sec->illum -= 0.1;
+	}
+}
+
+void			check_sec_events(t_core *cr, int x, int y, int secid)
+{
+	t_coord	xy;
+	t_sec	*sec;
+
+	if (!(sec = find_sec_list(cr, secid)))
+		return ;
+	xy.x = WIN_WIDTH - I_MENU_XLEN - 4;
+	xy.y = 0 + 4;
+	if (x > xy.x && x < xy.x + ICON_SIZE && \
+	y > xy.y + 4 && y < xy.y + 4 + ICON_SIZE)
+		sec->floor -= 0.1;
+	else if (x > xy.x + I_MENU_XLEN - ICON_SIZE && x < xy.x + I_MENU_XLEN && \
+	y > xy.y + 4 && y < xy.y + 4 + ICON_SIZE)
+		sec->floor += 0.1;//
+	else if (x > xy.x && x < xy.x + ICON_SIZE && \
+	y > xy.y + 8 + ICON_SIZE && y < xy.y + 8 + ICON_SIZE * 2)
+		sec->ceiling -= 0.1;
+	else if (x > xy.x + I_MENU_XLEN - ICON_SIZE && x < xy.x + I_MENU_XLEN && \
+	y > xy.y + 8 + ICON_SIZE && y < xy.y + 8 + ICON_SIZE * 2)
+		sec->ceiling += 0.1;//
+	else if (x > xy.x && x < xy.x + ICON_SIZE && \
+	y > xy.y + 12 + ICON_SIZE * 2 && y < xy.y + 12 + ICON_SIZE * 3)
+		sec->ftex--;
+	else if (x > xy.x + I_MENU_XLEN - ICON_SIZE && x < xy.x + I_MENU_XLEN && \
+	y > xy.y + 12 + ICON_SIZE * 2 && y < xy.y + 12 + ICON_SIZE * 3)
+		sec->ftex++;//
+	else if (x > xy.x && x < xy.x + ICON_SIZE && \
+	y > xy.y + 16 + ICON_SIZE * 3 && y < xy.y + 16 + ICON_SIZE * 4)
+		sec->ctex--;
+	else if (x > xy.x + I_MENU_XLEN - ICON_SIZE && x < xy.x + I_MENU_XLEN && \
+	y > xy.y + 16 + ICON_SIZE * 3 && y < xy.y + 16 + ICON_SIZE * 4)
+		sec->ctex++;//
+	else if (x > xy.x && x < xy.x + ICON_SIZE && \
+	y > xy.y + 20 + ICON_SIZE * 4 && y < xy.y + 20 + ICON_SIZE * 5)
+		sec->illum -= 0.1;
+	else if (x > xy.x + I_MENU_XLEN - ICON_SIZE && x < xy.x + I_MENU_XLEN && \
+	y > xy.y + 20 + ICON_SIZE * 4 && y < xy.y + 20 + ICON_SIZE * 5)
+		sec->illum += 0.1;
+	else if (x > xy.x + I_MENU_XLEN / 3 && x < xy.x + I_MENU_XLEN / 3 + CHECKBOX_SIZE && \
+	y > xy.y + ICON_SIZE * 5 + 24 && y < xy.y + ICON_SIZE * 5 + 24 + CHECKBOX_SIZE)
+		sec->isdoor = sec->isdoor == 0 ? 1 : 0;
+	else if (x > xy.x + I_MENU_XLEN / 3 && x < xy.x + I_MENU_XLEN / 3 + CHECKBOX_SIZE && \
+	y > xy.y + ICON_SIZE * 5 + 24 + LINE_SIZE_Y && y < xy.y + ICON_SIZE * 5 + 24 + CHECKBOX_SIZE + LINE_SIZE_Y)
+		sec->isfinish = sec->isfinish == 0 ? 1 : 0;
 }

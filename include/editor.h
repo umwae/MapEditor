@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:16 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/19 19:58:49 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/20 20:25:26 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,8 @@ typedef struct		s_core
 	t_coord					offs;
 	t_coord					msmem;
 	int							zoom;
-	int						dragl;
+	// int						dragl;
+	int						dragm;
 	int						test;
 
 	t_obj				player;
@@ -221,6 +222,7 @@ typedef struct		s_core
 	int						find_sec_color;
 	int						sel_sec_id;
 	int						searchtype;
+	int						do_use_inst;
 
 }									t_core;
 
@@ -315,5 +317,7 @@ void							find_sector(void *td, int x, int y);
 void							select_sector(void *td, int x, int y);
 void							sec_info_menu(t_core *cr, int secid);
 void							checkbox_fill(t_core *cr, t_coord xy, t_coord ab);
+void							check_sec_events_mwheel(t_core *cr, t_coord click, int button, int secid);
+void							check_sec_events(t_core *cr, int x, int y, int secid);
 
 #endif

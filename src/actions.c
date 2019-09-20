@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:59 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/14 20:56:30 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/20 20:33:23 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int			key_action(int keycode, t_core *cr)
 
 int			mouse_move(int x, int y, t_core *cr)
 {
-	if (cr->dragl == 1)
+	if (cr->dragm == 1)
 	{
 		cr->offs.x += x - cr->msmem.x;
 		cr->offs.y += y - cr->msmem.y;
@@ -90,8 +90,6 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 {
 	if (button == 1)
 	{
-		if (button == 1)
-			cr->dragl = 0;
 		//
 		// cr->detect_cl = 0;//Переписать на !менеджер событий в инфо меню
 		// iter_wall(cr, SELECT_COLOR, -1, &is_there_color);
@@ -127,9 +125,26 @@ int			mouse_release(int button, int x, int y, t_core *cr)
 		cr->rmb = 0;
 		return (0);
 	}
+	else if (button == 3)
+	{
+		cr->test = 0;
+		cr->dragm = 0;
+	}
 	else
 		return (0);
 	redraw(cr);
+	return (0);
+}
+
+static int		check_i_menu_bounds(t_core *cr, int x, int y)
+{
+	if ((cr->i_menu_is_open == 2 || cr->i_menu_is_open == 4 || cr->i_menu_is_open == 1) && \
+	 x > WIN_WIDTH - I_MENU_XLEN - 4 && x < WIN_WIDTH && y > 4)
+	{
+		if ((y < 4 + I_SEC_MENU_YLEN && cr->i_menu_is_open == 4) || y < 4 + I_MENU_YLEN)
+			return (1);
+	}
+	cr->i_menu_is_open = 0;
 	return (0);
 }
 
@@ -149,24 +164,23 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 			{
 				check_menu_events(cr, x, y);
 			}
-			else if (cr->test == 1)
-			{
-				cr->msmem.x = x;
-				cr->msmem.y = y;
-				cr->dragl = 1;
-			}
-			else
+			else if (check_i_menu_bounds(cr, x, y) == 1)
 			{
 				if (cr->i_menu_is_open == 2)
 				{
 					check_obj_events(cr, x, y, cr->closest_obj);
 				}
-				if (cr->i_menu_is_open == 1)
+				else if (cr->i_menu_is_open == 1)
 				{
 					check_wall_events(cr, x, y, cr->i_menu_wall);
 				}
-				(*cr->inst_func)(cr, x, y);
+				else if (cr->i_menu_is_open == 4)
+				{
+					check_sec_events(cr, x, y, cr->sel_sec_id);
+				}
 			}
+			else
+				(*cr->inst_func)(cr, x, y);
 		}
 	}
 	else if (button == 2 && !check_bounds(x, y))
@@ -186,6 +200,13 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 		}
 		cr->multi_sel = 0;
 	}
+	else if (button == 3)
+	{
+		cr->test = 1;
+		cr->msmem.x = x;
+		cr->msmem.y = y;
+		cr->dragm = 1;
+	}
 	else if ((button == 5 || button == 4) && !check_bounds(x, y))
 	{
 		if (cr->i_menu_is_open == 2)
@@ -196,6 +217,11 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 		else if (cr->i_menu_is_open == 1)
 		{
 			check_wall_events_mwheel(cr, click, button, cr->i_menu_wall);
+			redraw(cr);
+		}
+		else if (cr->i_menu_is_open == 4)
+		{
+			check_sec_events_mwheel(cr, click, button, cr->sel_sec_id);
 			redraw(cr);
 		}
 	}

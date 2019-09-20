@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/19 19:42:44 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/20 18:40:52 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ void				select_sector(void *td, int x, int y)
 	t_wall	*wall;
 	int		secmem;
 
-	// secmem[0] = -1;
-	// secmem[1] = -1;
 	secmem = -1;
 	cr = (t_core *)td;
 	cr->find_sec_color = SELECT_COLOR;
@@ -57,7 +55,7 @@ void				select_sector(void *td, int x, int y)
 		wall = wall->next;
 	}
 	cr->sel_sec_id = secmem;
-	sec_info_menu(cr, secmem);
+	cr->i_menu_is_open = 4;
 }
 
 int					select_wall(t_core *cr, int x, int y)

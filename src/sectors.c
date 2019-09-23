@@ -90,6 +90,10 @@ void 						restore_sec_id_v2(t_core *cr)
 	iter_wall(cr, i, -1, &get_last_sec);
 	while (i <= cr->idcurr)
 	{
+		// printf("SCURR\n");
+		// printf("SCURR %d\n", find_sec_list(cr, i)->id);
+		// printf("TCURR\n");
+		fflush(stdout);
 		if ((does_sec_id_exist(cr, i) == 1))
 		{
 			scount++;

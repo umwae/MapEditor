@@ -135,10 +135,32 @@ static void		draw_walls(t_core *cr)
 	}
 }
 
+static void				gridtest(t_core *cr)
+{
+	int    xi;
+	int    yi;
+	int		xi2;
+
+	xi = 0;
+	yi = cr->zoom;
+	while (xi <= WIN_WIDTH)
+	{
+		xi2 = xi - (xi) % cr->zoom;
+		cr->vs.x0 = -cr->zoom + cr->offs.x % cr->zoom + xi2 - cr->offs.x;
+		cr->vs.y0 = -cr->zoom + cr->offs.y % cr->zoom - cr->offs.y;
+		cr->vs.x1 = -cr->zoom + cr->offs.x % cr->zoom + xi2 - cr->offs.x;
+		cr->vs.y1 = WIN_HIGHT + cr->zoom + cr->offs.y % cr->zoom - cr->offs.y;
+		cr->vs.color = 0x00ff00;
+		bresenham(cr, &img_pxl);
+		xi += 1;
+	}
+}
+
 void			redraw(t_core *cr)
 {
 	mlx_clear_window(cr->mlx, cr->win);
 	img_fill(cr->idata, 0x000000);
+	// gridtest(cr);
 	grid(cr);
 	draw_walls(cr);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->image, 0, 0);

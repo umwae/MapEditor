@@ -12,36 +12,27 @@
 
 #include "editor.h"
 #include "stdio.h"
+#include "stdlib.h"
 
 void			grid_magnet(t_core *cr, int *x, int *y, int check_start)
 {
 	(void)check_start;//Дописать
-  // if ((cr->offs.x + *x) % cr->zoom < cr->zoom / 2)
-  //   *x = cr->offs.x - WIN_WIDTH / 2 + *x - (cr->offs.x + *x) % cr->zoom;
-  // else
-  //   *x = cr->offs.x - WIN_WIDTH / 2 + *x + cr->zoom - (cr->offs.x + *x) % cr->zoom;
-  // if ((cr->offs.y + *y) % cr->zoom < cr->zoom / 2)
-  //   *y = cr->offs.y - WIN_HIGHT / 2 + *y - (cr->offs.y + *y) % cr->zoom;
-  // else
-  //   *y = cr->offs.y - WIN_HIGHT / 2 + *y + cr->zoom - (cr->offs.y + *y) % cr->zoom;
+	int		hx;
+	int *p;
+	*x = (cr->offs.x + *x) / cr->zoom * cr->zoom;
+	*y = (cr->offs.y + *y) / cr->zoom * cr->zoom;
 
-  // if ((cr->offs.x + *x) % cr->zoom < (float)cr->zoom / 2)
-  //   *x = cr->offs.x - WIN_WIDTH / 2 + *x - (cr->offs.x + *x) % cr->zoom;
-  // else
-  //   *x = cr->offs.x - WIN_WIDTH / 2 + *x + cr->zoom - (cr->offs.x + *x) % cr->zoom;
-  // *y = cr->offs.y - WIN_HIGHT / 2 + *y - (cr->offs.y + *y) % cr->zoom;
-
-  // if ((cr->offs.x + *x) % cr->zoom < (float)cr->zoom / 2)
-  //   *x = (cr->offs.x - WIN_WIDTH / 2 + *x) - (cr->offs.x + *x) % cr->zoom;
-  // else
-	// *x = (cr->offs.x - WIN_HIGHT / 2 + *x + cr->zoom) - (cr->offs.x + *x) % cr->zoom;
-  // *y = *y - (cr->offs.y + *y) % cr->zoom;
-
-  if ((cr->offs.x + *x) % cr->zoom < cr->zoom / 2)
-	*x = *x - (cr->offs.x + *x) % cr->zoom;
-  else
-	*x = *x + cr->zoom - (cr->offs.x + *x) % cr->zoom;
-  *y = *y - (cr->offs.y + *y) % cr->zoom;
+	*x = *x + (cr->offs.x - WIN_WIDTH / 2) % cr->zoom + cr->zoom / 2 - \
+	cr->offs.x / cr->zoom * cr->zoom - cr->zoom;
+	// printf("___%d %d\n", (cr->offs.x - WIN_WIDTH / 2) % cr->zoom, *x);
+	// if (abs((*x + cr->offs.x - WIN_WIDTH / 2) % cr->zoom) > cr->zoom / 2)
+	// 	*x += cr->zoom;
+	*y = *y + (cr->offs.y - WIN_HIGHT / 2) % cr->zoom + cr->zoom / 2 - \
+	cr->offs.y / cr->zoom * cr->zoom - cr->zoom;
+	// cr->vs.x1 = *x + (cr->offs.x - WIN_WIDTH / 2) % cr->zoom + cr->zoom / 2 - cr->offs.x / cr->zoom * cr->zoom;
+	// cr->vs.y1 = *y + (cr->offs.y - WIN_HIGHT / 2) % cr->zoom + cr->zoom / 2 - cr->offs.y / cr->zoom * cr->zoom;
+	// cr->vs.color = 0x00ff00;
+	// bresenham(cr, &img_pxl);
 }
 
 void			grid(t_core *cr)

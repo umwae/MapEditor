@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/11 21:19:18 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/24 21:07:38 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,20 @@ void			switch_isportal(t_core *cr, t_wall *wall, int switchval, int pr2)
 
 void			check_menu_events(t_core *cr, int x, int y)
 {
-	if (x > cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 && x < cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 * 6 && \
+	if (x > cr->click.x && x < cr->click.x + MENU_XLEN && \
 	y > cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 1 && y < cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 1 + CHECKBOX_SIZE)
 	{
 		cr->player.fcoord.x = cr->click.x - cr->offs.x;
 		cr->player.fcoord.y = cr->click.y - cr->offs.y;
 	}
-	else if (x > cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 && x < cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 * 6 && \
+	else if (x > cr->click.x && x < cr->click.x + MENU_XLEN && \
 	y > cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 2 && y < cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 2) / 2 + LINE_SIZE_Y * 2 + CHECKBOX_SIZE)
 	{
 		add_object(cr, cr->click.x - cr->offs.x, cr->click.y - cr->offs.y);
 	}
 	else if (cr->menu_is_open == 3)
 		return ;
-	else if (x > cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 && x < cr->click.x + (MENU_XLEN - LINE_SIZE_X) / 2 * 6 && \
+	else if (x > cr->click.x && x < cr->click.x + MENU_XLEN && \
 	y > cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 0 && y < cr->click.y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 0 + CHECKBOX_SIZE)
 	{
 		// printf("MENU CLICK\n");
@@ -65,6 +65,20 @@ void			draw_rectangle(t_core *cr, t_coord xy, t_coord ab, int color)
 		while (c_abx--)
 		{
 			pxl_put_wrap(cr, xy.x + c_abx, xy.y + ab.y, color);
+		}
+	}
+}
+
+void			draw_rectangle_img_pxl(t_core *cr, t_coord xy, t_coord ab, int color)
+{
+	int		c_abx;
+
+	while (ab.y--)
+	{
+		c_abx = ab.x;
+		while (c_abx--)
+		{
+			img_pxl(cr, xy.x + c_abx, xy.y + ab.y, color);
 		}
 	}
 }

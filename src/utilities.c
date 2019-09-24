@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/20 17:01:14 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/24 20:53:21 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,35 +51,78 @@ float					calc_dist(int x0, int y0, int x1, int y1)
 }
 
 
+// char		*ft_ftoa(float num)
+// {
+// 	short	i;
+// 	int		tmp;
+// 	short	size;
+// 	char	*str;
+//
+// 	i = 0;
+// 	size = 1;
+// 	tmp = (int)round(num * 100);
+// 	if (num == .0)
+// 		return (ft_strdup("0.00"));
+// 	(num < .0 && (tmp *= -1.) > 0) ? ++size : 1;
+// 	(tmp < 100) ? ++size : 1;
+// 	num = tmp;
+// 	while (tmp != 0 && ++size)
+// 		tmp /= 10;
+// 	if (!(str = (char *)malloc((size + 1) * sizeof(char))))
+// 		return (NULL);
+// 	str[size--] = 0;
+// 	while ((int)num != 0 && ++i)
+// 		(i != 3 && (str[size--] =
+// 		((int)num % 10) + '0')) ? (num /= 10) : (str[size--] = '.');
+// 	(i++ == 2) ? str[size--] = '.' : 1;
+// 	(i++ == 3) ? str[size--] = '0' : 1;
+// 	(size == 0) ? str[0] = '-' : 1;
+// 	return (str);
+// }
+
+// static void	float_repair(float num)
+// {
+// 	num = floor()
+// }
+
 char		*ft_ftoa(float num)
 {
-	short	i;
-	int		tmp;
-	short	size;
 	char	*str;
 
-	i = 0;
-	size = 1;
-	tmp = (int)round(num * 100);
-	if (num == .0)
-		return (ft_strdup("0.00"));
-	(num < .0 && (tmp *= -1.) > 0) ? ++size : 1;
-	(tmp < 100) ? ++size : 1;
-	num = tmp;
-	while (tmp != 0 && ++size)
-		tmp /= 10;
-	if (!(str = (char *)malloc((size + 1) * sizeof(char))))
+	char	*tmpm;
+	char	*tmpa;
+	int		i;
+	int		size;
+	int		restr;
+	float		mem;
+
+
+	restr = 2;
+	mem = num;
+	i = num >= 0 ? floor(num) : ceil(num);
+	num = num - i;
+	num = fabs(num * 100);
+	num = round(num);
+	if (num == 100)
+	{
+		num = 0;
+		i += mem > 0 ? 1 : -1;
+	}
+	tmpm = ft_itoa(abs(i));
+	// while (num - num / 10 != 0 && restr--)
+	// 	num *= 10;
+	tmpa = ft_itoa(num);
+	if (!(str = ft_strnew(ft_strlen(tmpm) + ft_strlen(tmpa))))
 		return (NULL);
-	str[size--] = 0;
-	while ((int)num != 0 && ++i)
-		(i != 3 && (str[size--] =
-		((int)num % 10) + '0')) ? (num /= 10) : (str[size--] = '.');
-	(i++ == 2) ? str[size--] = '.' : 1;
-	(i++ == 3) ? str[size--] = '0' : 1;
-	(size == 0) ? str[0] = '-' : 1;
+	ft_strcat(str, mem >= 0 ? "" : "-");
+	ft_strcat(str, tmpm);
+	ft_strcat(str, ".");
+	if (floor(num) != 0)
+		ft_strcat(str, tmpa);
+	else
+		ft_strcat(str, "00");
 	return (str);
 }
-
 
 
 double	ft_atof(const char *str)

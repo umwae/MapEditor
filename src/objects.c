@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/19 20:21:13 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/24 21:17:01 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,25 @@ void		add_object(t_core *cr, int x, int y)
 	*cr->olist = obj;
 }
 
+void		draw_objects_text(t_core *cr)
+{
+	t_obj		*obj;
+	t_coord		xy;
+
+	obj = *cr->olist;
+	while (obj)
+	{
+		xy.x = obj->fcoord.x - OBJECT_SIZE / 2 + cr->offs.x;
+		xy.y = obj->fcoord.y - OBJECT_SIZE / 2 + cr->offs.y;
+		char *txt = malloc(sizeof(char) * 5);
+		ft_strcpy(txt, ft_itoa(obj->type));
+		mlx_string_put(cr->mlx, cr->win, xy.x, xy.y, 0xffffff, txt);
+		free(txt);
+		//
+		obj = obj->next;
+	}
+}
+
 void		draw_objects(t_core *cr)
 {
 	t_obj		*obj;
@@ -58,15 +77,9 @@ void		draw_objects(t_core *cr)
 	ab.y = OBJECT_SIZE;
 	while (obj)
 	{
-		xy.x = obj->fcoord.x - OBJECT_SIZE / 2 + cr->offs.x;
-		xy.y = obj->fcoord.y - OBJECT_SIZE / 2 + cr->offs.y;
-		draw_rectangle(cr, xy, ab, obj->color);
-		//
-		char *txt = malloc(sizeof(char) * 5);
-		ft_strcpy(txt, ft_itoa(obj->type));
-		mlx_string_put(cr->mlx, cr->win, xy.x, xy.y, 0xffffff, txt);
-		free(txt);
-		//
+		xy.x = obj->fcoord.x - OBJECT_SIZE / 2;
+		xy.y = obj->fcoord.y - OBJECT_SIZE / 2;
+		draw_rectangle_img_pxl(cr, xy, ab, obj->color);
 		obj = obj->next;
 	}
 }

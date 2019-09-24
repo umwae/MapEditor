@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/20 20:07:04 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/24 21:12:14 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,9 @@ void			draw_player(t_core *cr)
 
 	ab.x = PLAYER_SIZE;
 	ab.y = PLAYER_SIZE;
-	xy.x = cr->player.fcoord.x - PLAYER_SIZE / 2 + cr->offs.x;
-	xy.y = cr->player.fcoord.y - PLAYER_SIZE / 2 + cr->offs.y;
-	draw_rectangle(cr, xy, ab, PLAYER_COLOR);
+	xy.x = cr->player.fcoord.x - PLAYER_SIZE / 2;
+	xy.y = cr->player.fcoord.y - PLAYER_SIZE / 2;
+	draw_rectangle_img_pxl(cr, xy, ab, PLAYER_COLOR);
 }
 
 void			spot_sector_around(t_core *cr, t_obj *obj)

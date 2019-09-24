@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/20 20:33:44 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/24 21:17:36 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,19 @@
 
 void					draw_nodes(t_core *cr, t_wall *wall, int pr1, int pr2)
 {
-// 	t_coord		xy;
-// 	t_coord		ab;
-//
-// 	(void)pr1;
-// 	(void)pr2;
-// 	ab.x = POINT_SIZE;
-// 	ab.y = POINT_SIZE;
-// 	xy.x = wall->p1.x - POINT_SIZE / 2 + cr->offs.x;
-// 	xy.y = wall->p1.y - POINT_SIZE / 2 + cr->offs.y;
-// 	draw_rectangle(cr, xy, ab, POINT_COLOR);
-// 	xy.x = wall->p2.x - POINT_SIZE / 2 + cr->offs.x;
-// 	xy.y = wall->p2.y - POINT_SIZE / 2 + cr->offs.y;
-// 	draw_rectangle(cr, xy, ab, POINT_COLOR);
+	t_coord		xy;
+	t_coord		ab;
+
+	(void)pr1;
+	(void)pr2;
+	ab.x = POINT_SIZE;
+	ab.y = POINT_SIZE;
+	xy.x = wall->p1.x - POINT_SIZE / 2;
+	xy.y = wall->p1.y - POINT_SIZE / 2;
+	draw_rectangle_img_pxl(cr, xy, ab, POINT_COLOR);
+	xy.x = wall->p2.x - POINT_SIZE / 2;
+	xy.y = wall->p2.y - POINT_SIZE / 2;
+	draw_rectangle_img_pxl(cr, xy, ab, POINT_COLOR);
 // //
 // 	char *txt = malloc(sizeof(char) * 5);//Отображает номера стен, вызывает тормоза
 	// ft_strcpy(txt, ft_itoa(wall->index));
@@ -135,38 +135,17 @@ static void		draw_walls(t_core *cr)
 	}
 }
 
-static void				gridtest(t_core *cr)
-{
-	int    xi;
-	int    yi;
-	int		xi2;
-
-	xi = 0;
-	yi = cr->zoom;
-	while (xi <= WIN_WIDTH)
-	{
-		xi2 = xi - (xi) % cr->zoom;
-		cr->vs.x0 = -cr->zoom + cr->offs.x % cr->zoom + xi2 - cr->offs.x;
-		cr->vs.y0 = -cr->zoom + cr->offs.y % cr->zoom - cr->offs.y;
-		cr->vs.x1 = -cr->zoom + cr->offs.x % cr->zoom + xi2 - cr->offs.x;
-		cr->vs.y1 = WIN_HIGHT + cr->zoom + cr->offs.y % cr->zoom - cr->offs.y;
-		cr->vs.color = 0x00ff00;
-		bresenham(cr, &img_pxl);
-		xi += 1;
-	}
-}
-
 void			redraw(t_core *cr)
 {
 	mlx_clear_window(cr->mlx, cr->win);
 	img_fill(cr->idata, 0x000000);
-	// gridtest(cr);
 	grid(cr);
 	draw_walls(cr);
-	mlx_put_image_to_window(cr->mlx, cr->win, cr->image, 0, 0);
 	iter_wall(cr, 0, 0, &draw_nodes);
 	draw_objects(cr);
 	draw_player(cr);
+	mlx_put_image_to_window(cr->mlx, cr->win, cr->image, 0, 0);
+	draw_objects_text(cr);
 	display_instruments(cr);
 	highlight(cr);
 	spot_sector_around(cr, &cr->player);

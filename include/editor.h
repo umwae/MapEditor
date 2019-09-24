@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:55:16 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/20 20:25:26 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/24 21:17:21 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,6 +248,7 @@ int								is_near_wall(t_core *cr, t_wall *wall, int x, int y);
 int				 				min(int a, int b);
 int 							max(int a, int b);
 void							draw_rectangle(t_core *cr, t_coord xy, t_coord ab, int color);
+void							draw_rectangle_img_pxl(t_core *cr, t_coord xy, t_coord ab, int color);
 void							rmb_menu(t_core *cr, t_wall *wall, int x, int y);
 void							load_gui(t_core *cr);
 void							display_instruments(t_core *cr);
@@ -294,6 +295,7 @@ void							is_there_color(t_core *cr, t_wall *wall, int color, int pr2);
 void 							restore_sec_id_v2(t_core *cr);
 void							load_player(t_core *cr, char **line);
 void							draw_objects(t_core *cr);
+void							draw_objects_text(t_core *cr);
 void							add_object(t_core *cr, int x, int y);
 void							del_object(t_core *cr, int idref);
 void							info_menu(t_core *cr, t_wall *wall);
@@ -319,5 +321,7 @@ void							sec_info_menu(t_core *cr, int secid);
 void							checkbox_fill(t_core *cr, t_coord xy, t_coord ab);
 void							check_sec_events_mwheel(t_core *cr, t_coord click, int button, int secid);
 void							check_sec_events(t_core *cr, int x, int y, int secid);
+
+void							valid_illum_val(float *val);
 
 #endif

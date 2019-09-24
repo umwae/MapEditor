@@ -6,7 +6,7 @@
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/20 20:21:03 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/24 20:31:13 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,6 +323,7 @@ void			check_sec_events_mwheel(t_core *cr, t_coord click, int button, int secid)
 		else if (button == 4)
 			sec->illum -= 0.1;
 	}
+	valid_illum_val(&sec->illum);
 }
 
 void			check_sec_events(t_core *cr, int x, int y, int secid)
@@ -370,4 +371,5 @@ void			check_sec_events(t_core *cr, int x, int y, int secid)
 	else if (x > xy.x + I_MENU_XLEN / 3 && x < xy.x + I_MENU_XLEN / 3 + CHECKBOX_SIZE && \
 	y > xy.y + ICON_SIZE * 5 + 24 + LINE_SIZE_Y && y < xy.y + ICON_SIZE * 5 + 24 + CHECKBOX_SIZE + LINE_SIZE_Y)
 		sec->isfinish = sec->isfinish == 0 ? 1 : 0;
+	valid_illum_val(&sec->illum);
 }

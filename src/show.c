@@ -46,8 +46,6 @@ void					draw_nodes(t_core *cr, t_wall *wall, int pr1, int pr2)
 	// mlx_string_put(cr->mlx, cr->win, wall->p1.x + cr->offs.x, wall->p1.y + cr->offs.y, 0xffffff, txt);
 	// ft_strcpy(txt, ft_itoa(find_vt_id(cr, wall->p2.x / cr->zoom * UNIT_SIZE, wall->p2.y / cr->zoom * UNIT_SIZE)));
 	// mlx_string_put(cr->mlx, cr->win, wall->p2.x + cr->offs.x, wall->p2.y + cr->offs.y, 0xffffff, txt);
-
-	print_sec_num(cr);
 }
 
 void					straight_line(t_core *cr, int *x, int *y)
@@ -145,6 +143,7 @@ void			redraw(t_core *cr)
 	draw_objects(cr);
 	draw_player(cr);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->image, 0, 0);
+	print_sec_num(cr);
 	draw_objects_text(cr);
 	display_instruments(cr);
 	highlight(cr);

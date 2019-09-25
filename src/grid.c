@@ -20,28 +20,22 @@ void			grid_magnet(t_core *cr, int *x, int *y, int check_start)
 	int		hx;
 	int *p;
 
-	int xm;
-	int ym;
+	// int xm;
+	// int ym;
 
-	printf("___%d\n", cr->offs.x + *x - WIN_WIDTH);
+	// xm = *x;
+	// ym = *y;
+	// cr->vs.x0 = (xm - (cr->offs.x) % cr->zoom) / cr->zoom * cr->zoom + (cr->offs.x) % cr->zoom;
+	// cr->vs.y0 = (ym - (cr->offs.y) % cr->zoom) / cr->zoom * cr->zoom + (cr->offs.y) % cr->zoom;
+	// cr->vs.x1 = cr->vs.x0;
+	// cr->vs.y1 = cr->vs.y0 + 200;
+	// cr->vs.color = 0xff0000;
+	// bresenham(cr, &pxl_put_wrap);
+	// printf("___%d %d\n", cr->vs.x0, cr->vs.x1);
+	// cr->vs.color = 0xffffff;
 
-	xm = *x;
-	ym = *y;
-	*x = (cr->offs.x + *x) / cr->zoom * cr->zoom;
-	*y = (cr->offs.y + *y) / cr->zoom * cr->zoom;
-
-	*x += -(cr->offs.x / cr->zoom * cr->zoom) + cr->zoom / 2;
-	*y += -(cr->offs.y / cr->zoom * cr->zoom) + cr->zoom / 2;
-
-	// cr->vs.x0 = *x;
-	// cr->vs.y0 = *y;
-	// cr->vs.x1 = *x;
-	// cr->vs.y1 = *y + 200;
-	// cr->vs.color = 0x00ff00;
-	// bresenham(cr, &img_pxl);
-
-	*x += (cr->offs.x - WIN_WIDTH / 2) % cr->zoom;
-	*y += (cr->offs.y - WIN_HIGHT / 2) % cr->zoom;
+	*x = (*x - (cr->offs.x) % cr->zoom) / cr->zoom * cr->zoom + (cr->offs.x) % cr->zoom;
+	*y = (*y - (cr->offs.y) % cr->zoom) / cr->zoom * cr->zoom + (cr->offs.y) % cr->zoom;
 }
 
 void			grid(t_core *cr)

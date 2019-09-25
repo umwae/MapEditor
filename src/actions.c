@@ -55,6 +55,11 @@ int			key_action(int keycode, t_core *cr)
 		cr->test *= -1;
 	else if (keycode == 117)
 		del_object(cr, 0);
+	else if (keycode == 49)
+	{
+		cr->offs.x = WIN_WIDTH / 2;
+		cr->offs.y = WIN_HIGHT / 2;
+	}
 	redraw(cr);
 	return (0);
 }

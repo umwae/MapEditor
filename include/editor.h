@@ -63,6 +63,8 @@
 # define ST_CEIL_HIGHT 75
 # define ST_ILLUMINATION 0.75f
 # define ST_TEXTURE 2
+# define ST_FTEX -1
+# define ST_CTEX -1
 
 # define COMPRESSING 30
 # define UNIT_SIZE 0.5f

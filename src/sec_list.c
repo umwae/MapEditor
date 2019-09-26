@@ -39,8 +39,8 @@ void		add_sec_list(t_core *cr)
 	sec->illum = ST_ILLUMINATION;
 	sec->floor = ST_FLOOR_HIGHT;
 	sec->ceiling = ST_CEIL_HIGHT;
-	sec->ftex = -1;
-	sec->ctex = -1;
+	sec->ftex = ST_FTEX;
+	sec->ctex = ST_CTEX;
 	sec->id = cr->sec_num - 1;
 	sec->isdoor = 0;
 	sec->isfinish = 0;

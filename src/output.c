@@ -174,8 +174,8 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 				//
 				ft_strcat(txt, (tmp = ft_itoa(find_vt_id(cr, cw.x, cw.y))));
 				//
-				if (wtmp->sectors[0].t != -1 || \
-				wtmp->sectors[1].t != -1)
+				if (wtmp->sectors[0].t != -1 || wtmp->sectors[1].t != -1 || sec->floor != ST_FLOOR_HIGHT || sec->ceiling != ST_CEIL_HIGHT || \
+				sec->illum != ST_ILLUMINATION || sec->ftex != ST_FTEX || sec->ftex != ST_CTEX)
 					doprint_wtx = 1;
 				printf("%d %d \n", wtmp->sectors[0].t, wtmp->sectors[1].t);
 				ft_strcat(wtx, ft_itoa(wtmp->sectors[0].s == i ? wtmp->sectors[0].t : wtmp->sectors[1].t));

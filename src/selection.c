@@ -30,7 +30,10 @@ void				select_sector(void *td, int x, int y)
 	t_core 	*cr;
 	t_wall	*wall;
 	int		secmem;
+//
+	t_wall	*prev;
 
+	prev = NULL;
 	secmem = -1;
 	cr = (t_core *)td;
 	cr->find_sec_color = SELECT_COLOR;
@@ -44,17 +47,52 @@ void				select_sector(void *td, int x, int y)
 	{
 		if (wall->color == SELECT_COLOR)
 		{
-			if (wall->sectors[0].s != -1 && wall->sectors[0].s != secmem)
+			// if (wall->sectors[0].s != -1 && wall->sectors[0].s != secmem)
+			// {
+			// 	if (wall->sectors[1].s != -1 && wall->sectors[1].s != secmem)
+			// 	{
+			// 		secmem = wall->sectors[1].s;
+			// 		printf("SSSSSEC %d\n", secmem);
+			// 	}
+			// 	else if (wall->sectors[0].s != -1)
+			// 	{
+			// 		secmem = wall->sectors[0].s;
+			// 		printf("SSSSSEC %d\n", secmem);
+			// 	}
+			// }
+
+			if (!prev)
 			{
-				if (wall->sectors[1].s != -1 && wall->sectors[1].s != secmem)
-					secmem = wall->sectors[1].s;
-				else if (wall->sectors[0].s != -1)
+				printf("SSSSSECMEM WALL %d\n", wall->index);
+				if (wall->sectors[0].s != -1)
+				{
+					// secmem = wall->sectors[0].s;
+					prev = wall;
+				}
+				else if (wall->sectors[1].s != -1)
+				{
+					// secmem = wall->sectors[0].s;
+					prev = wall;
+				}
+			}
+			else
+			{
+				printf("SSSSSECMEM WALL %d\n", wall->index);
+				if (wall->sectors[0].s == prev->sectors[0].s || wall->sectors[0].s == prev->sectors[1].s)
 					secmem = wall->sectors[0].s;
+				else if (wall->sectors[1].s == prev->sectors[1].s || wall->sectors[1].s == prev->sectors[0].s)
+					secmem = wall->sectors[1].s;
+				// else
+				// {
+					
+				// }
+				prev = wall;
 			}
 		}
 		wall = wall->next;
 	}
 	cr->sel_sec_id = secmem;
+	printf("SSSSSECMEM FIN %d\n", secmem);
 	cr->i_menu_is_open = 4;
 }
 

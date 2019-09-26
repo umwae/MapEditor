@@ -192,30 +192,27 @@ void            load_map(t_core *cr)
       		// find_sec_list(cr, i)->floor = 99;
 			find_sec_list(cr, i)->floor = ft_atof(pts[1]);
 			find_sec_list(cr, i)->ceiling = ft_atof(ft_strchr(pts[1], ' ') + 1);
-			printf("§§§§§§§ %f %f\n", find_sec_list(cr, i)->floor, find_sec_list(cr, i)->ceiling);
 			if (pts[4])
 				find_sec_list(cr, i)->illum = ft_atof(pts[4]);
 			free(pts);
 			//
 			p = line + find_rep_symb(line, '|', 3);
-	  	  while (*p != ' ')
-	  	  	p--;
-	  	  tmp = ft_strsub(p + 1, 0, ft_strchr(p, '|') - p - 1);
-	  	  tmp = ft_strjoin(tmp, " ");
-	  	  tmp = ft_strjoin(tmp, ft_strsub(line, find_rep_symb(line, '|', 2) + 1, \
-	  			find_rep_symb(line, '|', 3) - (find_rep_symb(line, '|', 2) + 1)));
-	        pts = ft_strsplit(tmp, ' ');
+	  	while (*p != ' ')
+	  	  p--;
+	  	tmp = ft_strsub(p + 1, 0, ft_strchr(p, '|') - p - 1);
+	  	tmp = ft_strjoin(tmp, " ");
+	  	tmp = ft_strjoin(tmp, ft_strsub(line, find_rep_symb(line, '|', 2) + 1, \
+	  	find_rep_symb(line, '|', 3) - (find_rep_symb(line, '|', 2) + 1)));
+	    pts = ft_strsplit(tmp, ' ');
 			ft_strclr(tmp);
 		//
-	  p = line + find_rep_symb(line, '|', 4);
-	  while (*p != ' ')
-	  	p--;
-	printf("PPPPPPPP %s //////// %s\n", line, ft_strsub(p + 1, 0, ft_strchr(p, '|') - p - 1));
-	  tmp = ft_strsub(p + 1, 0, ft_strchr(p, '|') - p - 1);
-	  tmp = ft_strjoin(tmp, " ");
-	  tmp = ft_strjoin(tmp, ft_strsub(line, find_rep_symb(line, '|', 3) + 1, \
+	    p = line + find_rep_symb(line, '|', 4);
+	    while (*p != ' ')
+	  	  p--;
+	    tmp = ft_strsub(p + 1, 0, ft_strchr(p, '|') - p - 1);
+	    tmp = ft_strjoin(tmp, " ");
+	    tmp = ft_strjoin(tmp, ft_strsub(line, find_rep_symb(line, '|', 3) + 1, \
 			find_rep_symb(line, '|', 4) - (find_rep_symb(line, '|', 3) + 1)));
-		printf("TTTTTTTT %s\n", tmp);
       prt = ft_strsplit(tmp, ' ');
 			ft_strclr(tmp);
       //

@@ -127,8 +127,8 @@ void					add_wall(t_core *cr)
 	wall->len = calc_dist(wall->p1.x, wall->p1.y, wall->p2.x, wall->p2.y);
 	wall->sectors[0].s = -1;
 	wall->sectors[1].s = -1;
-	wall->sectors[0].t = 0;
-	wall->sectors[1].t = 0;
+	wall->sectors[0].t = -1;
+	wall->sectors[1].t = -1;
 	wall->isportal = cr->mpsw;
 	cr->mpsw = 0;
 	printf("w>>>%d %d\n", wall->sectors[0].t, wall->sectors[1].t);

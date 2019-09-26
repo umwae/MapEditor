@@ -69,6 +69,8 @@
 
 # define SKY 555
 
+#define SAVEPATH "./maps/testmap"
+
 typedef struct		s_coord
 {
 	int							x;
@@ -223,6 +225,7 @@ typedef struct		s_core
 	int						sel_sec_id;
 	int						searchtype;
 	int						do_use_inst;
+	int						vt[2];
 
 }									t_core;
 
@@ -323,5 +326,6 @@ void							check_sec_events_mwheel(t_core *cr, t_coord click, int button, int se
 void							check_sec_events(t_core *cr, int x, int y, int secid);
 
 void							valid_illum_val(float *val);
+int								ft_arrlen(char	**arr);
 
 #endif

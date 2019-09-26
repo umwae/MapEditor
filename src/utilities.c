@@ -164,3 +164,15 @@ void			checkbox_fill(t_core *cr, t_coord xy, t_coord ab)
 	ab.y *= 0.8;
 	draw_rectangle(cr, xy, ab, 0);
 }
+
+int				ft_arrlen(char	**arr)
+{
+	int		i;
+
+	i = 0;
+	if (!arr)
+		return(0);
+	while(arr[i])
+		i++;
+	return(i);
+}

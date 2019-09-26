@@ -133,6 +133,21 @@ static void		draw_walls(t_core *cr)
 	}
 }
 
+static void		draw_ggff(t_core *cr)
+{
+	t_wall	*wall;
+
+	wall = cr->wlist;
+	char *txt = malloc(sizeof(char) * 5);//Отображает номера стен, вызывает тормоза
+	while (wall)
+	{
+		ft_strcpy(txt, ft_itoa(wall->index));
+		mlx_string_put(cr->mlx, cr->win, min(wall->p2.x + cr->offs.x, wall->p1.x + cr->offs.x) + abs(wall->p2.x - wall->p1.x) / 2, \
+		min(wall->p2.y + cr->offs.y, wall->p1.y + cr->offs.y) + abs(wall->p2.y - wall->p1.y) / 2, 0xffffff, txt);
+		wall = wall->next;
+	}
+}
+
 void			redraw(t_core *cr)
 {
 	mlx_clear_window(cr->mlx, cr->win);
@@ -144,7 +159,7 @@ void			redraw(t_core *cr)
 	draw_player(cr);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->image, 0, 0);
 	print_sec_num(cr);
-	draw_objects_text(cr);
+	// draw_objects_text(cr);
 	display_instruments(cr);
 	highlight(cr);
 	spot_sector_around(cr, &cr->player);
@@ -154,5 +169,6 @@ void			redraw(t_core *cr)
 		obj_info_menu(cr, cr->closest_obj);
 	else if (cr->i_menu_is_open == 4)
 		sec_info_menu(cr, cr->sel_sec_id);
+	draw_ggff(cr);
 	// show_messages(cr);
 }

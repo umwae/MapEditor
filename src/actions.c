@@ -29,6 +29,21 @@ int			key_release(int keycode, t_core *cr)
 	return (0);
 }
 
+static void	key_action_p2(int keycode, t_core *cr)
+{
+	if (keycode == 67)
+		cr->test *= -1;
+	else if (keycode == 117)
+		del_object(cr, 0);
+	else if (keycode == 49)
+	{
+		cr->offs.x = WIN_WIDTH / 2;
+		cr->offs.y = WIN_HIGHT / 2;
+	}
+	else if (keycode == 32)
+		del_last_sector(cr);
+}
+
 int			key_action(int keycode, t_core *cr)
 {
 	if (keycode == 53)
@@ -51,184 +66,8 @@ int			key_action(int keycode, t_core *cr)
 		cr->player.fcoord.y += 20;
 	else if (keycode == 126)
 		cr->player.fcoord.y -= 20;
-	else if (keycode == 67)
-		cr->test *= -1;
-	else if (keycode == 117)
-		del_object(cr, 0);
-	else if (keycode == 49)
-	{
-		cr->offs.x = WIN_WIDTH / 2;
-		cr->offs.y = WIN_HIGHT / 2;
-	}
-	redraw(cr);
-	return (0);
-}
-
-int			mouse_move(int x, int y, t_core *cr)
-{
-	if (cr->dragm == 1)
-	{
-		cr->offs.x += x - cr->msmem.x;
-		cr->offs.y += y - cr->msmem.y;
-		cr->msmem.x = x;
-		cr->msmem.y = y;
-		redraw(cr);
-	}
-	else if (cr->lmb == 1)
-	{
-		if (cr->shift_button == 1)
-			straight_line(cr, &x, &y);
-		redraw(cr);
-		cr->vs.x1 = x;
-		cr->vs.y1 = y;
-		cr->vs.x0 = cr->vs.mem_x;
-		cr->vs.y0 = cr->vs.mem_y;
-		cr->vs.color = WALL_COLOR;
-		grid_magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
-		// magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
-		bresenham(cr, &pxl_put_wrap);
-	}
-	return (0);
-}
-
-int			mouse_release(int button, int x, int y, t_core *cr)
-{
-	if (button == 1)
-	{
-		//
-		// cr->detect_cl = 0;//Переписать на !менеджер событий в инфо меню
-		// iter_wall(cr, SELECT_COLOR, -1, &is_there_color);
-		// if (cr->detect_cl == 0 && cr->i_menu_is_open != 2)
-		// {
-		// 	cr->i_menu_is_open = 0;
-		// }
-		//
-		if (cr->menu_is_open == 1 || cr->menu_is_open == 3)
-		{
-			cr->menu_is_open = 0;
-			redraw(cr);
-			return (0);
-		}
-		if (cr->lmb == 1)
-		{
-			cr->lmb = 0;
-			if (cr->shift_button == 1)
-				straight_line(cr, &x, &y);
-			cr->vs.x1 = x;
-			cr->vs.y1 = y;
-			grid_magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
-			// magnet(cr, &cr->vs.x1, &cr->vs.y1, 1);
-			cr->vs.x1 -= cr->offs.x;
-			cr->vs.y1 -= cr->offs.y;
-			cr->vs.mem_x -= cr->offs.x;
-			cr->vs.mem_y -= cr->offs.y;
-			add_wall(cr);
-		}
-	}
-	else if (button == 2)
-	{
-		cr->rmb = 0;
-		return (0);
-	}
-	else if (button == 3)
-	{
-		cr->test = 0;
-		cr->dragm = 0;
-	}
 	else
-		return (0);
+		key_action_p2(keycode, cr);
 	redraw(cr);
-	return (0);
-}
-
-static int		check_i_menu_bounds(t_core *cr, int x, int y)
-{
-	if ((cr->i_menu_is_open == 2 || cr->i_menu_is_open == 4 || cr->i_menu_is_open == 1) && \
-	 x > WIN_WIDTH - I_MENU_XLEN - 4 && x < WIN_WIDTH && y > 4)
-	{
-		if ((y < 4 + I_SEC_MENU_YLEN && cr->i_menu_is_open == 4) || y < 4 + I_MENU_YLEN)
-			return (1);
-	}
-	cr->i_menu_is_open = 0;
-	return (0);
-}
-
-int			mouse_press(int button, int x, int y, t_core *cr)
-{
-	int		wall_id;
-	t_coord	click;
-
-	click.x = x;
-	click.y = y;
-	if (button == 1 && !check_bounds(x, y))
-	{
-		if (!choose_instrument(cr, x, y))
-		{
-			// printf("NOT AN INSTRUMENT\n");
-			if (cr->menu_is_open == 1 || cr->menu_is_open == 3)
-			{
-				check_menu_events(cr, x, y);
-			}
-			else if (check_i_menu_bounds(cr, x, y) == 1)
-			{
-				if (cr->i_menu_is_open == 2)
-				{
-					check_obj_events(cr, x, y, cr->closest_obj);
-				}
-				else if (cr->i_menu_is_open == 1)
-				{
-					check_wall_events(cr, x, y, cr->i_menu_wall);
-				}
-				else if (cr->i_menu_is_open == 4)
-				{
-					check_sec_events(cr, x, y, cr->sel_sec_id);
-				}
-			}
-			else
-				(*cr->inst_func)(cr, x, y);
-		}
-	}
-	else if (button == 2 && !check_bounds(x, y))
-	{
-		cr->rmb = 1;
-		find_multi_sel(cr);
-		if ((wall_id = select_wall(cr, x, y)) >= 0)
-		{
-			find_by_index(cr, wall_id)->color = SELECT_COLOR;
-			redraw(cr);
-			rmb_menu(cr, find_by_index(cr, wall_id), x, y);
-		}
-		else
-		{
-			redraw(cr);
-			rmb_menu(cr, NULL, x, y);
-		}
-		cr->multi_sel = 0;
-	}
-	else if (button == 3)
-	{
-		cr->test = 1;
-		cr->msmem.x = x;
-		cr->msmem.y = y;
-		cr->dragm = 1;
-	}
-	else if ((button == 5 || button == 4) && !check_bounds(x, y))
-	{
-		if (cr->i_menu_is_open == 2)
-		{
-			check_obj_events_mwheel(cr, click, button, cr->closest_obj);
-			redraw(cr);
-		}
-		else if (cr->i_menu_is_open == 1)
-		{
-			check_wall_events_mwheel(cr, click, button, cr->i_menu_wall);
-			redraw(cr);
-		}
-		else if (cr->i_menu_is_open == 4)
-		{
-			check_sec_events_mwheel(cr, click, button, cr->sel_sec_id);
-			redraw(cr);
-		}
-	}
 	return (0);
 }

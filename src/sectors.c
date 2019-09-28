@@ -254,3 +254,22 @@ void				halfplane(t_core *cr, t_wall *ref)
 	ref->color = cr->find_sec_color;
 	halfplane(cr, find_by_index(cr, cr->idcurr));
 }
+
+void		del_last_sector(t_core *cr)
+{
+	t_wall	*wall;
+
+	if (cr->sec_num <= 0)
+		return ;
+	wall = cr->wlist;
+	while(wall)
+	{
+		if (wall->sectors[0].s == cr->sec_num - 1)
+			wall->sectors[0].s = -1;
+		else if (wall->sectors[1].s == cr->sec_num - 1)
+			wall->sectors[1].s = -1;
+		wall = wall->next;
+	}
+	del_sec_list(cr, cr->sec_num-- - 1);
+	iter_wall(cr, -1, -1, &redraw_color);
+}

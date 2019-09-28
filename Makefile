@@ -24,7 +24,7 @@ MLX_INC_PATH=/usr/X11/include
 FT_PATH=./libft
 BIN_PATH=./bin
 
-SRC= main.c image.c init.c show.c actions.c walls.c selection.c utilities.c \
+SRC= main.c image.c init.c show.c actions.c actions2.c actions3.c walls.c selection.c utilities.c \
 context_menu.c gui.c sectors.c messages.c colors.c output.c input.c grid.c \
 objects.c player.c info_menu.c sec_list.c validation.c
 OBJ:= $(addprefix $(BIN_PATH)/,$(SRC:.c=.o))

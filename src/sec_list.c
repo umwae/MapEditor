@@ -65,6 +65,7 @@ void				sec_list_id_replace(t_core *cr, int new, int old)
 
 void		del_sec_list(t_core *cr, int idref)
 {
+	printf("SECDEL IDREF %d\n", idref);
 	t_sec	*pr;
 	t_sec	*sec;
 

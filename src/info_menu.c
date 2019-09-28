@@ -21,6 +21,8 @@ void			info_menu(t_core *cr, t_wall *wall)
 	t_coord	ab;
 	char		*text;
 
+	if (!wall)
+		return ;
 	cr->i_menu_is_open = 1;
 	cr->i_menu_wall = wall;
 	ab.x = I_MENU_XLEN;
@@ -79,6 +81,8 @@ void			check_wall_events(t_core *cr, int x, int y, t_wall *wall)
 {
 	t_coord	xy;
 
+	if (!wall)
+		return ;
 	xy.x = WIN_WIDTH - I_MENU_XLEN - 4;
 	xy.y = 0 + 4;
 	if (x > xy.x && x < xy.x + ICON_SIZE && \
@@ -99,6 +103,8 @@ void			check_wall_events_mwheel(t_core *cr, t_coord click, int button, t_wall *w
 {
 	t_coord	xy;
 
+	if (!wall)
+		return ;
 	xy.x = WIN_WIDTH - I_MENU_XLEN - 4;
 	xy.y = 0 + 4;
 	if (click.x > xy.x && click.x < xy.x + I_MENU_XLEN && \
@@ -125,6 +131,8 @@ void			obj_info_menu(t_core *cr, t_obj *obj)
 	t_coord	ab;
 	char		*text;
 
+	if (!obj)
+		return ;
 	cr->i_menu_is_open = 2;
 	ab.x = I_MENU_XLEN;
 	ab.y = I_MENU_YLEN;
@@ -149,6 +157,8 @@ void			check_obj_events(t_core *cr, int x, int y, t_obj *obj)
 {
 	t_coord	xy;
 
+	if (!obj)
+		return ;
 	xy.x = WIN_WIDTH - I_MENU_XLEN - 4;
 	xy.y = 0 + 4;
 	if (x > xy.x && x < xy.x + ICON_SIZE && \
@@ -168,6 +178,8 @@ void			check_obj_events_mwheel(t_core *cr, t_coord click, int button, t_obj *obj
 {
 	t_coord	xy;
 
+	if (!obj)
+		return ;
 	xy.x = WIN_WIDTH - I_MENU_XLEN - 4;
 	xy.y = 0 + 4;
 	if (click.x > xy.x && click.x < xy.x + I_MENU_XLEN && \

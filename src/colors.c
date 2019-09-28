@@ -18,12 +18,12 @@
 void			find_multi_sel(t_core *cr)
 {
 	t_wall	*wall;
-	int			cl_mem;
+	int		cl_mem;
 
 	cl_mem = 0;
 	wall = cr->wlist;
 	if (!wall)
-		return;
+		return ;
 	while (wall)
 	{
 		if (cl_mem > 1)
@@ -79,18 +79,3 @@ void			is_there_color(t_core *cr, t_wall *wall, int color, int pr2)
 	if (wall->color == color)
 		cr->detect_cl = 1;
 }
-
-
-// void			reset_color(t_core *cr)
-// {
-// 	t_wall		*wall;
-//
-// 	wall = cr->wlist;
-// 	if (!wall)
-// 		return ;
-// 	while (wall)
-// 	{
-// 		wall->color = WALL_COLOR;
-// 		wall = wall->next;
-// 	}
-// }

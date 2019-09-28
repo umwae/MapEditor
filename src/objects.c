@@ -111,6 +111,7 @@ void		del_object(t_core *cr, int idref)
 	{
 		*cr->olist = pr->next;
 		free(pr);
+		cr->closest_obj = NULL;
 		restore_obj_id(cr);
 		return ;
 	}
@@ -127,6 +128,7 @@ void		del_object(t_core *cr, int idref)
 		{
 			pr->next = obj->next;
 			free(obj);
+			cr->closest_obj = NULL;
 			restore_obj_id(cr);
 			return ;
 		}

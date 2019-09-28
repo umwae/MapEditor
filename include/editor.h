@@ -35,7 +35,7 @@
 # define SEL_SEC_COLOR 0xFF3300
 # define APP_SEC_COLOR 0x00FFFF
 # define POINT_COLOR 0xFFFFFF
-# define PORTAL_COLOR 0xA600E7
+# define PORTAL_COLOR 0xe35c36
 # define APP_PORTAL_COLOR 0xBF8EEA
 # define GRID_COLOR 0x464646
 # define PLAYER_COLOR 0x00FF00
@@ -60,7 +60,7 @@
 # define ICON_SIZE 50
 
 # define ST_FLOOR_HIGHT 0
-# define ST_CEIL_HIGHT 75
+# define ST_CEIL_HIGHT 30
 # define ST_ILLUMINATION 0.75f
 # define ST_TEXTURE 2
 # define ST_FTEX -1
@@ -329,5 +329,7 @@ void							check_sec_events(t_core *cr, int x, int y, int secid);
 
 void							valid_illum_val(float *val);
 int								ft_arrlen(char	**arr);
+void							err_ex(int pr);
+void							del_last_sector(t_core *cr);
 
 #endif

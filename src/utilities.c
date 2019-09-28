@@ -176,3 +176,32 @@ int				ft_arrlen(char	**arr)
 		i++;
 	return(i);
 }
+
+void		draw_rectangle(t_core *cr, t_coord xy, t_coord ab, int color)
+{
+	int		c_abx;
+
+	while (ab.y--)
+	{
+		c_abx = ab.x;
+		while (c_abx--)
+		{
+			pxl_put_wrap(cr, xy.x + c_abx, xy.y + ab.y, color);
+		}
+	}
+}
+
+void		draw_rectangle_img_pxl(t_core *cr, t_coord xy, t_coord ab, \
+int color)
+{
+	int		c_abx;
+
+	while (ab.y--)
+	{
+		c_abx = ab.x;
+		while (c_abx--)
+		{
+			img_pxl(cr, xy.x + c_abx, xy.y + ab.y, color);
+		}
+	}
+}

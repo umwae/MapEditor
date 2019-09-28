@@ -62,7 +62,7 @@
 # define ST_FLOOR_HIGHT 0
 # define ST_CEIL_HIGHT 30
 # define ST_ILLUMINATION 0.75f
-# define ST_TEXTURE 2
+# define ST_TEXTURE 0
 # define ST_FTEX -1
 # define ST_CTEX -1
 
@@ -165,6 +165,7 @@ typedef struct		s_core
 	int							endian;
 	int							bpp;
 	int							linesize;
+	int							tr;
 	//
 	t_wall					*wlist;
 	t_obj						**olist;
@@ -276,7 +277,7 @@ void							draw_nodes(t_core *cr, t_wall *wall, int pr1, int pr2);
 void							find_multi_sel(t_core *cr);
 void							check_menu_events(t_core *cr, int x, int y);
 void							switch_isportal(t_core *cr, t_wall *wall, int switchval, int pr2);
-void							remove_sectors(t_core *cr, int id);
+void							remove_sectors(t_core *cr, t_wall *wall);
 void 							restore_sec_id(t_core *cr);
 void        	    save_map(t_core *cr);
 void							load_map(t_core *cr);

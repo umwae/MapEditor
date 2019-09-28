@@ -21,37 +21,29 @@ void				highlight(t_core *cr)
 
 	if (!cr->highlight)
 		return ;
-	pos.y =	cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * (cr->highlight - 1);
+	pos.y = cr->inst_panel.y + (float)cr->inst_panel_size.y /
+	INST_NUM * (cr->highlight - 1);
+	printf("HIGHLIGHT %d\n", cr->highlight);
 	pos.x = cr->inst_panel.x;
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->hl_trash, pos.x, pos.y);
 }
 
-void	find_sector(void *td, int x, int y)
+void				find_sector(void *td, int x, int y)
 {
-	t_core	*cr;
-	char		*text;
+	t_core		*cr;
 	int			wall_id;
 
 	cr = td;
 	if ((wall_id = select_wall(cr, x, y)) >= 0)
 	{
-		// iter_wall(cr, APP_SEC_COLOR, 0, &redraw_color);
 		cr->click.x = x;
 		cr->click.y = y;
 		cr->wpoint = 2;
-		// printf("---------------------SEL SEC CLICK---------------------\n");
 		halfplane(cr, find_by_index(cr, wall_id));
-		//
-		if (!find_msg_by_id(cr, 0))
-		{
-			text = malloc(sizeof(char) * ft_strlen("Y to apply") + 1);
-			ft_strcpy(text, "Y to apply");
-			add_message(cr, &text, 2, 0xffffff, 0);
-		}
 	}
 }
 
-static void	select_wall_wrap(void *td, int x, int y)
+static void			select_wall_wrap(void *td, int x, int y)
 {
 	t_core	*cr;
 	t_wall	*wall;
@@ -77,22 +69,15 @@ void				draw_wall(void *td, int x, int y)
 	cr->vs.y0 = y;
 	cr->vs.x1 = x;
 	cr->vs.y1 = y;
-	// cr->vs.x0 = x + cr->offs.x - WIN_WIDTH / 2;
-	// cr->vs.y0 = y + cr->offs.y - WIN_HIGHT / 2;
-	// cr->vs.x1 = x + cr->offs.x - WIN_WIDTH / 2;
-	// cr->vs.y1 = y + cr->offs.y - WIN_HIGHT / 2;
 	grid_magnet(cr, &cr->vs.x0, &cr->vs.y0, 0);
-	// magnet(cr, &cr->vs.x0, &cr->vs.y0, 0);
 	cr->vs.mem_x = cr->vs.x0;
 	cr->vs.mem_y = cr->vs.y0;
 }
 
-
-
-static			void restore_id(t_core *cr)
+static void			restore_id(t_core *cr)
 {
 	t_wall		*wall;
-	int				i;
+	int			i;
 
 	i = 0;
 	wall = cr->wlist;
@@ -106,13 +91,26 @@ static			void restore_id(t_core *cr)
 	}
 }
 
-void						erase_by_id(t_core	*cr, int id)
+static void			erase_wall(t_core *cr, t_wall *wall, t_wall *rm, int mod)
+{
+	rm = mod == 0 ? wall : wall->next;
+	printf("EW %d %d\n", rm->sectors[0].s, rm->sectors[1].s);
+	remove_sectors(cr, rm);
+	if (mod == 0)
+		cr->wlist = wall->next;
+	else
+		wall->next = ((t_wall *)wall->next)->next;
+	free(rm);
+	restore_id(cr);
+	restore_sec_id_v2(cr);
+}
+
+void				erase_by_id(t_core *cr, int id)
 {
 	t_wall	*wall;
 	t_wall	*rm;
 
-	wall = cr->wlist;
-	if (!wall)
+	if (!(wall = cr->wlist))
 		return ;
 	if (!wall->next)
 	{
@@ -122,83 +120,78 @@ void						erase_by_id(t_core	*cr, int id)
 	}
 	if (id == 0)
 	{
-		remove_sectors(cr, id);
-		rm = wall;
-		cr->wlist = wall->next;
-		free(rm);
-		restore_id(cr);
-		restore_sec_id_v2(cr);
+		erase_wall(cr, wall, rm, 0);
 		return ;
 	}
 	while (wall->next)
 	{
 		if (((t_wall *)wall->next)->index == id)
 		{
-			remove_sectors(cr, id);
-			rm = wall->next;
-			wall->next = ((t_wall *)wall->next)->next;
-			free(rm);
-			restore_id(cr);
-			restore_sec_id_v2(cr);
+			erase_wall(cr, wall, rm, 1);
 			return ;
 		}
 		wall = wall->next;
 	}
-	redraw(cr);
 }
 
 void				eraser(void *td, int x, int y)
 {
 	t_core	*cr;
-	int			id;
+	int		id;
 
 	cr = td;
 	id = select_wall(cr, x, y);
 	if (id == -1)
 		del_object(cr, cr->closest_obj->id);
 	else if (id != -2)
+	{
 		erase_by_id(cr, id);
+		redraw(cr);
+	}
+}
+
+static void			choose_instrument_p2(t_core *cr, int x, int y)
+{
+	if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 2 && \
+	y < cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 3)
+	{
+		cr->inst_func = select_wall_wrap;
+		cr->highlight = 3;
+	}
+	else if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 3 && \
+	y < cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 4)
+	{
+		cr->find_sec_color = SEL_SEC_COLOR;
+		cr->inst_func = find_sector;
+		cr->highlight = 4;
+	}
+	else if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 4 && \
+	y < cr->inst_panel.y + cr->inst_panel_size.y)
+	{
+		cr->inst_func = select_sector;
+		cr->highlight = 5;
+	}
 }
 
 int					choose_instrument(t_core *cr, int x, int y)
 {
-	int		inst_num;
-
-	inst_num = 0;
 	if (!(x > cr->inst_panel.x && x < cr->inst_panel_size.x && \
 		y > cr->inst_panel.y && y < cr->inst_panel.y + cr->inst_panel_size.y))
 		return (0);
-	else if (y > cr->inst_panel.y && y < cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM)
+	else if (y > cr->inst_panel.y && y < cr->inst_panel.y + \
+	cr->inst_panel_size.y / INST_NUM)
 	{
 		cr->inst_func = draw_wall;
-		inst_num = 1;
+		cr->highlight = 1;
 	}
 	else if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM && y < \
 		cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 2)
 	{
 		cr->inst_func = eraser;
-		inst_num = 2;
+		cr->highlight = 2;
 	}
-	else if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 2 && y < \
-		cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 3)
-	{
-		cr->inst_func = select_wall_wrap;
-		inst_num = 3;
-	}
-	else if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 3 && y < \
-		cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 4)
-	{
-		cr->find_sec_color = SEL_SEC_COLOR;
-		cr->inst_func = find_sector;
-		inst_num = 4;
-	}
-	else if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 4 && y < \
-		cr->inst_panel.y + cr->inst_panel_size.y)
-	{
-		cr->inst_func = select_sector;
-		inst_num = 5;
-	}
-	cr->highlight = inst_num;
+	else
+		choose_instrument_p2(cr, x, y);
 	return (1);
 }
 
@@ -208,15 +201,23 @@ void				display_instruments(t_core *cr)
 		cr->inst_panel.x, cr->inst_panel.y);
 }
 
+static void			load_gui_p2(t_core *cr)
+{
+	cr->arrowl_trash = mlx_xpm_file_to_image(cr->mlx, "./gui/arrow_left.xpm", \
+	&cr->tr, &cr->tr);
+	cr->arrowr_trash = mlx_xpm_file_to_image(cr->mlx, "./gui/arrow_right.xpm", \
+	&cr->tr, &cr->tr);
+	cr->arrowl_data = (int *)mlx_get_data_addr(cr->arrowl_trash, \
+	&cr->bpp, &(cr->linesize), &(cr->endian));
+	cr->arrowr_data = (int *)mlx_get_data_addr(cr->arrowr_trash, \
+	&cr->bpp, &(cr->linesize), &(cr->endian));
+}
+
 void				load_gui(t_core *cr)
 {
 	int	i;
-	int	x;
-	int	y;
 
 	i = 1;
-	// cr->inst_panel_size.x = INST_PANEL_SIZE_X;//Дублирует?
-	// cr->inst_panel_size.y = INST_PANEL_SIZE_Y;
 	if (!(cr->icons_trash = (int *)malloc(sizeof(int))))
 		err_ex(0);
 	cr->icons_trash = mlx_xpm_file_to_image(cr->mlx, "./gui/instruments.xpm", \
@@ -225,24 +226,15 @@ void				load_gui(t_core *cr)
 		&cr->bpp, &(cr->linesize), &(cr->endian));
 	cr->inst_panel.x = INST_PANEL_X;
 	cr->inst_panel.y = INST_PANEL_Y;
-	//
 	if (!(cr->hl_trash = (int *)malloc(sizeof(int))))
 		err_ex(0);
 	cr->hl_trash = mlx_xpm_file_to_image(cr->mlx, "./gui/highlight.xpm", \
-	&x, &y);
+	&cr->tr, &cr->tr);
 	cr->hl_data = (int *)mlx_get_data_addr(cr->hl_trash, \
 	&cr->bpp, &(cr->linesize), &(cr->endian));
-	//
 	if (!(cr->arrowl_trash = (int *)malloc(sizeof(int))))
 		err_ex(0);
 	if (!(cr->arrowr_trash = (int *)malloc(sizeof(int))))
 		err_ex(0);
-	cr->arrowl_trash = mlx_xpm_file_to_image(cr->mlx, "./gui/arrow_left.xpm", \
-	&x, &y);
-	cr->arrowr_trash = mlx_xpm_file_to_image(cr->mlx, "./gui/arrow_right.xpm", \
-	&x, &y);
-	cr->arrowl_data = (int *)mlx_get_data_addr(cr->arrowl_trash, \
-	&cr->bpp, &(cr->linesize), &(cr->endian));
-	cr->arrowr_data = (int *)mlx_get_data_addr(cr->arrowr_trash, \
-	&cr->bpp, &(cr->linesize), &(cr->endian));
+	load_gui_p2(cr);
 }

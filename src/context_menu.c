@@ -64,41 +64,40 @@ void		check_menu_events(t_core *cr, int x, int y)
 		portal_switch(cr);
 }
 
-void		draw_rectangle(t_core *cr, t_coord xy, t_coord ab, int color)
+void		rmb_menu_p2(t_core *cr, t_wall *wall, int x, int y)
 {
-	int		c_abx;
+	t_coord	xy;
+	t_coord	ab;
+	char	*text;
 
-	while (ab.y--)
+	if (!wall)
+		return ;
+	if (!(text = ft_strnew(20)))
+		err_ex(0);
+	xy.x = x + (MENU_XLEN - LINE_SIZE_X) / 2;
+	xy.y = y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 0;
+	ab.x = CHECKBOX_SIZE;
+	ab.y = CHECKBOX_SIZE;
+	draw_rectangle(cr, xy, ab, 0xffffff);
+	ft_strcpy(text, "Portal");
+	mlx_string_put(cr->mlx, cr->win, \
+	x + (MENU_XLEN - LINE_SIZE_X) / 2 + ab.x * 2, \
+	y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 0, 0, text);
+	if (wall->isportal == 1)
 	{
-		c_abx = ab.x;
-		while (c_abx--)
-		{
-			pxl_put_wrap(cr, xy.x + c_abx, xy.y + ab.y, color);
-		}
+		checkbox_fill(cr, xy, ab);
+		cr->cmenu_elems.isportal = 1;
 	}
-}
-
-void		draw_rectangle_img_pxl(t_core *cr, t_coord xy, t_coord ab, \
-int color)
-{
-	int		c_abx;
-
-	while (ab.y--)
-	{
-		c_abx = ab.x;
-		while (c_abx--)
-		{
-			img_pxl(cr, xy.x + c_abx, xy.y + ab.y, color);
-		}
-	}
+	else
+		cr->cmenu_elems.isportal = 0;
+	free(text);
 }
 
 void		rmb_menu(t_core *cr, t_wall *wall, int x, int y)
 {
 	t_coord	xy;
 	t_coord	ab;
-	char		*text;
-
+	char	*text;
 
 	cr->menu_is_open = 1;
 	cr->click.x = x;
@@ -116,26 +115,6 @@ void		rmb_menu(t_core *cr, t_wall *wall, int x, int y)
 	ft_strcpy(text, "Place object");
 	mlx_string_put(cr->mlx, cr->win, x + (MENU_XLEN - LINE_SIZE_X) / 2, \
 	y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 2, 0, text);
-	if (!wall)
-		return ;
-	xy.x = x + (MENU_XLEN - LINE_SIZE_X) / 2;
-	xy.y = y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 0;
-	ab.x = CHECKBOX_SIZE;
-	ab.y = CHECKBOX_SIZE;
-	draw_rectangle(cr, xy, ab, 0xffffff);
-	ft_strcpy(text, "Portal");
-	mlx_string_put(cr->mlx, cr->win, \
-	x + (MENU_XLEN - LINE_SIZE_X) / 2 + ab.x * 2, \
-	y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 0, 0, text);
-	if (wall->isportal == 1)
-	{
-		xy.x = xy.x + ab.x * 0.1;
-		xy.y = xy.y + ab.y * 0.1;
-		ab.x *= 0.8;
-		ab.y *= 0.8;
-		draw_rectangle(cr, xy, ab, 0);
-		cr->cmenu_elems.isportal = 1;
-	}
-	else
-		cr->cmenu_elems.isportal = 0;
+	free(text);
+	rmb_menu_p2(cr, wall, x, y);
 }

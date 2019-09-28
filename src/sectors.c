@@ -110,18 +110,6 @@ void 						restore_sec_id_v2(t_core *cr)
 	printf("SECNUM +++ %d\n", scount);
 }
 
-static void			remove_sectors_search(t_core *cr, t_wall *wall, int id, int pr2)
-{
-	(void)pr2;
-	if (wall->index == id)
-	{
-		if (wall->sectors[0].s >= 0)
-			cr->idsec.x = wall->sectors[0].s;
-		if (wall->sectors[1].s >= 0)
-			cr->idsec.y = wall->sectors[1].s;
-	}
-}
-
 static void			remove_sectors_ag(t_core *cr, t_wall *wall, int pr1, int pr2)
 {
 	(void)pr1;
@@ -131,21 +119,20 @@ static void			remove_sectors_ag(t_core *cr, t_wall *wall, int pr1, int pr2)
 		wall->sectors[0].s = -1;
 		wall->sectors[0].t = -1;
 	}
-	if (wall->sectors[1].s == cr->idsec.x || wall->sectors[0].s == cr->idsec.y)
+	if (wall->sectors[1].s == cr->idsec.x || wall->sectors[1].s == cr->idsec.y)
 	{
 		wall->sectors[1].s = -1;
 		wall->sectors[1].t = -1;
 	}
 }
 
-void			remove_sectors(t_core *cr, int id)
+void			remove_sectors(t_core *cr, t_wall *wall)
 {
-	cr->idsec.x = -2;
-	cr->idsec.y = -2;
-	iter_wall(cr, id, 0, &remove_sectors_search);
+	cr->idsec.x = wall->sectors[0].s;
+	cr->idsec.y = wall->sectors[1].s;
+	iter_wall(cr, wall->index, 0, &remove_sectors_ag);
 	del_sec_list(cr, cr->idsec.x);
 	del_sec_list(cr, cr->idsec.y);
-	iter_wall(cr, id, 0, &remove_sectors_ag);
 	iter_wall(cr, 0, 0, &redraw_color);
 }
 

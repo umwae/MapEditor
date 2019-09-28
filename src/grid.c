@@ -16,53 +16,41 @@
 
 void			grid_magnet(t_core *cr, int *x, int *y, int check_start)
 {
-	(void)check_start;//Дописать
 	int		hx;
-	int *p;
+	int		*p;
 
-	// int xm;
-	// int ym;
-
-	// xm = *x;
-	// ym = *y;
-	// cr->vs.x0 = (xm - (cr->offs.x) % cr->zoom) / cr->zoom * cr->zoom + (cr->offs.x) % cr->zoom;
-	// cr->vs.y0 = (ym - (cr->offs.y) % cr->zoom) / cr->zoom * cr->zoom + (cr->offs.y) % cr->zoom;
-	// cr->vs.x1 = cr->vs.x0;
-	// cr->vs.y1 = cr->vs.y0 + 200;
-	// cr->vs.color = 0xff0000;
-	// bresenham(cr, &pxl_put_wrap);
-	// printf("___%d %d\n", cr->vs.x0, cr->vs.x1);
-	// cr->vs.color = 0xffffff;
-
-	*x = (*x - (cr->offs.x) % cr->zoom) / cr->zoom * cr->zoom + (cr->offs.x) % cr->zoom;
-	*y = (*y - (cr->offs.y) % cr->zoom) / cr->zoom * cr->zoom + (cr->offs.y) % cr->zoom;
+	(void)check_start;//Дописать
+	*x = (*x - (cr->offs.x) % cr->zoom) / cr->zoom * cr->zoom + \
+	(cr->offs.x) % cr->zoom;
+	*y = (*y - (cr->offs.y) % cr->zoom) / cr->zoom * cr->zoom + \
+	(cr->offs.y) % cr->zoom;
 }
 
 void			grid(t_core *cr)
 {
-  int    xi;
-  int    yi;
+	int		xi;
+	int		yi;
 
 	xi = 0;
-  yi = cr->zoom;
-  while (yi <= WIN_HIGHT + cr->zoom)
-  {
-    cr->vs.x0 = -cr->zoom + cr->offs.x % cr->zoom - cr->offs.x;
-    cr->vs.y0 = -cr->zoom + cr->offs.y % cr->zoom + yi - cr->offs.y;
-    cr->vs.x1 = cr->zoom + WIN_WIDTH + (cr->offs.x) % cr->zoom - cr->offs.x;
-    cr->vs.y1 = -cr->zoom + cr->offs.y % cr->zoom + yi - cr->offs.y;
-    cr->vs.color = GRID_COLOR;
-    bresenham(cr, &img_pxl);
-    yi += cr->zoom;
-  }
-  while (xi <= WIN_WIDTH + cr->zoom * 3)
-  {
-    cr->vs.x0 = -cr->zoom + cr->offs.x % cr->zoom + xi - cr->offs.x;
-    cr->vs.y0 = -cr->zoom + cr->offs.y % cr->zoom - cr->offs.y;
-    cr->vs.x1 = -cr->zoom + cr->offs.x % cr->zoom + xi - cr->offs.x;
-    cr->vs.y1 = cr->zoom + WIN_HIGHT + (cr->offs.y) % cr->zoom - cr->offs.y;
-    cr->vs.color = GRID_COLOR;
-    bresenham(cr, &img_pxl);
-    xi += cr->zoom;
-  }
+	yi = cr->zoom;
+	while (yi <= WIN_HIGHT + cr->zoom)
+	{
+		cr->vs.x0 = -cr->zoom + cr->offs.x % cr->zoom - cr->offs.x;
+		cr->vs.y0 = -cr->zoom + cr->offs.y % cr->zoom + yi - cr->offs.y;
+		cr->vs.x1 = cr->zoom + WIN_WIDTH + (cr->offs.x) % cr->zoom - cr->offs.x;
+		cr->vs.y1 = -cr->zoom + cr->offs.y % cr->zoom + yi - cr->offs.y;
+		cr->vs.color = GRID_COLOR;
+		bresenham(cr, &img_pxl);
+		yi += cr->zoom;
+	}
+	while (xi <= WIN_WIDTH + cr->zoom * 3)
+	{
+		cr->vs.x0 = -cr->zoom + cr->offs.x % cr->zoom + xi - cr->offs.x;
+		cr->vs.y0 = -cr->zoom + cr->offs.y % cr->zoom - cr->offs.y;
+		cr->vs.x1 = -cr->zoom + cr->offs.x % cr->zoom + xi - cr->offs.x;
+		cr->vs.y1 = cr->zoom + WIN_HIGHT + (cr->offs.y) % cr->zoom - cr->offs.y;
+		cr->vs.color = GRID_COLOR;
+		bresenham(cr, &img_pxl);
+		xi += cr->zoom;
+	}
 }

@@ -102,7 +102,8 @@ void					add_wall(t_core *cr)
 	wall = cr->wlist;
 	if (!wall)
 	{
-		cr->wlist = (t_wall *)malloc(sizeof(t_wall));
+		if (!(cr->wlist = (t_wall *)malloc(sizeof(t_wall))))
+			err_ex(0);
 		wall = cr->wlist;
 		cr->wlist->next = NULL;
 		i = 0;
@@ -114,7 +115,8 @@ void					add_wall(t_core *cr)
 			wall = wall->next;
 			i++;
 		}
-		wall->next = (t_wall *)malloc(sizeof(t_wall));
+		if (!(wall->next = (t_wall *)malloc(sizeof(t_wall))))
+			err_ex(0);
 		wall = wall->next;
 		wall->next = NULL;
 	}

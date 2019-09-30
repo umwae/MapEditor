@@ -23,6 +23,7 @@ void		new_sector(t_core *cr)
 		return ;
 	iter_wall(cr, -1, -1, &apply_sector);
 	cr->sec_num++;
+	printf("SEC_NUM++ from sec_list\n");
 	iter_wall(cr, -1, -1, &redraw_color);
 	add_sec_list(cr);
 	name_sec_list(cr);
@@ -104,10 +105,15 @@ void 						restore_sec_id_v2(t_core *cr)
 		i++;
 	}
 	if (sw == 1)
+	{
 		cr->sec_num = scount + 1;
+		printf("SECNUM = SCOUNT (%d)\n", scount);
+	}
 	else
+	{
 		cr->sec_num = 0;
-	printf("SECNUM +++ %d\n", scount);
+		printf("SECNUM = 0\n");
+	}
 }
 
 static void			remove_sectors_ag(t_core *cr, t_wall *wall, int pr1, int pr2)
@@ -258,5 +264,6 @@ void		del_last_sector(t_core *cr)
 		wall = wall->next;
 	}
 	del_sec_list(cr, cr->sec_num-- - 1);
+	printf("SEC_NUM--\n");
 	iter_wall(cr, -1, -1, &redraw_color);
 }

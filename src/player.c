@@ -154,7 +154,8 @@ void			load_player(t_core *cr, char **line)
 	char		**parr;
 	int			fd;
 
-	fd = open("./maps/testmap", O_RDONLY);
+	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
+      reopen_10_times(&fd);
 	while (get_next_line(fd, line) > 0)
 	{
 		if (*line[0] == 'p')

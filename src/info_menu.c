@@ -77,7 +77,7 @@ void			info_menu(t_core *cr, t_wall *wall)
 	free(text);
 }
 
-void			check_wall_events(t_core *cr, int x, int y, t_wall *wall)
+void			check_wall_events(int x, int y, t_wall *wall)
 {
 	t_coord	xy;
 
@@ -99,7 +99,7 @@ void			check_wall_events(t_core *cr, int x, int y, t_wall *wall)
 		wall->sectors[1].t++;
 }
 
-void			check_wall_events_mwheel(t_core *cr, t_coord click, int button, t_wall *wall)
+void			check_wall_events_mwheel(t_coord click, int button, t_wall *wall)
 {
 	t_coord	xy;
 
@@ -153,7 +153,7 @@ void			obj_info_menu(t_core *cr, t_obj *obj)
 		xy.x + I_MENU_XLEN - ICON_SIZE, I_MENU_YLEN / 10);
 }
 
-void			check_obj_events(t_core *cr, int x, int y, t_obj *obj)
+void			check_obj_events(int x, int y, t_obj *obj)
 {
 	t_coord	xy;
 
@@ -174,7 +174,7 @@ void			check_obj_events(t_core *cr, int x, int y, t_obj *obj)
 	}
 }
 
-void			check_obj_events_mwheel(t_core *cr, t_coord click, int button, t_obj *obj)
+void			check_obj_events_mwheel(t_coord click, int button, t_obj *obj)
 {
 	t_coord	xy;
 

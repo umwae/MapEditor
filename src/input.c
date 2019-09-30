@@ -88,11 +88,13 @@ static void     process_walls(t_core *cr, char **pts, char **prt, int secnum)
   while (pts[i + 1])
   {
     num = ft_atoi(pts[i]);
-    fd2 = open("./maps/testmap", O_RDONLY);
+    if ((fd2 = open(SAVEPATH, O_RDONLY)) == -1)
+      reopen_10_times(&fd2);
     j = 0;
     while (j++ <= num)
     {
-      get_next_line(fd2, &line);
+      if (get_next_line(fd2, &line) <= 0)
+        err_ex(1);
       if (j <= num)
         free(line);
     }
@@ -101,15 +103,19 @@ static void     process_walls(t_core *cr, char **pts, char **prt, int secnum)
 	inp1.y = ft_atof(v[1]) * cr->zoom / UNIT_SIZE;
     ft_arrfree(&v, 3);
     num = ft_atoi(pts[i + 1]);
-    fd2 = open("./maps/testmap", O_RDONLY);
+    // close (fd2);
+    if ((fd2 = open("./maps/testmap", O_RDONLY)) == -1)
+      reopen_10_times(&fd2);
     j = 0;
     while (j++ <= num)
     {
-      get_next_line(fd2, &line);
+      if (get_next_line(fd2, &line) <= 0)
+        err_ex(1);
       if (j <= num)
         free(line);
     }
     v = ft_strsplit(line, ' ');
+    // close (fd2);
 	inp2.x = ft_atof(v[2]) * cr->zoom / UNIT_SIZE;
 	inp2.y = ft_atof(v[1]) * cr->zoom / UNIT_SIZE;
     ft_arrfree(&v, 3);
@@ -133,7 +139,8 @@ static void		load_doors(t_core *cr)
 	int			fd;
 	char		*line;
 
-	fd = open("./maps/testmap", O_RDONLY);
+	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
+      reopen_10_times(&fd);
 	while (get_next_line(fd, &line) > 0)
 	{
 		if (line[0] == 'd')
@@ -150,7 +157,8 @@ static void		load_finish(t_core *cr)
 	int			fd;
 	char		*line;
 
-	fd = open("./maps/testmap", O_RDONLY);
+	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
+      reopen_10_times(&fd);
 	while (get_next_line(fd, &line) > 0)
 	{
 		if (line[0] == 'f')
@@ -176,7 +184,8 @@ void            load_map(t_core *cr)
 	//
 	cr->sec_num = 0;
   delete_wlist(cr);
-	fd = open("./maps/testmap", O_RDONLY);
+	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
+      reopen_10_times(&fd);
 	// cr->mpsw = 0;
 	i = -1;
 	while (get_next_line(fd, &line) > 0)
@@ -184,6 +193,7 @@ void            load_map(t_core *cr)
 		if (line[0] == 's')
 		{
 			cr->sec_num++;
+      printf("SEC_NUM++\n");
 			if (i == -1)
 				i = 0;
 			// s|0.00 75.00|2 1 0 3|-1 -1 1 -1|
@@ -193,7 +203,14 @@ void            load_map(t_core *cr)
 			find_sec_list(cr, i)->floor = ft_atof(pts[1]);
 			find_sec_list(cr, i)->ceiling = ft_atof(ft_strchr(pts[1], ' ') + 1);
 			if (pts[4])
-				find_sec_list(cr, i)->illum = ft_atof(pts[4]);
+      {
+        // for (size_t h = 0; pts[h]; h++)
+        // {
+        //   printf("pts4 %s\n", pts[h]);
+        // }
+        fflush(stdout);
+        find_sec_list(cr, i)->illum = ft_atof(pts[4]);
+      }
 			free(pts);
 			//
 			p = line + find_rep_symb(line, '|', 3);

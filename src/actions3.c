@@ -40,11 +40,11 @@ static void	mouse_press_button1(int x, int y, t_core *cr)
 		{
 			if (cr->i_menu_is_open == 2)
 			{
-				check_obj_events(cr, x, y, cr->closest_obj);
+				check_obj_events(x, y, cr->closest_obj);
 			}
 			else if (cr->i_menu_is_open == 1)
 			{
-				check_wall_events(cr, x, y, cr->i_menu_wall);
+				check_wall_events(x, y, cr->i_menu_wall);
 			}
 			else if (cr->i_menu_is_open == 4)
 			{
@@ -56,8 +56,10 @@ static void	mouse_press_button1(int x, int y, t_core *cr)
 	}
 }
 
-static void	mouse_press_button2(int wall_id, int x, int y, t_core *cr)
+static void	mouse_press_button2(int x, int y, t_core *cr)
 {
+	int		wall_id;
+
 	cr->rmb = 1;
 	find_multi_sel(cr);
 	if ((wall_id = select_wall(cr, x, y)) >= 0)
@@ -78,12 +80,12 @@ static void	mouse_press_button5(t_coord click, int button, t_core *cr)
 {
 	if (cr->i_menu_is_open == 2)
 	{
-		check_obj_events_mwheel(cr, click, button, cr->closest_obj);
+		check_obj_events_mwheel(click, button, cr->closest_obj);
 		redraw(cr);
 	}
 	else if (cr->i_menu_is_open == 1)
 	{
-		check_wall_events_mwheel(cr, click, button, cr->i_menu_wall);
+		check_wall_events_mwheel(click, button, cr->i_menu_wall);
 		redraw(cr);
 	}
 	else if (cr->i_menu_is_open == 4)
@@ -95,7 +97,6 @@ static void	mouse_press_button5(t_coord click, int button, t_core *cr)
 
 int			mouse_press(int button, int x, int y, t_core *cr)
 {
-	int		wall_id;
 	t_coord	click;
 
 	click.x = x;
@@ -103,7 +104,7 @@ int			mouse_press(int button, int x, int y, t_core *cr)
 	if (button == 1 && !check_bounds(x, y))
 		mouse_press_button1(x, y, cr);
 	else if (button == 2 && !check_bounds(x, y))
-		mouse_press_button2(wall_id, x, y, cr);
+		mouse_press_button2(x, y, cr);
 	else if (button == 3)
 	{
 		cr->test = 1;

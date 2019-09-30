@@ -33,26 +33,9 @@ void		img_new(t_core *cr)
 {
 	if (!(cr->image = mlx_new_image(cr->mlx, WIN_WIDTH, WIN_HIGHT)))
 		err_ex(0);
-	cr->idata = mlx_get_data_addr(cr->image, &cr->bpp, &(cr->linesize), &cr->endian);
+	cr->idata = mlx_get_data_addr(cr->image, &cr->bpp, \
+	&(cr->linesize), &cr->endian);
 }
-
-// void		img_minimap_new(t_core *cr)
-// {
-// 	char	*img;
-//
-// 	// printf("%d\n", cr->vs.mmsize);
-// 	if (!(img = mlx_new_image(cr->mlx, cr->vs.mmsize, cr->vs.mmsize_y)))
-// 		err_ex(0);
-// 	cr->mm_image = mlx_get_data_addr(img, &cr->bpp, &(cr->linesize), &cr->endian);
-// 	cr->mm_img_ptr = img;
-// }
-// void		pxl_put_wrap(void *td, int x, int y, int color)
-// {
-// 	t_core		*cr;
-//
-// 	cr = (t_core *)(td);
-// 	mlx_pixel_put(cr->mlx, cr->win, x, y, color);
-// }
 
 void		pxl_put_wrap(void *td, int x, int y, int color)
 {
@@ -64,18 +47,15 @@ void		pxl_put_wrap(void *td, int x, int y, int color)
 
 void		img_pxl(void *td, int x, int y, int color)
 {
-	t_core		*cr;
+	t_core	*cr;
 	char	*p;
 
 	cr = (t_core *)(td);
 	x += cr->offs.x;
 	y += cr->offs.y;
 	if (x >= WIN_WIDTH || y >= WIN_HIGHT || \
-		x < 0 || y < 0)
-	{
-		// printf("OOB! ");
+	x < 0 || y < 0)
 		return ;
-	}
 	p = cr->idata;
 	p += (x * 32 / 8) + (cr->linesize * y);
 	*p++ = (color) & 0xFF;

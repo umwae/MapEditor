@@ -34,7 +34,8 @@ void		add_sec_list(t_core *cr)
 	t_sec	*sec;
 
 	printf("ADD SEC %d\n", cr->sec_num - 1);
-	sec = (t_sec *)malloc(sizeof(t_sec));
+	if (!(sec = (t_sec *)malloc(sizeof(t_sec))))
+		err_ex(0);
 	sec->next = *cr->slist;
 	sec->illum = ST_ILLUMINATION;
 	sec->floor = ST_FLOOR_HIGHT;
@@ -193,11 +194,16 @@ static int			find_w_id(t_core *cr)
 	t_coord	xy2;
 
 	// printf("looking for v id: %f %f\n", x, y);
-	fd = open(SAVEPATH, O_RDONLY);
+	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
+      reopen_10_times(&fd);
 	i = -1;
 	while (i < cr->vt[0])
 	{
-		get_next_line(fd, &line);
+		if (get_next_line(fd, &line) <= 0)
+		{
+			printf("111");
+			err_ex(1);
+		}
 		if (line[0] != 'v')
 			return (0);
 		i++;
@@ -205,11 +211,17 @@ static int			find_w_id(t_core *cr)
 	xy1.y = ft_atof(line + 2) * cr->zoom / UNIT_SIZE;
 	xy1.x = ft_atof(line + find_rep_symb(line, ' ', 2) + 1) * cr->zoom / UNIT_SIZE;
 //Переоткрыть
-	fd = open(SAVEPATH, O_RDONLY);
+	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
+      reopen_10_times(&fd);
+	if (fd < 0)
+	{
+		printf ("OPEN ERR");
+	}
 	i = -1;
 	while (i < cr->vt[1])
 	{
-		get_next_line(fd, &line);
+		if (get_next_line(fd, &line) <= 0)
+			err_ex(1);
 		if (line[0] != 'v')
 			return (0);
 		i++;
@@ -220,7 +232,7 @@ static int			find_w_id(t_core *cr)
 	return (cr->idcurr);
 }
 
-static char			**find_sec_in_save(t_core *cr, int secid)
+static char			**find_sec_in_save(int secid)
 {
 	int		fd;
 	char 	*line;
@@ -229,8 +241,8 @@ static char			**find_sec_in_save(t_core *cr, int secid)
 	int		i;
 
 	i = -1;
-	if (!(fd = open(SAVEPATH, O_RDONLY)))
-		printf("FD ERR %d\n", secid);
+	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
+      reopen_10_times(&fd);
 	while (get_next_line(fd, &line) > 0)
 	{
 		if (line[0] == 's')
@@ -267,11 +279,10 @@ static void	load_textures(t_core *cr, char *str, int secid)
 	char	**pts;
 	char	**sts;
 	int		i;
-	int		texture;
 
 	i = 0;
 	pts = ft_strsplit(str, ' ');
-	if (!(sts = find_sec_in_save(cr, secid)))
+	if (!(sts = find_sec_in_save(secid)))
 		printf("STS ERR SEC ID %d\n", secid);
 	while (pts[i])
 	{
@@ -294,7 +305,8 @@ void		load_sec_info(t_core *cr)
 	int		i;
 
 	i = 0;
-	fd = open("./maps/testmap", O_RDONLY);
+	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
+      reopen_10_times(&fd);
 	while (get_next_line(fd, &line) > 0)
 	{
 		if (line[0] == 't')

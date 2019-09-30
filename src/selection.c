@@ -63,7 +63,6 @@ void				select_sector(void *td, int x, int y)
 
 			if (!prev)
 			{
-				printf("SSSSSECMEM WALL %d\n", wall->index);
 				if (wall->sectors[0].s != -1)
 				{
 					// secmem = wall->sectors[0].s;
@@ -77,7 +76,6 @@ void				select_sector(void *td, int x, int y)
 			}
 			else
 			{
-				printf("SSSSSECMEM WALL %d\n", wall->index);
 				if (wall->sectors[0].s == prev->sectors[0].s || wall->sectors[0].s == prev->sectors[1].s)
 					secmem = wall->sectors[0].s;
 				else if (wall->sectors[1].s == prev->sectors[1].s || wall->sectors[1].s == prev->sectors[0].s)
@@ -92,7 +90,6 @@ void				select_sector(void *td, int x, int y)
 		wall = wall->next;
 	}
 	cr->sel_sec_id = secmem;
-	printf("SSSSSECMEM FIN %d\n", secmem);
 	cr->i_menu_is_open = 4;
 }
 

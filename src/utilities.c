@@ -14,6 +14,21 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "math.h"
+#include <fcntl.h>
+
+void		reopen_10_times(int *fd)
+{
+	int		i;
+
+	i = 10;
+	while (i-- && (*fd = open(SAVEPATH, O_RDONLY)) < 0)
+	{
+	}
+	if (*fd < 0)
+		err_ex(1);
+	else
+		printf("REOPEN SUCCESS\n");
+}
 
 int		check_bounds(int x, int y)
 {
@@ -25,8 +40,15 @@ int		check_bounds(int x, int y)
 
 void	err_ex(int pr)
 {
+	char *jj;
+
 	if (pr == 0)
 		ft_putstr("Error: memory allocation failure\n");
+	else if (pr == 1)
+	{
+		ft_putstr("Error: unexpected GNL data\n");
+		free(jj);
+	}
 	exit(1);
 }
 
@@ -92,7 +114,6 @@ char		*ft_ftoa(float num)
 	char	*tmpm;
 	char	*tmpa;
 	int		i;
-	int		size;
 	int		restr;
 	float		mem;
 
@@ -132,7 +153,6 @@ double	ft_atof(const char *str)
 	char	*c;
 	int		len;
 	int		sign;
-	char	*r2;
 
 	sign = 1;
 	c = (char *)str;

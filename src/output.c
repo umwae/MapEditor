@@ -24,7 +24,8 @@ int			find_vt_id(t_core *cr, float x, float y)
 
 	(void)cr;
 	// printf("looking for v id: %f %f\n", x, y);
-	fd = open("./maps/testmap", O_RDONLY);
+	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
+      reopen_10_times(&fd);
 	i = 0;
 	while (get_next_line(fd, &line) > 0)
 	{
@@ -118,7 +119,7 @@ static void			find_any_wall_in_sec(t_core *cr, t_wall *wall, int refid, int pr2)
 		cr->idcurr = wall->index;
 }
 
-static void			record_sectors(t_core *cr, char *line, int fd)
+static void			record_sectors(t_core *cr, int fd)
 {
 	char		*txt;
 	char		*tmp;
@@ -127,7 +128,6 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 	char		*wtx;
 	int			doprint_wtx = 0;
 	t_wall		*wtmp;
-	int			itmp;
 	//
 	int			i;
 	t_fcoord	cw;
@@ -226,15 +226,16 @@ static void			record_sectors(t_core *cr, char *line, int fd)
 		ft_strclr(conn);
 		//
 		ft_strcat(wtx, "|");
-
+		printf("IIIII +++ %d\n", i);
 		i++;
 	}
 		free(txt);
 		free(conn);
 		ft_putstr_fd("\n", fd);
 		//
-		if (doprint_wtx == 1)
+		if (i == cr->sec_num)
 		{
+			printf("i == cr->sec_num (%d)\n", cr->sec_num);
 			ft_putstr_fd(wtx, fd);
 			ft_putstr_fd("\n", fd);
 		}
@@ -246,13 +247,14 @@ static int			check_vt_dups(t_core *cr, float	x, float y)
 	int		fd;
 	char	*line;
 
-	x = (float)x / cr->zoom * UNIT_SIZE;
-	y = (float)y / cr->zoom * UNIT_SIZE;
-	fd = open("./maps/testmap", O_RDONLY);
+	// x = (float)x / cr->zoom * UNIT_SIZE;
+	// y = (float)y / cr->zoom * UNIT_SIZE;
+	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
+      reopen_10_times(&fd);
 	while (get_next_line(fd, &line) > 0)
 	{
-		if (ft_atof(line + 2) == y && \
-		ft_atof(line + find_rep_symb(line, ' ', 2) + 1) == x)
+		if ((int)(ft_atof(line + 2) * cr->zoom / UNIT_SIZE) == y && \
+		(int)(ft_atof(line + find_rep_symb(line, ' ', 2) + 1) * cr->zoom / UNIT_SIZE) == x)
 			return (1);
 		// if (ft_atof(line + 2) == y && \
 		// ft_atof(line + find_rep_symb(line, ' ', 2) + 1) == x)
@@ -351,11 +353,12 @@ void            save_map(t_core *cr)
   int   fd;
   char  *line;
 
-  	line = (char *)malloc(sizeof(char) * ft_strlen("v 00000 00000") + 1);
+	if (!(line = (char *)malloc(sizeof(char) * ft_strlen("v 00000 00000") + 1)))
+		err_ex(0);
 	if ((fd = open("./maps/testmap", O_WRONLY | O_CREAT | O_TRUNC, 0777)) < 0)
 		printf("ERROR\n");
 	record_walls(cr, line, fd);
-	record_sectors(cr, line, fd);
+	record_sectors(cr, fd);
 	record_objects(cr, fd);
 	record_doors(cr, fd);
 	record_finish(cr, fd);

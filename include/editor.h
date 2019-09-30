@@ -63,8 +63,8 @@
 # define ST_CEIL_HIGHT 30
 # define ST_ILLUMINATION 0.75f
 # define ST_TEXTURE 0
-# define ST_FTEX -1
-# define ST_CTEX -1
+# define ST_FTEX 0
+# define ST_CTEX 555
 
 # define COMPRESSING 30
 # define UNIT_SIZE 0.5f
@@ -308,7 +308,7 @@ void							info_menu(t_core *cr, t_wall *wall);
 void							record_objects(t_core *cr, int fd);
 void							obj_info_menu(t_core *cr, t_obj *obj);
 float							sel_object(t_core *cr, int x, int y);
-void							check_obj_events(t_core *cr, int x, int y, t_obj *obj);
+void							check_obj_events(int x, int y, t_obj *obj);
 void							load_objects(t_core *cr);
 
 void							sec_list_id_replace(t_core *cr, int new, int old);
@@ -318,9 +318,9 @@ void							name_sec_list(t_core *cr);
 t_sec							*find_sec_list(t_core *cr, int idref);
 void					print_sec_num(t_core *cr);
 void							load_sec_info(t_core *cr);
-void							check_obj_events_mwheel(t_core *cr, t_coord click, int button, t_obj *obj);
-void							check_wall_events_mwheel(t_core *cr, t_coord click, int button, t_wall *wall);
-void							check_wall_events(t_core *cr, int x, int y, t_wall *wall);
+void							check_obj_events_mwheel(t_coord click, int button, t_obj *obj);
+void							check_wall_events_mwheel(t_coord click, int button, t_wall *wall);
+void							check_wall_events(int x, int y, t_wall *wall);
 void							find_sector(void *td, int x, int y);
 void							select_sector(void *td, int x, int y);
 void							sec_info_menu(t_core *cr, int secid);
@@ -332,5 +332,7 @@ void							valid_illum_val(float *val);
 int								ft_arrlen(char	**arr);
 void							err_ex(int pr);
 void							del_last_sector(t_core *cr);
+void							select_wall_wrap(void *td, int x, int y);
+void							reopen_10_times(int *fd);
 
 #endif

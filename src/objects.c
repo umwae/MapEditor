@@ -36,7 +36,8 @@ void		add_object(t_core *cr, int x, int y)
 	t_obj	*obj;
 
 
-	obj = (t_obj *)malloc(sizeof(t_obj));
+	if (!(obj = (t_obj *)malloc(sizeof(t_obj))))
+		err_ex(0);
 	obj->next = *cr->olist;
 	obj->sec = 0;//Заменить на рейкаст
 	obj->fcoord.x = x;
@@ -51,13 +52,15 @@ void		draw_objects_text(t_core *cr)
 {
 	t_obj		*obj;
 	t_coord		xy;
+	char		*txt;
 
 	obj = *cr->olist;
 	while (obj)
 	{
 		xy.x = obj->fcoord.x - OBJECT_SIZE / 2 + cr->offs.x;
 		xy.y = obj->fcoord.y - OBJECT_SIZE / 2 + cr->offs.y;
-		char *txt = malloc(sizeof(char) * 5);
+		if (!(txt = malloc(sizeof(char) * 5)))
+			err_ex(0);
 		ft_strcpy(txt, ft_itoa(obj->type));
 		mlx_string_put(cr->mlx, cr->win, xy.x, xy.y, 0xffffff, txt);
 		free(txt);
@@ -179,7 +182,8 @@ void			load_objects(t_core *cr)
 		if (line[0] == 'o')
 		{
 			oarr = ft_strsplit(line, '|');
-			obj = (t_obj *)malloc(sizeof(t_obj));
+			if (!(obj = (t_obj *)malloc(sizeof(t_obj))))
+				err_ex(0);
 			obj->sec = ft_atoi(oarr[1]);
 			obj->fcoord.x = ft_atof(oarr[2]) * cr->zoom / UNIT_SIZE;
 			obj->fcoord.y = ft_atof(ft_strchr(oarr[2], ' ') + 1) * cr->zoom / UNIT_SIZE;

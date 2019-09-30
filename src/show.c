@@ -146,6 +146,7 @@ static void		draw_ggff(t_core *cr)
 		min(wall->p2.y + cr->offs.y, wall->p1.y + cr->offs.y) + abs(wall->p2.y - wall->p1.y) / 2, 0xffffff, txt);
 		wall = wall->next;
 	}
+	free(txt);
 }
 
 void			redraw(t_core *cr)
@@ -169,6 +170,6 @@ void			redraw(t_core *cr)
 		obj_info_menu(cr, cr->closest_obj);
 	else if (cr->i_menu_is_open == 4)
 		sec_info_menu(cr, cr->sel_sec_id);
-	draw_ggff(cr);
+	// draw_ggff(cr);
 	// show_messages(cr);
 }

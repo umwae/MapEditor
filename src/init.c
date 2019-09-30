@@ -16,22 +16,21 @@
 #include <time.h>
 #include <stdio.h>
 
-void				init(t_core		*cr)
+void				init(t_core *cr)
 {
 	if (!(cr->mlx = mlx_init()))
 		err_ex(0);
 	if (!(cr->win = mlx_new_window(cr->mlx, WIN_WIDTH, WIN_HIGHT, "Editor")))
 		err_ex(0);
 	cr->wlist = NULL;
-	// cr->olist = NULL;
-	cr->olist = (t_obj **)malloc(sizeof(t_obj *));
+	if (!(cr->olist = (t_obj **)malloc(sizeof(t_obj *))))
+		err_ex(0);
 	*cr->olist = NULL;
-	cr->slist = (t_sec **)malloc(sizeof(t_sec *));
+	if (!(cr->slist = (t_sec **)malloc(sizeof(t_sec *))))
+		err_ex(0);
 	*cr->slist = NULL;
 	load_gui(cr);
 	cr->inst_func = draw_wall;
-	cr->messages = (t_list **)malloc(sizeof(t_list **));
-	*(cr->messages) = NULL;
 	cr->highlight = 1;
 	cr->sec_num = 0;
 	cr->mpsw = 0;

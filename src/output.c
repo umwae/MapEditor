@@ -143,9 +143,9 @@ static void			record_sectors(t_core *cr, int fd)
 	t_sec		*sec;
 
 	i = 0;
-	txt = ft_strnew(200);
-	conn = ft_strnew(200);
-	wtx = ft_strnew(1000);
+	txt = ft_strnew(300);
+	conn = ft_strnew(300);
+	wtx = ft_strnew(3000);
 	iter_wall(cr, 0, -1, &find_any_wall_in_sec);
 	// curr = cr->idcurr;
 	while (i < cr->sec_num && cr->idcurr != -1)

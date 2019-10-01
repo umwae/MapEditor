@@ -37,7 +37,6 @@ static void			erase_wall(t_core *cr, t_wall *wall, int mod)
 	t_wall	*rm;
 
 	rm = mod == 0 ? wall : wall->next;
-	printf("EW %d %d\n", rm->sectors[0].s, rm->sectors[1].s);
 	remove_sectors(cr, rm);
 	if (mod == 0)
 		cr->wlist = wall->next;

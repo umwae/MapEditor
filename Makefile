@@ -26,7 +26,7 @@ BIN_PATH=./bin
 
 SRC= main.c image.c init.c show.c actions.c actions2.c actions3.c walls.c selection.c utilities.c \
 context_menu.c gui.c gui_func.c gui_func2.c sectors.c colors.c output.c input.c grid.c \
-objects.c player.c info_menu.c sec_list.c validation.c
+objects.c player.c info_menu.c sec_list.c validation.c im_events_wall.c im_canvas_wall.c
 OBJ:= $(addprefix $(BIN_PATH)/,$(SRC:.c=.o))
 
 .PHONY: all clean fclean re

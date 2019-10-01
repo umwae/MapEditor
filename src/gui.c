@@ -85,23 +85,15 @@ void				load_gui(t_core *cr)
 	int	i;
 
 	i = 1;
-	// if (!(cr->icons_trash = (int *)malloc(sizeof(int *))))
-	// 	err_ex(0);
 	cr->icons_trash = mlx_xpm_file_to_image(cr->mlx, "./gui/instruments.xpm", \
 	&cr->inst_panel_size.x, &cr->inst_panel_size.y);
 	cr->icons_data = (int *)mlx_get_data_addr(cr->icons_trash, \
 		&cr->bpp, &(cr->linesize), &(cr->endian));
 	cr->inst_panel.x = INST_PANEL_X;
 	cr->inst_panel.y = INST_PANEL_Y;
-	// if (!(cr->hl_trash = (int *)malloc(sizeof(int *))))
-	// 	err_ex(0);
 	cr->hl_trash = mlx_xpm_file_to_image(cr->mlx, "./gui/highlight.xpm", \
 	&cr->tr, &cr->tr);
 	cr->hl_data = (int *)mlx_get_data_addr(cr->hl_trash, \
 	&cr->bpp, &(cr->linesize), &(cr->endian));
-	// if (!(cr->arrowl_trash = (int *)malloc(sizeof(int *))))
-	// 	err_ex(0);
-	// if (!(cr->arrowr_trash = (int *)malloc(sizeof(int *))))
-	// 	err_ex(0);
 	load_gui_p2(cr);
 }

@@ -23,7 +23,6 @@ void				highlight(t_core *cr)
 		return ;
 	pos.y = cr->inst_panel.y + (float)cr->inst_panel_size.y /
 	INST_NUM * (cr->highlight - 1);
-	printf("HIGHLIGHT %d\n", cr->highlight);
 	pos.x = cr->inst_panel.x;
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->hl_trash, pos.x, pos.y);
 }

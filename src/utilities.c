@@ -47,7 +47,7 @@ void	err_ex(int pr)
 	else if (pr == 1)
 	{
 		ft_putstr("Error: unexpected GNL data\n");
-		// free(jj);
+		free(jj);
 	}
 	exit(1);
 }

@@ -95,10 +95,11 @@ static void     process_walls(t_core *cr, char **pts, char **prt, int secnum)
     {
       if (get_next_line(fd2, &line) <= 0)
         err_ex(1);
-      if (j <= num)
+      if (j < num + 1)
         free(line);
     }
     v = ft_strsplit(line, ' ');
+    free(line);
 	inp1.x = ft_atof(v[2]) * cr->zoom / UNIT_SIZE;
 	inp1.y = ft_atof(v[1]) * cr->zoom / UNIT_SIZE;
     ft_arrfree(&v, 3);
@@ -111,10 +112,11 @@ static void     process_walls(t_core *cr, char **pts, char **prt, int secnum)
     {
       if (get_next_line(fd2, &line) <= 0)
         err_ex(1);
-      if (j <= num)
+      if (j < num + 1)
         free(line);
     }
     v = ft_strsplit(line, ' ');
+    free(line);
     // close (fd2);
 	inp2.x = ft_atof(v[2]) * cr->zoom / UNIT_SIZE;
 	inp2.y = ft_atof(v[1]) * cr->zoom / UNIT_SIZE;
@@ -173,15 +175,17 @@ static void		load_finish(t_core *cr)
 void            load_map(t_core *cr)
 {
   int   fd;
-  char  *line;
+  char  *line = NULL;
 	int		i;
   char  **pts;
-  char  **prt;
+  char  **vtx;
+  char  **por;
   char  *tmp;
   char	*p;
 
   // load_sec_list(cr);
 	//
+  tmp = ft_strnew(300);
 	cr->sec_num = 0;
   delete_wlist(cr);
 	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
@@ -211,40 +215,39 @@ void            load_map(t_core *cr)
         fflush(stdout);
         find_sec_list(cr, i)->illum = ft_atof(pts[4]);
       }
-			free(pts);
-			//
-			p = line + find_rep_symb(line, '|', 3);
-	  	while (*p != ' ')
-	  	  p--;
-	  	tmp = ft_strsub(p + 1, 0, ft_strchr(p, '|') - p - 1);
-	  	tmp = ft_strjoin(tmp, " ");
-	  	tmp = ft_strjoin(tmp, ft_strsub(line, find_rep_symb(line, '|', 2) + 1, \
-	  	find_rep_symb(line, '|', 3) - (find_rep_symb(line, '|', 2) + 1)));
-	    pts = ft_strsplit(tmp, ' ');
+      ft_strcat(tmp, pts[2]);
+      ft_strcat(tmp, " ");
+      cr->tms = ft_strsub(tmp, 0, ft_strchr(tmp, ' ') - tmp);
+      ft_strcat(tmp, cr->tms);
+      free(cr->tms);
+	    vtx = ft_strsplit(tmp, ' ');
 			ft_strclr(tmp);
 		//
-	    p = line + find_rep_symb(line, '|', 4);
-	    while (*p != ' ')
-	  	  p--;
-	    tmp = ft_strsub(p + 1, 0, ft_strchr(p, '|') - p - 1);
-	    tmp = ft_strjoin(tmp, " ");
-	    tmp = ft_strjoin(tmp, ft_strsub(line, find_rep_symb(line, '|', 3) + 1, \
-			find_rep_symb(line, '|', 4) - (find_rep_symb(line, '|', 3) + 1)));
-      prt = ft_strsplit(tmp, ' ');
+      ft_strcat(tmp, pts[3]);
+      ft_strcat(tmp, " ");
+      cr->tms = ft_strsub(tmp, 0, ft_strchr(tmp, ' ') - tmp);
+      ft_strcat(tmp, cr->tms);
+      free(cr->tms);
+	    por = ft_strsplit(tmp, ' ');
 			ft_strclr(tmp);
       //
-      process_walls(cr, pts, prt, i);
+      process_walls(cr, vtx, por, i);
+
+      ft_arrfree(&vtx, ft_arrlen(vtx));
+      ft_arrfree(&por, ft_arrlen(por));
+      ft_arrfree(&pts, ft_arrlen(pts));
 			i++;
 		}
-		// free(line);
+		free(line);
 	}
+  free(line);
   // load_walls(cr, line, fd);
 	// load_sectors(cr, line, fd);
   // load_portals(cr, line, fd);
   load_sec_info(cr);
   while (*cr->olist)
-  	del_object(cr, 0);
-load_objects(cr);
+  del_object(cr, 0);
+  load_objects(cr);
   load_player(cr, &line);
   iter_wall(cr, -1, -1, &count_sectors);
   iter_wall(cr, -1, -1, &redraw_color);
@@ -252,4 +255,5 @@ load_objects(cr);
   load_finish(cr);
 	// free(line);
 	close(fd);
+  free(tmp);
 }

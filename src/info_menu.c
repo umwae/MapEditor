@@ -33,16 +33,20 @@ void			info_menu(t_core *cr, t_wall *wall)
 	//
 	text = ft_strnew(100);
 	ft_strcat(text, "P1(y, x):    ");
-	ft_strcat(text, ft_itoa(wall->p1.y));
+	ft_strcat(text, cr->tms = ft_itoa(wall->p1.y));
+	free(cr->tms);
 	ft_strcat(text, " ");
-	ft_strcat(text, ft_itoa(wall->p1.x));
+	ft_strcat(text, cr->tms = ft_itoa(wall->p1.x));
+	free(cr->tms);
 	mlx_string_put(cr->mlx, cr->win, xy.x + I_MENU_XLEN / 10, \
 	I_MENU_YLEN / 10, 0, text);
 	ft_strclr(text);
 	ft_strcat(text, "P2(y, x):    ");
-	ft_strcat(text, ft_itoa(wall->p2.y));
+	ft_strcat(text, cr->tms = ft_itoa(wall->p2.y));
+	free(cr->tms);
 	ft_strcat(text, " ");
-	ft_strcat(text, ft_itoa(wall->p2.x));
+	ft_strcat(text, cr->tms = ft_itoa(wall->p2.x));
+	free(cr->tms);
 	mlx_string_put(cr->mlx, cr->win, xy.x + I_MENU_XLEN / 10, \
 	I_MENU_YLEN / 10 * 2, 0, text);
 	ft_strclr(text);
@@ -53,10 +57,12 @@ void			info_menu(t_core *cr, t_wall *wall)
 		xy.x + I_MENU_XLEN - ICON_SIZE, I_MENU_YLEN / 3 + 10);
 	//
 	ft_strcat(text, " [ ");
-	ft_strcat(text, ft_itoa(wall->sectors[0].s));
+	ft_strcat(text, cr->tms = ft_itoa(wall->sectors[0].s));
+	free(cr->tms);
 	ft_strcat(text, " ]");
 	ft_strcat(text, " texture: ");
-	ft_strcat(text, ft_itoa(wall->sectors[0].t));
+	ft_strcat(text, cr->tms = ft_itoa(wall->sectors[0].t));
+	free(cr->tms);
 	mlx_string_put(cr->mlx, cr->win, xy.x + I_MENU_XLEN / 5, \
 	I_MENU_YLEN / 3 + 10, 0, text);
 	//
@@ -67,10 +73,12 @@ void			info_menu(t_core *cr, t_wall *wall)
 		xy.x + I_MENU_XLEN - ICON_SIZE, I_MENU_YLEN / 3 + 10 + ICON_SIZE);
 	//
 	ft_strcat(text, " [ ");
-	ft_strcat(text, ft_itoa(wall->sectors[1].s));
+	ft_strcat(text, cr->tms = ft_itoa(wall->sectors[1].s));
+	free(cr->tms);
 	ft_strcat(text, " ]");
 	ft_strcat(text, " texture: ");
-	ft_strcat(text, ft_itoa(wall->sectors[1].t));
+	ft_strcat(text, cr->tms = ft_itoa(wall->sectors[1].t));
+	free(cr->tms);
 	mlx_string_put(cr->mlx, cr->win, xy.x + I_MENU_XLEN / 5, \
 	I_MENU_YLEN / 3 + 10 + ICON_SIZE, 0, text);
 	//
@@ -142,7 +150,8 @@ void			obj_info_menu(t_core *cr, t_obj *obj)
 	//
 	text = ft_strnew(100);
 	ft_strcat(text, " Type: ");
-	ft_strcat(text, ft_itoa(obj->type));
+	ft_strcat(text, cr->tms = ft_itoa(obj->type));
+	free(cr->tms);
 	mlx_string_put(cr->mlx, cr->win, xy.x + I_MENU_XLEN / 3, \
 	I_MENU_YLEN / 9, 0, text);
 	free(text);
@@ -212,7 +221,8 @@ void			sec_info_menu(t_core *cr, int secid)
 	text = ft_strnew(100);
 	//
 	ft_strcat(text, "Floor lvl: ");
-	ft_strcat(text, ft_ftoa(sec->floor));
+	ft_strcat(text, cr->tms = ft_ftoa(sec->floor));
+	free(cr->tms);
 	mlx_string_put(cr->mlx, cr->win, xy.x + 60, \
 	(xy.y + 4), 0, text);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
@@ -222,7 +232,8 @@ void			sec_info_menu(t_core *cr, int secid)
 	ft_strclr(text);
 	//
 	ft_strcat(text, "Ceiling lvl: ");
-	ft_strcat(text, ft_ftoa(sec->ceiling));
+	ft_strcat(text, cr->tms = ft_ftoa(sec->ceiling));
+	free(cr->tms);
 	mlx_string_put(cr->mlx, cr->win, xy.x + 60, \
 	(xy.y + ICON_SIZE + 8), 0, text);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
@@ -232,7 +243,8 @@ void			sec_info_menu(t_core *cr, int secid)
 	ft_strclr(text);
 	//
 	ft_strcat(text, "Floor tex: ");
-	ft_strcat(text, ft_itoa(sec->ftex));
+	ft_strcat(text, cr->tms = ft_itoa(sec->ftex));
+	free(cr->tms);
 	mlx_string_put(cr->mlx, cr->win, xy.x + 60, \
 	(xy.y + ICON_SIZE * 2 + 12), 0, text);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
@@ -242,7 +254,8 @@ void			sec_info_menu(t_core *cr, int secid)
 	ft_strclr(text);
 	//
 	ft_strcat(text, "Ceiling tex: ");
-	ft_strcat(text, ft_itoa(sec->ctex));
+	ft_strcat(text, cr->tms = ft_itoa(sec->ctex));
+	free(cr->tms);
 	mlx_string_put(cr->mlx, cr->win, xy.x + 60, \
 	(xy.y + ICON_SIZE * 3 + 16), 0, text);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
@@ -252,7 +265,8 @@ void			sec_info_menu(t_core *cr, int secid)
 	ft_strclr(text);
 	//
 	ft_strcat(text, "Illumination: ");
-	ft_strcat(text, ft_ftoa(sec->illum));
+	ft_strcat(text, cr->tms = ft_ftoa(sec->illum));
+	free(cr->tms);
 	mlx_string_put(cr->mlx, cr->win, xy.x + 60, \
 	(xy.y + ICON_SIZE * 4 + 20), 0, text);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \

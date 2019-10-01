@@ -144,27 +144,31 @@ void			record_objects(t_core *cr, int fd)
 	char	*text;
 	t_obj	*obj;
 
-	text = ft_strnew(100);
 	obj = *cr->olist;
+	text = ft_strnew(100); //???
 	spot_sector_around(cr, obj);
 	ft_putstr_fd("\n", fd);
 	while (obj)
 	{
-		text = ft_strnew(100);
 		// spot_sector_around(cr);
 		ft_strcat(text, "o|");
-		ft_strcat(text, ft_itoa(obj->sec));
+		ft_strcat(text, cr->tms = ft_itoa(obj->sec));
+		free(cr->tms);
 		ft_strcat(text, "|");
-		ft_strcat(text, ft_ftoa(obj->fcoord.x / cr->zoom * UNIT_SIZE));
+		ft_strcat(text, cr->tms = ft_ftoa(obj->fcoord.x / cr->zoom * UNIT_SIZE));
+		free(cr->tms);
 		ft_strcat(text, " ");
-		ft_strcat(text, ft_ftoa(obj->fcoord.y / cr->zoom * UNIT_SIZE));
+		ft_strcat(text, cr->tms = ft_ftoa(obj->fcoord.y / cr->zoom * UNIT_SIZE));
+		free(cr->tms);
 		ft_strcat(text, "|");
-		ft_strcat(text, ft_itoa(obj->type));
+		ft_strcat(text, cr->tms = ft_itoa(obj->type));
+		free(cr->tms);
 		// ft_strcat(text, "|");
 		// ft_strcat(text, ft_itoa(cr->player.angle));
 		ft_strcat(text, "|\n");
 		ft_putstr_fd(text, fd);
 		obj = obj->next;
+		ft_strclr(text);
 	}
 	free(text);
 }
@@ -174,7 +178,7 @@ void			load_objects(t_core *cr)
 	char		**oarr;
 	int			fd;
 	t_obj		*obj;
-	char		*line;
+	char		*line = NULL;
 
 	fd = open("./maps/testmap", O_RDONLY);
 	while (get_next_line(fd, &line) > 0)
@@ -192,8 +196,11 @@ void			load_objects(t_core *cr)
 			obj->color = OBJECT_COLOR;
 			obj->next = *cr->olist;
 			*cr->olist = obj;
+			ft_arrfree(&oarr, ft_arrlen(oarr));
 		}
+		free(line);
 	}
+	free(line);
 	close(fd);
 	// ft_arrfree(&oarr, 4);
 	return ;

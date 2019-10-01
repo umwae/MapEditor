@@ -133,20 +133,26 @@ void			spot_sector_around(t_core *cr, t_obj *obj)
 void			record_player(t_core *cr, int fd)
 {
 	char	*text;
+	char	*tmp;
 
 	ft_putstr_fd("\n", fd);
 	text = ft_strnew(ft_strlen("p|0.0 0.0|0|0.0|") + 1);
 	spot_sector_around(cr, &cr->player);
 	ft_strcat(text, "p|");
-	ft_strcat(text, ft_ftoa(cr->player.fcoord.x / cr->zoom * UNIT_SIZE));
+	ft_strcat(text, tmp = ft_ftoa(cr->player.fcoord.x / cr->zoom * UNIT_SIZE));
+	free(tmp);
 	ft_strcat(text, " ");
-	ft_strcat(text, ft_ftoa(cr->player.fcoord.y / cr->zoom * UNIT_SIZE));
+	ft_strcat(text, tmp = ft_ftoa(cr->player.fcoord.y / cr->zoom * UNIT_SIZE));
+	free(tmp);
 	ft_strcat(text, "|");
-	ft_strcat(text, ft_itoa(cr->player.sec));
+	ft_strcat(text, tmp = ft_itoa(cr->player.sec));
+	free(tmp);
 	ft_strcat(text, "|");
-	ft_strcat(text, ft_itoa(cr->player.angle));
+	ft_strcat(text, tmp = ft_itoa(cr->player.angle));
+	free(tmp);
 	ft_strcat(text, "|\n");
 	ft_putstr_fd(text, fd);
+	free(text);
 }
 
 void			load_player(t_core *cr, char **line)
@@ -154,6 +160,7 @@ void			load_player(t_core *cr, char **line)
 	char		**parr;
 	int			fd;
 
+	line = NULL;
 	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
       reopen_10_times(&fd);
 	while (get_next_line(fd, line) > 0)
@@ -168,7 +175,9 @@ void			load_player(t_core *cr, char **line)
 			close(fd);
 			return ;
 		}
+		free(line);
 	}
+	free(line);
 	close(fd);
 	return ;
 }

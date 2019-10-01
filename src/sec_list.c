@@ -119,6 +119,7 @@ void					print_sec_num(t_core *cr)
 	int			i;
 	t_coord		summ;
 	char 		*txt;
+	char		*tmp;
 
 	txt = ft_strnew(10);
 	i = 0;
@@ -141,13 +142,15 @@ void					print_sec_num(t_core *cr)
 		summ.x = (float)summ.x / am;
 		summ.y = (float)summ.y / am;
 		// ft_strcat(txt, "[");
-		ft_strcat(txt, ft_itoa(i));
+		ft_strcat(txt, tmp = ft_itoa(i));
+		free(tmp);
 		// ft_strcat(txt, "]");
 		mlx_string_put(cr->mlx, cr->win, summ.x + cr->offs.x, \
 		summ.y + cr->offs.y, 0x00ffb5, txt);
 		ft_strclr(txt);
 		i++;
 	}
+	free(txt);
 }
 
 static void	set_textures(t_core *cr, t_wall *wall, int texture, int secid)
@@ -200,16 +203,14 @@ static int			find_w_id(t_core *cr)
 	while (i < cr->vt[0])
 	{
 		if (get_next_line(fd, &line) <= 0)
-		{
-			printf("111");
 			err_ex(1);
-		}
-		if (line[0] != 'v')
-			return (0);
+		if	(i + 1 < cr->vt[0])
+			free(line);
 		i++;
 	}
 	xy1.y = ft_atof(line + 2) * cr->zoom / UNIT_SIZE;
 	xy1.x = ft_atof(line + find_rep_symb(line, ' ', 2) + 1) * cr->zoom / UNIT_SIZE;
+	free(line);
 //Переоткрыть
 	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
       reopen_10_times(&fd);
@@ -222,17 +223,18 @@ static int			find_w_id(t_core *cr)
 	{
 		if (get_next_line(fd, &line) <= 0)
 			err_ex(1);
-		if (line[0] != 'v')
-			return (0);
+		if	(i + 1 < cr->vt[1])
+			free(line);
 		i++;
 	}
 	xy2.y = ft_atof(line + 2) * cr->zoom / UNIT_SIZE;
 	xy2.x = ft_atof(line + find_rep_symb(line, ' ', 2) + 1) * cr->zoom / UNIT_SIZE;
+	free(line);
 	find_wall_by_xy(cr, xy1, xy2);
 	return (cr->idcurr);
 }
 
-static char			**find_sec_in_save(int secid)
+static char			**find_sec_in_save(t_core *cr, int secid)
 {
 	int		fd;
 	char 	*line;
@@ -250,27 +252,26 @@ static char			**find_sec_in_save(int secid)
 			i++;
 			if (i == secid)
 			{
-				// line = ft_strjoin(line, " ");
-	  			// line = ft_strjoin(line, ft_strsub(line, find_rep_symb(line, '|', 2) + 1, \
-	  			// find_rep_symb(line, '|', 3) - (find_rep_symb(line, '|', 2) + 1)));
-				
 				tmp = ft_strsplit(line, '|');
 
-				printf("*777 %s\n", tmp[2]);
-				// tmp[2] = ft_strjoin(tmp[2], " ");
-	  			// tmp[2] = ft_strjoin(tmp[2], ft_strsub(tmp[2], 0, \
-	  			// ft_strlen(tmp[2]) - ((ft_strrchr(tmp[2], ' ') - tmp[2]))));
-				
-				tmp[2] = ft_strjoin(" ", tmp[2]);
-				tmp[2] = ft_strjoin(ft_strrchr(tmp[2], ' '), tmp[2]);
+				cr->tms = ft_strjoin(" ", tmp[2]);
+				free(tmp[2]);
+				tmp[2] = ft_strdup(cr->tms);
+				free(cr->tms);
+				cr->tms = ft_strjoin(ft_strrchr(tmp[2], ' '), tmp[2]);
+				free(tmp[2]);
+				tmp[2] = ft_strdup(cr->tms);
+				free(cr->tms);
 
-				printf("*888 %s\n", tmp[2]);
 				pts = ft_strsplit(tmp[2], ' ');
 				ft_arrfree(&tmp, ft_arrlen(tmp));
+				free(line);
 				return (pts);
 			}
 		}
+		free(line);
 	}
+	free(line);
 	return (NULL);
 }
 
@@ -282,7 +283,7 @@ static void	load_textures(t_core *cr, char *str, int secid)
 
 	i = 0;
 	pts = ft_strsplit(str, ' ');
-	if (!(sts = find_sec_in_save(secid)))
+	if (!(sts = find_sec_in_save(cr, secid)))
 		printf("STS ERR SEC ID %d\n", secid);
 	while (pts[i])
 	{
@@ -292,7 +293,7 @@ static void	load_textures(t_core *cr, char *str, int secid)
 		iter_wall(cr, ft_atoi(pts[i]), secid, &set_textures);
 		i++;
 	}
-	ft_arrfree(&sts, i);
+	ft_arrfree(&sts, ft_arrlen(sts));
 	ft_arrfree(&pts, ft_arrlen(pts));
 }
 
@@ -319,6 +320,7 @@ void		load_sec_info(t_core *cr)
 			else
 				sec->ctex = ft_atoi(ft_strchr(pts[2], ' '));
 			load_textures(cr, pts[3], ft_atoi(pts[1]));
+			ft_arrfree(&pts, ft_arrlen(pts));
 		}
 		free(line);
 	}

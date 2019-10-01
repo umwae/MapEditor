@@ -229,6 +229,7 @@ typedef struct		s_core
 	int						searchtype;
 	int						do_use_inst;
 	int						vt[2];
+	char					*tms;
 
 }									t_core;
 
@@ -284,7 +285,7 @@ void							load_map(t_core *cr);
 void							erase_by_id(t_core	*cr, int id);
 int    						find_rep_symb(char *line, char symb, int num);
 t_wall						*get_last_wall(t_core *cr);
-int								find_vt_id(t_core *cr, float x, float y);
+int								find_vt_id(float x, float y);
 void							count_sectors(t_core *cr, t_wall *wall, int pr1, int pr2);
 int								check_bounds(int x, int y);
 void							grid(t_core *cr);

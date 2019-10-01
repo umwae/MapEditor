@@ -16,26 +16,34 @@
 #include "stdlib.h"
 #include "math.h"
 
-int			find_vt_id(t_core *cr, float x, float y)
+int			find_vt_id(float x, float y)
 {
 	int		fd;
 	char	*line;
 	int		i;
 
-	(void)cr;
+	// line = NULL;
 	// printf("looking for v id: %f %f\n", x, y);
 	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
       reopen_10_times(&fd);
 	i = 0;
-	while (get_next_line(fd, &line) > 0)
+	while (get_next_line(fd, &line) == 1)
 	{
 		if (line[0] != 'v')
+		{
+			free(line);
 			return (0);
-		if (ft_atof(line + 2) == y && \
+		}
+		else if (ft_atof(line + 2) == y && \
 		ft_atof(line + find_rep_symb(line, ' ', 2) + 1) == x)
+		{
+			free(line);
 			return (i);
+		}
+		free(line);
 		i++;
 	}
+	free(line);
 	return (0);
 }
 
@@ -137,7 +145,7 @@ static void			record_sectors(t_core *cr, int fd)
 	i = 0;
 	txt = ft_strnew(200);
 	conn = ft_strnew(200);
-	wtx = ft_strnew(200);
+	wtx = ft_strnew(1000);
 	iter_wall(cr, 0, -1, &find_any_wall_in_sec);
 	// curr = cr->idcurr;
 	while (i < cr->sec_num && cr->idcurr != -1)
@@ -172,13 +180,14 @@ static void			record_sectors(t_core *cr, int fd)
 			{
 				wtmp = find_by_index(cr, curr);
 				//
-				ft_strcat(txt, (tmp = ft_itoa(find_vt_id(cr, cw.x, cw.y))));
+				ft_strcat(txt, (tmp = ft_itoa(find_vt_id(cw.x, cw.y))));
 				//
 				if (wtmp->sectors[0].t != -1 || wtmp->sectors[1].t != -1 || sec->floor != ST_FLOOR_HIGHT || sec->ceiling != ST_CEIL_HIGHT || \
 				sec->illum != ST_ILLUMINATION || sec->ftex != ST_FTEX || sec->ftex != ST_CTEX)
 					doprint_wtx = 1;
 				printf("%d %d \n", wtmp->sectors[0].t, wtmp->sectors[1].t);
-				ft_strcat(wtx, ft_itoa(wtmp->sectors[0].s == i ? wtmp->sectors[0].t : wtmp->sectors[1].t));
+				ft_strcat(wtx, cr->tms = ft_itoa(wtmp->sectors[0].s == i ? wtmp->sectors[0].t : wtmp->sectors[1].t));
+				free(cr->tms);
 				//
 				free(tmp);
 				if (wtmp->isportal == 1)
@@ -249,17 +258,23 @@ static int			check_vt_dups(t_core *cr, float	x, float y)
 
 	// x = (float)x / cr->zoom * UNIT_SIZE;
 	// y = (float)y / cr->zoom * UNIT_SIZE;
+	line = NULL;
 	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
       reopen_10_times(&fd);
 	while (get_next_line(fd, &line) > 0)
 	{
 		if ((int)(ft_atof(line + 2) * cr->zoom / UNIT_SIZE) == y && \
 		(int)(ft_atof(line + find_rep_symb(line, ' ', 2) + 1) * cr->zoom / UNIT_SIZE) == x)
+		{
+			free(line);
 			return (1);
+		}
+		free(line);
 		// if (ft_atof(line + 2) == y && \
 		// ft_atof(line + find_rep_symb(line, ' ', 2) + 1) == x)
 		// 	return (1);
 	}
+	free(line);
 	return (0);
 }
 
@@ -276,11 +291,13 @@ static void			record_walls(t_core *cr, char *line, int fd)
 		{
 			ft_strcpy(line, "v ");
 			ft_putstr_fd(line, fd);
-			ft_strcpy(line, ft_ftoa((float)wall->p1.y / cr->zoom * UNIT_SIZE));
+			ft_strcpy(line, cr->tms = ft_ftoa((float)wall->p1.y / cr->zoom * UNIT_SIZE));
+			free(cr->tms);
 			ft_putstr_fd(line, fd);
 			ft_strcpy(line, " ");
 			ft_putstr_fd(line, fd);
-			ft_strcpy(line, ft_ftoa((float)wall->p1.x / cr->zoom * UNIT_SIZE));
+			ft_strcpy(line, cr->tms = ft_ftoa((float)wall->p1.x / cr->zoom * UNIT_SIZE));
+			free(cr->tms);
 			ft_putstr_fd(line, fd);
 			ft_strcpy(line, " \n");
 			ft_putstr_fd(line, fd);
@@ -289,11 +306,13 @@ static void			record_walls(t_core *cr, char *line, int fd)
 		{
 			ft_strcpy(line, "v ");
 			ft_putstr_fd(line, fd);
-			ft_strcpy(line, ft_ftoa((float)wall->p2.y / cr->zoom * UNIT_SIZE));
+			ft_strcpy(line, cr->tms = ft_ftoa((float)wall->p2.y / cr->zoom * UNIT_SIZE));
+			free(cr->tms);
 			ft_putstr_fd(line, fd);
 			ft_strcpy(line, " ");
 			ft_putstr_fd(line, fd);
-			ft_strcpy(line, ft_ftoa((float)wall->p2.x / cr->zoom * UNIT_SIZE));
+			ft_strcpy(line, cr->tms = ft_ftoa((float)wall->p2.x / cr->zoom * UNIT_SIZE));
+			free(cr->tms);
 			ft_putstr_fd(line, fd);
 			ft_strcpy(line, " \n");
 			ft_putstr_fd(line, fd);

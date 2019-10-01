@@ -47,7 +47,7 @@ void	err_ex(int pr)
 	else if (pr == 1)
 	{
 		ft_putstr("Error: unexpected GNL data\n");
-		free(jj);
+		// free(jj);
 	}
 	exit(1);
 }
@@ -142,6 +142,8 @@ char		*ft_ftoa(float num)
 		ft_strcat(str, tmpa);
 	else
 		ft_strcat(str, "00");
+	free(tmpm);
+	free(tmpa);
 	return (str);
 }
 

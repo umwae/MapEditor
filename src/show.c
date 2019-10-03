@@ -133,21 +133,21 @@ static void		draw_walls(t_core *cr)
 	}
 }
 
-static void		draw_ggff(t_core *cr)
-{
-	t_wall	*wall;
+// static void		draw_ggff(t_core *cr)
+// {
+// 	t_wall	*wall;
 
-	wall = cr->wlist;
-	char *txt = malloc(sizeof(char) * 5);//Отображает номера стен, вызывает тормоза
-	while (wall)
-	{
-		ft_strcpy(txt, ft_itoa(wall->index));
-		mlx_string_put(cr->mlx, cr->win, min(wall->p2.x + cr->offs.x, wall->p1.x + cr->offs.x) + abs(wall->p2.x - wall->p1.x) / 2, \
-		min(wall->p2.y + cr->offs.y, wall->p1.y + cr->offs.y) + abs(wall->p2.y - wall->p1.y) / 2, 0xffffff, txt);
-		wall = wall->next;
-	}
-	free(txt);
-}
+// 	wall = cr->wlist;
+// 	char *txt = malloc(sizeof(char) * 5);//Отображает номера стен, вызывает тормоза
+// 	while (wall)
+// 	{
+// 		ft_strcpy(txt, ft_itoa(wall->index));
+// 		mlx_string_put(cr->mlx, cr->win, min(wall->p2.x + cr->offs.x, wall->p1.x + cr->offs.x) + abs(wall->p2.x - wall->p1.x) / 2, \
+// 		min(wall->p2.y + cr->offs.y, wall->p1.y + cr->offs.y) + abs(wall->p2.y - wall->p1.y) / 2, 0xffffff, txt);
+// 		wall = wall->next;
+// 	}
+// 	free(txt);
+// }
 
 void			redraw(t_core *cr)
 {

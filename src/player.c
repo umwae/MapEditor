@@ -155,19 +155,19 @@ void			record_player(t_core *cr, int fd)
 	free(text);
 }
 
-void			load_player(t_core *cr, char **line)
+void			load_player(t_core *cr)
 {
 	char		**parr;
 	int			fd;
+	char		*line;
 
-	line = NULL;
 	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
       reopen_10_times(&fd);
-	while (get_next_line(fd, line) > 0)
+	while (get_next_line(fd, &line) > 0)
 	{
-		if (*line[0] == 'p')
+		if (line[0] == 'p')
 		{
-			parr = ft_strsplit(*line, '|');
+			parr = ft_strsplit(line, '|');
 			cr->player.fcoord.x = ft_atof(parr[1]) * cr->zoom / UNIT_SIZE;
 			cr->player.fcoord.y = ft_atof(ft_strchr(parr[1], ' ') + 1) * cr->zoom / UNIT_SIZE;
 			cr->player.sec = ft_atoi(parr[2]);

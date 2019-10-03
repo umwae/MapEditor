@@ -40,14 +40,14 @@ int		check_bounds(int x, int y)
 
 void	err_ex(int pr)
 {
-	char *jj;
+	// char *jj;
 
 	if (pr == 0)
 		ft_putstr("Error: memory allocation failure\n");
 	else if (pr == 1)
 	{
 		ft_putstr("Error: unexpected GNL data\n");
-		free(jj);
+		// free(jj);
 	}
 	exit(1);
 }

@@ -300,7 +300,7 @@ void							spot_sector_around(t_core *cr, t_obj *obj);
 void							new_sector(t_core *cr);
 void							is_there_color(t_core *cr, t_wall *wall, int color, int pr2);
 void 							restore_sec_id_v2(t_core *cr);
-void							load_player(t_core *cr, char **line);
+void							load_player(t_core *cr);
 void							draw_objects(t_core *cr);
 void							draw_objects_text(t_core *cr);
 void							add_object(t_core *cr, int x, int y);
@@ -336,4 +336,7 @@ void							del_last_sector(t_core *cr);
 void							select_wall_wrap(void *td, int x, int y);
 void							reopen_10_times(int *fd);
 
+void     						process_walls(t_core *cr, char **pts, char **prt, int secnum);
+void							load_doors(t_core *cr);
+void							load_finish(t_core *cr);
 #endif

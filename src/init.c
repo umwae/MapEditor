@@ -32,17 +32,10 @@ void				init(t_core *cr)
 	load_gui(cr);
 	cr->inst_func = draw_wall;
 	cr->highlight = 1;
-	cr->sec_num = 0;
-	cr->mpsw = 0;
 	cr->offs.x = WIN_WIDTH / 2;
 	cr->offs.y = WIN_HIGHT / 2;
 	cr->test = -1;
 	cr->zoom = 20;
-	cr->ctrl_button = 0;
-	cr->player.fcoord.x = 0;
-	cr->player.fcoord.y = 0;
-	cr->player.sec = 0;
-	cr->player.angle = 0;
 	cr->searchtype = 1;
 	img_new(cr);
 	redraw(cr);

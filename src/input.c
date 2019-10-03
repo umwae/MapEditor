@@ -28,12 +28,6 @@ int     find_rep_symb(char *line, char symb, int num)
   return (p - line);
 }
 
-static void     delete_wlist(t_core *cr)
-{
-  while (cr->wlist)
-    erase_by_id(cr, 0);
-}
-
 static int      check_dups(t_core *cr, t_coord inp1, t_coord inp2)
 {
   t_wall  *wall;
@@ -72,7 +66,7 @@ static void     set_sectors(t_core *cr, t_coord inp1, t_coord inp2, int secnum)
     }
 }
 
-static void     process_walls(t_core *cr, char **pts, char **prt, int secnum)
+void     process_walls(t_core *cr, char **pts, char **prt, int secnum)
 {
   t_coord inp1;
   t_coord inp2;
@@ -90,36 +84,40 @@ static void     process_walls(t_core *cr, char **pts, char **prt, int secnum)
     num = ft_atoi(pts[i]);
     if ((fd2 = open(SAVEPATH, O_RDONLY)) == -1)
       reopen_10_times(&fd2);
+    printf(">>>>>>>>>>444>>>>>>>>>>> %d\n", fd2);
     j = 0;
     while (j++ <= num)
     {
       if (get_next_line(fd2, &line) <= 0)
         err_ex(1);
+      // printf(">>>>>>>>>>11>>>>>>>>>>> %s\n", line);
       if (j < num + 1)
         free(line);
     }
     v = ft_strsplit(line, ' ');
     free(line);
-	inp1.x = ft_atof(v[2]) * cr->zoom / UNIT_SIZE;
-	inp1.y = ft_atof(v[1]) * cr->zoom / UNIT_SIZE;
+	  inp1.x = ft_atof(v[2]) * cr->zoom / UNIT_SIZE;
+	  inp1.y = ft_atof(v[1]) * cr->zoom / UNIT_SIZE;
     ft_arrfree(&v, 3);
     num = ft_atoi(pts[i + 1]);
     // close (fd2);
     if ((fd2 = open("./maps/testmap", O_RDONLY)) == -1)
       reopen_10_times(&fd2);
+    printf(">>>>>>>>>>555>>>>>>>>>>> %d\n", fd2);
     j = 0;
     while (j++ <= num)
     {
       if (get_next_line(fd2, &line) <= 0)
         err_ex(1);
+      // printf(">>>>>>>>>22>>>>>>>>>>>> %s\n", line);
       if (j < num + 1)
         free(line);
     }
     v = ft_strsplit(line, ' ');
     free(line);
     // close (fd2);
-	inp2.x = ft_atof(v[2]) * cr->zoom / UNIT_SIZE;
-	inp2.y = ft_atof(v[1]) * cr->zoom / UNIT_SIZE;
+	  inp2.x = ft_atof(v[2]) * cr->zoom / UNIT_SIZE;
+	  inp2.y = ft_atof(v[1]) * cr->zoom / UNIT_SIZE;
     ft_arrfree(&v, 3);
     if (check_dups(cr, inp1, inp2) == 0)
     {
@@ -136,7 +134,7 @@ static void     process_walls(t_core *cr, char **pts, char **prt, int secnum)
   }
 }
 
-static void		load_doors(t_core *cr)
+void		load_doors(t_core *cr)
 {
 	int			fd;
 	char		*line;
@@ -154,7 +152,7 @@ static void		load_doors(t_core *cr)
 	return ;
 }
 
-static void		load_finish(t_core *cr)
+void		load_finish(t_core *cr)
 {
 	int			fd;
 	char		*line;
@@ -172,88 +170,25 @@ static void		load_finish(t_core *cr)
 	return ;
 }
 
-void            load_map(t_core *cr)
-{
-  int   fd;
-  char  *line = NULL;
-	int		i;
-  char  **pts;
-  char  **vtx;
-  char  **por;
-  char  *tmp;
-  char	*p;
+// static void     debtest(t_core *cr)
+// {
+//   char  *line;
+//   int   fd;
 
-  // load_sec_list(cr);
-	//
-  tmp = ft_strnew(300);
-	cr->sec_num = 0;
-  delete_wlist(cr);
-	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
-      reopen_10_times(&fd);
-	// cr->mpsw = 0;
-	i = -1;
-	while (get_next_line(fd, &line) > 0)
-	{
-		if (line[0] == 's')
-		{
-			cr->sec_num++;
-      printf("SEC_NUM++\n");
-			if (i == -1)
-				i = 0;
-			// s|0.00 75.00|2 1 0 3|-1 -1 1 -1|
-			add_sec_list(cr);
-			pts = ft_strsplit(line, '|');
-      		// find_sec_list(cr, i)->floor = 99;
-			find_sec_list(cr, i)->floor = ft_atof(pts[1]);
-			find_sec_list(cr, i)->ceiling = ft_atof(ft_strchr(pts[1], ' ') + 1);
-			if (pts[4])
-      {
-        // for (size_t h = 0; pts[h]; h++)
-        // {
-        //   printf("pts4 %s\n", pts[h]);
-        // }
-        fflush(stdout);
-        find_sec_list(cr, i)->illum = ft_atof(pts[4]);
-      }
-      ft_strcat(tmp, pts[2]);
-      ft_strcat(tmp, " ");
-      cr->tms = ft_strsub(tmp, 0, ft_strchr(tmp, ' ') - tmp);
-      ft_strcat(tmp, cr->tms);
-      free(cr->tms);
-	    vtx = ft_strsplit(tmp, ' ');
-			ft_strclr(tmp);
-		//
-      ft_strcat(tmp, pts[3]);
-      ft_strcat(tmp, " ");
-      cr->tms = ft_strsub(tmp, 0, ft_strchr(tmp, ' ') - tmp);
-      ft_strcat(tmp, cr->tms);
-      free(cr->tms);
-	    por = ft_strsplit(tmp, ' ');
-			ft_strclr(tmp);
-      //
-      process_walls(cr, vtx, por, i);
-
-      ft_arrfree(&vtx, ft_arrlen(vtx));
-      ft_arrfree(&por, ft_arrlen(por));
-      ft_arrfree(&pts, ft_arrlen(pts));
-			i++;
-		}
-		free(line);
-	}
-  free(line);
-  // load_walls(cr, line, fd);
-	// load_sectors(cr, line, fd);
-  // load_portals(cr, line, fd);
-  load_sec_info(cr);
-  while (*cr->olist)
-  del_object(cr, 0);
-  load_objects(cr);
-  load_player(cr, &line);
-  iter_wall(cr, -1, -1, &count_sectors);
-  iter_wall(cr, -1, -1, &redraw_color);
-  load_doors(cr);
-  load_finish(cr);
-	// free(line);
-	close(fd);
-  free(tmp);
-}
+//   fd = open("./maps/testmap", O_RDONLY);
+//   while (get_next_line(fd, &line) > 0)
+// 	{
+//     printf("%s\n", line);
+//     free(line);
+//   }
+//   close(fd);
+//   free(line);
+//   printf("--------------------------------------------\n");
+//   fd = open("./maps/testmap", O_RDONLY);
+//   while (get_next_line(fd, &line) > 0)
+// 	{
+//     printf("%s\n", line);
+//     free(line);
+//   }
+//   free(line);
+// }

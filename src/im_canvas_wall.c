@@ -40,7 +40,7 @@ static void		display_coords(t_core *cr, char *text, t_wall *wall, t_coord xy)
 	ft_strclr(text);
 }
 
-static void		display_texture(t_core *cr, char *text, t_st *scn, t_coord xy)
+static void		display_texture(t_core *cr, char *text, t_st *scn)
 {
 	ft_strcat(text, " [ ");
 	ft_strcat(text, cr->tms = ft_itoa(scn->s));
@@ -77,12 +77,12 @@ void			info_menu(t_core *cr, t_wall *wall)
 	draw_rectangle(cr, xy, ab, MENU_COLOR);
 	display_coords(cr, text, wall, xy);
 	display_arrows(cr, xy.x, I_MENU_YLEN / 3 + 10);
-	display_texture(cr, text, &wall->sectors[0], xy);
+	display_texture(cr, text, &wall->sectors[0]);
 	mlx_string_put(cr->mlx, cr->win, xy.x + I_MENU_XLEN / 5, \
 	I_MENU_YLEN / 3 + 10, 0, text);
 	ft_strclr(text);
 	display_arrows(cr, xy.x, I_MENU_YLEN / 3 + 10 + ICON_SIZE);
-	display_texture(cr, text, &wall->sectors[1], xy);
+	display_texture(cr, text, &wall->sectors[1]);
 	mlx_string_put(cr->mlx, cr->win, xy.x + I_MENU_XLEN / 5, \
 	I_MENU_YLEN / 3 + 10 + ICON_SIZE, 0, text);
 	free(text);

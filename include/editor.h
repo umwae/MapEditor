@@ -230,6 +230,9 @@ typedef struct		s_core
 	int						do_use_inst;
 	int						vt[2];
 	char					*tms;
+	t_coord					p3;
+	t_coord					rpoint;
+	t_coord					rstart;
 
 }									t_core;
 
@@ -339,4 +342,17 @@ void							reopen_10_times(int *fd);
 void     						process_walls(t_core *cr, char **pts, char **prt, int secnum);
 void							load_doors(t_core *cr);
 void							load_finish(t_core *cr);
+int								check_dups(t_core *cr, t_coord inp1, t_coord inp2);
+void							set_sectors(t_core *cr, t_coord inp1, t_coord inp2, int secnum);
+void							restore_obj_color(t_core *cr);
+int								check_vt_dups(t_core *cr, float	x, float y);
+void							record_sectors(t_core *cr, int fd);
+void							choose_direction(t_core *cr, t_fcoord *cw, t_wall *start, int secid);
+int								find_next_wall(t_core *cr, t_fcoord *cw, int prev, int secid);
+void							find_wall_by_xy(t_core *cr, t_coord inp1, t_coord inp2);
+void							set_textures(t_core *cr, t_wall *wall, int texture, int secid);
+int								find_w_id(t_core *cr);
+void							get_last_sec(t_core *cr, t_wall *wall, int idref, int pr2);
+int								does_sec_id_exist(t_core *cr, int idref);
+void							sec_id_replace(t_core *cr, t_wall *wall, int idold, int idnew);
 #endif

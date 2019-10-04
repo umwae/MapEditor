@@ -17,9 +17,12 @@
 
 int					is_near_wall(t_core *cr, t_wall *wall, int x, int y)
 {
-	if (x < min(wall->p1.x + cr->offs.x, wall->p2.x + cr->offs.x) - SELECT_PADDING || \
-	x > max(wall->p1.x + cr->offs.x, wall->p2.x + cr->offs.x) + SELECT_PADDING || \
-	y < min(wall->p1.y + cr->offs.y, wall->p2.y + cr->offs.y) - SELECT_PADDING || \
+	if (x < min(wall->p1.x + cr->offs.x, wall->p2.x + cr->offs.x) \
+											- SELECT_PADDING || \
+	x > max(wall->p1.x + cr->offs.x, wall->p2.x + cr->offs.x) \
+											+ SELECT_PADDING || \
+	y < min(wall->p1.y + cr->offs.y, wall->p2.y + cr->offs.y) \
+											- SELECT_PADDING || \
 	y > max(wall->p1.y + cr->offs.y, wall->p2.y + cr->offs.y) + SELECT_PADDING)
 		return (0);
 	return (1);
@@ -30,7 +33,6 @@ void				select_sector(void *td, int x, int y)
 	t_core 	*cr;
 	t_wall	*wall;
 	int		secmem;
-//
 	t_wall	*prev;
 
 	prev = NULL;
@@ -47,32 +49,12 @@ void				select_sector(void *td, int x, int y)
 	{
 		if (wall->color == SELECT_COLOR)
 		{
-			// if (wall->sectors[0].s != -1 && wall->sectors[0].s != secmem)
-			// {
-			// 	if (wall->sectors[1].s != -1 && wall->sectors[1].s != secmem)
-			// 	{
-			// 		secmem = wall->sectors[1].s;
-			// 		printf("SSSSSEC %d\n", secmem);
-			// 	}
-			// 	else if (wall->sectors[0].s != -1)
-			// 	{
-			// 		secmem = wall->sectors[0].s;
-			// 		printf("SSSSSEC %d\n", secmem);
-			// 	}
-			// }
-
 			if (!prev)
 			{
 				if (wall->sectors[0].s != -1)
-				{
-					// secmem = wall->sectors[0].s;
 					prev = wall;
-				}
 				else if (wall->sectors[1].s != -1)
-				{
-					// secmem = wall->sectors[0].s;
 					prev = wall;
-				}
 			}
 			else
 			{

@@ -35,7 +35,6 @@ int		main(int argc, char **argv)
 	if (!(cr = (t_core *)malloc(sizeof(t_core))))
 		err_ex(0);
 	ft_memset(cr, 0, sizeof(t_core));
-	// load_map(argv[1], cr);
 	init(cr);
 	hooks(cr);
 	(void)argc;

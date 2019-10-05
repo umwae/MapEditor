@@ -80,10 +80,10 @@ void		record_objects(t_core *cr, int fd)
 
 	obj = *cr->olist;
 	text = ft_strnew(100);
-	spot_sector_around(cr, obj);
 	ft_putstr_fd("\n", fd);
 	while (obj)
 	{
+		spot_sector_around(cr, obj);
 		record_new_object(cr, fd, text, obj);
 		obj = obj->next;
 	}

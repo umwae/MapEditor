@@ -73,10 +73,20 @@ static int		compare_walls(t_core *cr, t_wall *ref, t_wall *wall)
 
 static void		halfplane_part(t_core *cr, t_wall *ref)
 {
-	cr->rpoint.x = ref->p2.x;
-	cr->rpoint.y = ref->p2.y;
-	cr->rstart.x = ref->p1.x;
-	cr->rstart.y = ref->p1.y;
+	if (cr->wpoint == 2)
+	{
+		cr->rpoint.x = ref->p2.x;
+		cr->rpoint.y = ref->p2.y;
+		cr->rstart.x = ref->p1.x;
+		cr->rstart.y = ref->p1.y;
+	}
+	else
+	{
+		cr->rpoint.x = ref->p1.x;
+		cr->rpoint.y = ref->p1.y;
+		cr->rstart.x = ref->p2.x;
+		cr->rstart.y = ref->p2.y;
+	}
 }
 
 /*
@@ -91,10 +101,7 @@ void			halfplane(t_core *cr, t_wall *ref)
 	cr->idcurr = 0;
 	if (ref->color == cr->find_sec_color)
 		return ;
-	if (cr->wpoint == 2)
-		halfplane_part(cr, ref);
-	else
-		halfplane_part(cr, ref);
+	halfplane_part(cr, ref);
 	cr->wside = (cr->rpoint.x - cr->rstart.x) * \
 	(cr->click.y - (cr->rstart.y + cr->offs.y)) - \
 	(cr->rpoint.y - cr->rstart.y) * (cr->click.x - \

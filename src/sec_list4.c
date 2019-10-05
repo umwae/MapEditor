@@ -43,9 +43,6 @@ static void			find_w_id_part(t_core *cr, int *vt, t_coord *xy)
 
 int					find_w_id(t_core *cr)
 {
-	int		fd;
-	char	*line;
-	int		i;
 	t_coord	xy1;
 	t_coord	xy2;
 

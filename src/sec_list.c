@@ -16,9 +16,11 @@
 #include "math.h"
 #include <fcntl.h>
 
-static void			find_sec_in_save_part(t_core *cr, char **tmp, char ***pts, \
+static void			find_sec_in_save_part(t_core *cr, char ***pts, \
 char *line)
 {
+	char	**tmp;
+
 	tmp = ft_strsplit(line, '|');
 	cr->tms = ft_strjoin(" ", tmp[2]);
 	free(tmp[2]);
@@ -38,7 +40,6 @@ static char			**find_sec_in_save(t_core *cr, int secid)
 	int		fd;
 	char	*line;
 	char	**pts;
-	char	**tmp;
 	int		i;
 
 	i = -1;
@@ -52,7 +53,7 @@ static char			**find_sec_in_save(t_core *cr, int secid)
 			i++;
 			if (i == secid)
 			{
-				find_sec_in_save_part(cr, tmp, &pts, line);
+				find_sec_in_save_part(cr, &pts, line);
 				close(fd);
 				return (pts);
 			}
@@ -85,9 +86,12 @@ static void			load_textures(t_core *cr, char *str, int secid)
 	ft_arrfree(&pts, ft_arrlen(pts));
 }
 
-static void			load_sec_info_part(t_core *cr, char **pts, t_sec *sec, \
+static void			load_sec_info_part(t_core *cr, \
 char *line)
 {
+	char	**pts;
+	t_sec	*sec;
+
 	pts = ft_strsplit(line, '|');
 	sec = find_sec_list(cr, ft_atoi(pts[1]));
 	sec->ftex = ft_atoi(pts[2]);
@@ -103,8 +107,6 @@ void				load_sec_info(t_core *cr)
 {
 	int		fd;
 	char	*line;
-	t_sec	*sec;
-	char	**pts;
 	int		i;
 
 	i = 0;
@@ -114,7 +116,7 @@ void				load_sec_info(t_core *cr)
 	while (gnl_struct(&cr->gnlstr[9], fd, &line) > 0)
 	{
 		if (line[0] == 't')
-			load_sec_info_part(cr, pts, sec, line);
+			load_sec_info_part(cr, line);
 		free(line);
 	}
 	close(fd);

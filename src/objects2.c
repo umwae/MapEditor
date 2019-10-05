@@ -22,14 +22,18 @@ void		draw_objects_text(t_core *cr)
 	t_coord		xy;
 	char		*txt;
 
+	printf("000 --- %d\n", cr->show_obj_num);
+	if (cr->show_obj_num < 0)
+		return ;
 	obj = *cr->olist;
 	while (obj)
 	{
 		xy.x = obj->fcoord.x - OBJECT_SIZE / 2 + cr->offs.x;
 		xy.y = obj->fcoord.y - OBJECT_SIZE / 2 + cr->offs.y;
-		if (!(txt = malloc(sizeof(char) * 5)))
+		if (!(txt = ft_strnew(6)))
 			err_ex(0);
-		ft_strcpy(txt, ft_itoa(obj->type));
+		ft_strcpy(txt, (cr->tms = ft_itoa(obj->type)));
+		free(cr->tms);
 		mlx_string_put(cr->mlx, cr->win, xy.x, xy.y, 0xffffff, txt);
 		free(txt);
 		obj = obj->next;

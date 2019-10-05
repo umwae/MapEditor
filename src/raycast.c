@@ -104,7 +104,7 @@ static void		raycast(t_core *cr, t_obj *obj)
 		calc(cr, wall, ray, obj);
 		wall = wall->next;
 	}
-	if (cr->secmem[0] != -1 || cr->secmem[1] != -1)
+	if (obj->isplayer && (cr->secmem[0] != -1 || cr->secmem[1] != -1))
 	{
 		cr->vs.x0 = obj->fcoord.x + cr->offs.x;
 		cr->vs.y0 = obj->fcoord.y + cr->offs.y;

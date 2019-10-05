@@ -31,8 +31,10 @@ static void	restore_obj_id(t_core *cr)
 	}
 }
 
-static void	del_object_part(t_core *cr, int idref, t_obj *pr, t_obj *obj)
+static void	del_object_part(t_core *cr, int idref, t_obj *pr)
 {
+	t_obj	*obj;
+
 	if (!pr->next)
 		return ;
 	obj = pr->next;
@@ -51,7 +53,6 @@ static void	del_object_part(t_core *cr, int idref, t_obj *pr, t_obj *obj)
 void		del_object(t_core *cr, int idref)
 {
 	t_obj	*pr;
-	t_obj	*obj;
 
 	pr = *cr->olist;
 	if (!pr)
@@ -66,7 +67,7 @@ void		del_object(t_core *cr, int idref)
 	}
 	while (pr)
 	{
-		del_object_part(cr, idref, pr, obj);
+		del_object_part(cr, idref, pr);
 		pr = pr->next;
 	}
 }

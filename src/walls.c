@@ -15,111 +15,17 @@
 #include "stdlib.h"
 #include "math.h"
 
-t_wall			*get_last_wall(t_core *cr)
+static void				add_first_wall(t_core *cr, int *i, t_wall **wall)
 {
-	t_wall		*wall;
-
-	wall = cr->wlist;
-	while (wall->next)
-		wall = wall->next;
-	return (wall);
+	if (!(cr->wlist = (t_wall *)malloc(sizeof(t_wall))))
+		err_ex(0);
+	*wall = cr->wlist;
+	cr->wlist->next = NULL;
+	*i = 0;
 }
 
-void			iter_wall(t_core *cr, int pr1, int pr2, void (*f)(t_core *, t_wall *, int, int))//Переписать на void* типы
+static void				add_wall_attributes(t_core *cr, int i, t_wall *wall)
 {
-		t_wall		*wall;
-
-		wall = cr->wlist;
-		if (!wall)
-			return ;
-		while (wall)
-		{
-			(*f)(cr, wall, pr1, pr2);
-			wall = wall->next;
-		}
-}
-
-t_wall				*find_by_index(t_core *cr, int index)
-{
-	t_wall		*wall;
-
-	wall = cr->wlist;
-	while (wall && index--)
-		wall = wall->next;
-	return (wall);
-}
-
-void					magnet(t_core *cr, int *x, int *y, int check_start)//How do they work???
-{
-	t_wall		*wall;
-	float		dist;
-	int			closest_x;
-	int			closest_y;
-	float		min_dist;
-
-	closest_x = *x;
-	closest_y = *y;
-	min_dist = MAGNET_RADIUS;
-	wall = cr->wlist;
-	if (!wall)
-		return ;
-	while (wall)
-	{
-		if ((dist = calc_dist(*x + cr->offs.x, *y + cr->offs.y, wall->p1.x + cr->offs.x * 2, wall->p1.y + cr->offs.y * 2)) <= min_dist)
-		{
-			if (((wall->p1.x + cr->offs.x == cr->vs.mem_x && wall->p1.y + cr->offs.y == cr->vs.mem_y) || \
-			(wall->p2.x + cr->offs.x == cr->vs.mem_x && wall->p2.y + cr->offs.y == cr->vs.mem_y)) && check_start == 1)
-				return ;
-			min_dist = dist;
-			closest_x = wall->p1.x;
-			closest_y = wall->p1.y;
-		}
-		if ((dist = calc_dist(*x + cr->offs.x, *y + cr->offs.y, wall->p2.x + cr->offs.x * 2, wall->p2.y + cr->offs.y * 2)) <= min_dist)
-		{
-			if (((wall->p1.x + cr->offs.x == cr->vs.mem_x && wall->p1.y + cr->offs.y == cr->vs.mem_y) || \
-			(wall->p2.x + cr->offs.x  == cr->vs.mem_x && wall->p2.y + cr->offs.y == cr->vs.mem_y)) && check_start == 1)
-				return ;
-			min_dist = dist;
-			closest_x = wall->p2.x;
-			closest_y = wall->p2.y;
-		}
-		wall = wall->next;
-	}
-	if (min_dist == MAGNET_RADIUS)
-		return ;
-	*x = closest_x + cr->offs.x;
-	*y = closest_y + cr->offs.y;
-}
-
-void					add_wall(t_core *cr)
-{
-	t_wall	*wall;
-	int			i;
-
-	if (cr->vs.x1 == cr->vs.mem_x && cr->vs.y1 == cr->vs.mem_y)
-		return ;
-	i = 1;
-	wall = cr->wlist;
-	if (!wall)
-	{
-		if (!(cr->wlist = (t_wall *)malloc(sizeof(t_wall))))
-			err_ex(0);
-		wall = cr->wlist;
-		cr->wlist->next = NULL;
-		i = 0;
-	}
-	else
-	{
-		while (wall->next)
-		{
-			wall = wall->next;
-			i++;
-		}
-		if (!(wall->next = (t_wall *)malloc(sizeof(t_wall))))
-			err_ex(0);
-		wall = wall->next;
-		wall->next = NULL;
-	}
 	wall->p1.x = cr->vs.mem_x;
 	wall->p1.y = cr->vs.mem_y;
 	wall->p2.x = cr->vs.x1;
@@ -132,6 +38,32 @@ void					add_wall(t_core *cr)
 	wall->sectors[0].t = ST_TEXTURE;
 	wall->sectors[1].t = ST_TEXTURE;
 	wall->isportal = cr->mpsw;
+}
+
+void					add_wall(t_core *cr)
+{
+	t_wall		*wall;
+	int			i;
+
+	if (cr->vs.x1 == cr->vs.mem_x && cr->vs.y1 == cr->vs.mem_y)
+		return ;
+	i = 1;
+	wall = cr->wlist;
+	if (!wall)
+		add_first_wall(cr, &i, &wall);
+	else
+	{
+		while (wall->next)
+		{
+			wall = wall->next;
+			i++;
+		}
+		if (!(wall->next = (t_wall *)malloc(sizeof(t_wall))))
+			err_ex(0);
+		wall = wall->next;
+		wall->next = NULL;
+	}
+	add_wall_attributes(cr, i, wall);
 	cr->mpsw = 0;
 	iter_wall(cr, 0, 0, &redraw_color);
 }

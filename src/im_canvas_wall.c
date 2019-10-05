@@ -28,7 +28,6 @@ static void		display_coords(t_core *cr, char *text, t_wall *wall, t_coord xy)
 	mlx_string_put(cr->mlx, cr->win, xy.x + I_MENU_XLEN / 10, \
 	I_MENU_YLEN / 10, 0, text);
 	ft_strclr(text);
-
 	ft_strcat(text, "P2(y, x):    ");
 	ft_strcat(text, tmp = ft_itoa(wall->p2.y));
 	free(tmp);

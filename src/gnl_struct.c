@@ -13,7 +13,7 @@
 #include "editor.h"
 #include "stdlib.h"
 
-void prepare_gnlstr(char **str)
+void					prepare_gnlstr(char **str)
 {
 	if (*str)
 	{
@@ -51,7 +51,7 @@ static int				readbuf(char *buf, char **str, const int fd)
 	buf[bytesnumb] = '\0';
 	tmp = *str;
 	*str = ft_strjoin(*str, buf);
-	// ft_strdel(&tmp);
+	ft_strdel(&tmp);
 	return (bytesnumb);
 }
 

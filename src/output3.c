@@ -30,11 +30,9 @@ void			record_sectors(t_core *cr, int fd)
 	char		*txt;
 	char		*tmp;
 	char		*conn;
-	//
 	char		*wtx;
 	int			doprint_wtx = 0;
 	t_wall		*wtmp;
-	//
 	int			i;
 	t_fcoord	cw;
 	int			curr;
@@ -45,7 +43,6 @@ void			record_sectors(t_core *cr, int fd)
 	conn = ft_strnew(300);
 	wtx = ft_strnew(3000);
 	iter_wall(cr, 0, -1, &find_any_wall_in_sec);
-	// curr = cr->idcurr;
 	while (i < cr->sec_num && cr->idcurr != -1)
 	{
 		sec = find_sec_list(cr, i);

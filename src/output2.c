@@ -49,9 +49,10 @@ int			find_vt_id(t_core *cr, float x, float y)
 	return (0);
 }
 
-static void	choose_direction_p2(t_core *cr, t_fcoord *cw, t_wall *start, \
-int side)
+static void	choose_direction_p2(t_core *cr, t_fcoord *cw, t_wall *start)
 {
+	int			side;
+
 	if ((side = (start->p1.x - start->p2.x) * (cr->p3.y - start->p2.y) - \
 	(start->p1.y - start->p2.y) * (cr->p3.x - start->p2.x)) > 0)
 	{
@@ -69,7 +70,6 @@ void		choose_direction(t_core *cr, t_fcoord *cw, t_wall *start, \
 int secid)
 {
 	t_wall		*wall;
-	int			side;
 
 	wall = cr->wlist;
 	if (!wall)
@@ -92,7 +92,7 @@ int secid)
 		}
 		wall = wall->next;
 	}
-	choose_direction_p2(cr, cw, start, side);
+	choose_direction_p2(cr, cw, start);
 }
 
 static void	find_next_wall_part(t_core *cr, t_fcoord *cw, t_coord *p)

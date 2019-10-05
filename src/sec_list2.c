@@ -50,8 +50,10 @@ void		sec_list_id_replace(t_core *cr, int new, int old)
 	}
 }
 
-void		del_sec_list_p2(t_sec *pr, t_sec *sec, int idref)
+static void		del_sec_list_p2(t_sec *pr, int idref)
 {
+	t_sec	*sec;
+
 	while (pr)
 	{
 		if (!pr->next)
@@ -72,7 +74,6 @@ void		del_sec_list_p2(t_sec *pr, t_sec *sec, int idref)
 void		del_sec_list(t_core *cr, int idref)
 {
 	t_sec	*pr;
-	t_sec	*sec;
 
 	pr = *cr->slist;
 	if (!pr)
@@ -83,7 +84,7 @@ void		del_sec_list(t_core *cr, int idref)
 		free(pr);
 		return ;
 	}
-	del_sec_list_p2(pr, sec, idref);
+	del_sec_list_p2(pr, idref);
 }
 
 t_sec		*find_sec_list(t_core *cr, int idref)

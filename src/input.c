@@ -88,8 +88,6 @@ static void				load_sectors(t_core *cr, int *i)
 void					load_map(t_core *cr)
 {
 	int		i;
-	char	*tmp;
-	int		fd;
 
 	i = -1;
 	cr->sec_num = 0;

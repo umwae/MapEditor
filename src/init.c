@@ -16,6 +16,15 @@
 #include <time.h>
 #include <stdio.h>
 
+static void			prepare_gnlstr_init(t_core *cr)
+{
+	int	i;
+
+	i = FD_STORAGE_NUM;
+	while (--i > -1)
+		cr->gnlstr[i] = NULL;
+}
+
 void				init(t_core *cr)
 {
 	if (!(cr->mlx = mlx_init()))
@@ -37,10 +46,8 @@ void				init(t_core *cr)
 	cr->test = -1;
 	cr->zoom = 20;
 	cr->searchtype = 1;
-	for (size_t i = 0; i <= 10; i++)
-	{
-		cr->gnlstr[i] = NULL;
-	}
+	cr->show_obj_num = 1;
+	prepare_gnlstr_init(cr);
 	img_new(cr);
 	redraw(cr);
 }

@@ -18,7 +18,6 @@
 static void			choose_instrument_p2(t_core *cr, int x, int y)
 {
 	(void)x;
-
 	if (y > cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 2 && \
 	y < cr->inst_panel.y + cr->inst_panel_size.y / INST_NUM * 3)
 	{

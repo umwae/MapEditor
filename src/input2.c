@@ -16,11 +16,12 @@
 #include "stdlib.h"
 #include "math.h"
 
-static void			calc_inp(t_core *cr, int num, char **v, t_coord *inp)
+static void			calc_inp(t_core *cr, int num, t_coord *inp)
 {
 	int			fd;
 	char		*line;
 	int			j;
+	char		**v;
 
 	if ((fd = open(SAVEPATH, O_RDONLY)) == -1)
 		reopen_10_times(&fd);
@@ -49,15 +50,14 @@ void				process_walls(t_core *cr, char **pts, char **prt, int snum)
 	t_coord		inp2;
 	int			i;
 	int			num;
-	char		**v;
 
 	i = 0;
 	while (pts[i + 1])
 	{
 		num = ft_atoi(pts[i]);
-		calc_inp(cr, num, v, &inp1);
+		calc_inp(cr, num, &inp1);
 		num = ft_atoi(pts[i + 1]);
-		calc_inp(cr, num, v, &inp2);
+		calc_inp(cr, num, &inp2);
 		if (check_dups(cr, inp1, inp2) == 0)
 		{
 			cr->vs.mem_x = inp1.x;

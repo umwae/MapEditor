@@ -16,7 +16,7 @@
 
 void			grid_magnet(t_core *cr, int *x, int *y, int check_start)
 {
-	(void)check_start;//Дописать
+	(void)check_start;
 	*x = (*x - (cr->offs.x) % cr->zoom) / cr->zoom * cr->zoom + \
 	(cr->offs.x) % cr->zoom;
 	*y = (*y - (cr->offs.y) % cr->zoom) / cr->zoom * cr->zoom + \

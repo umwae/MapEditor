@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utilities.c                                        :+:      :+:    :+:   */
+/*   walls.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsteuber <jsteuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 15:54:47 by jsteuber          #+#    #+#             */
-/*   Updated: 2019/09/24 20:53:21 by jsteuber         ###   ########.fr       */
+/*   Updated: 2019/09/16 20:37:06 by jsteuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,43 +14,38 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "math.h"
-#include <fcntl.h>
 
-void		err_ex(int pr)
+t_wall			*get_last_wall(t_core *cr)
 {
-	if (pr == 0)
-		ft_putstr("Error: memory allocation failure\n");
-	else if (pr == 1)
-		ft_putstr("Error: unexpected GNL data\n");
-	exit(1);
+	t_wall		*wall;
+
+	wall = cr->wlist;
+	while (wall->next)
+		wall = wall->next;
+	return (wall);
 }
 
-void		reopen_10_times(int *fd)
+void			iter_wall(t_core *cr, int pr1, int pr2, \
+void (*f)(t_core *, t_wall *, int, int))
 {
-	int		i;
+	t_wall		*wall;
 
-	i = 10;
-	while (i-- && (*fd = open(SAVEPATH, O_RDONLY)) < 0)
+	wall = cr->wlist;
+	if (!wall)
+		return ;
+	while (wall)
 	{
+		(*f)(cr, wall, pr1, pr2);
+		wall = wall->next;
 	}
-	if (*fd < 0)
-		err_ex(1);
 }
 
-int			check_bounds(int x, int y)
+t_wall			*find_by_index(t_core *cr, int index)
 {
-	if (x >= WIN_WIDTH || y >= WIN_HIGHT || \
-		x < 0 || y < 0)
-		return (1);
-	return (0);
-}
+	t_wall		*wall;
 
-int			min(int a, int b)
-{
-	return (a < b ? a : b);
-}
-
-int			max(int a, int b)
-{
-	return (a > b ? a : b);
+	wall = cr->wlist;
+	while (wall && index--)
+		wall = wall->next;
+	return (wall);
 }

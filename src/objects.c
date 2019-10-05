@@ -47,8 +47,10 @@ void			add_object(t_core *cr, int x, int y)
 	*cr->olist = obj;
 }
 
-static void		load_new_object(t_core *cr, t_obj *obj, char **oarr)
+static void		load_new_object(t_core *cr, char **oarr)
 {
+	t_obj		*obj;
+
 	if (!(obj = (t_obj *)malloc(sizeof(t_obj))))
 		err_ex(0);
 	obj->sec = ft_atoi(oarr[1]);
@@ -66,7 +68,6 @@ void			load_objects(t_core *cr)
 {
 	char		**oarr;
 	int			fd;
-	t_obj		*obj;
 	char		*line;
 
 	fd = open("./maps/testmap", O_RDONLY);
@@ -76,7 +77,7 @@ void			load_objects(t_core *cr)
 		if (line[0] == 'o')
 		{
 			oarr = ft_strsplit(line, '|');
-			load_new_object(cr, obj, oarr);
+			load_new_object(cr, oarr);
 			ft_arrfree(&oarr, ft_arrlen(oarr));
 		}
 		free(line);

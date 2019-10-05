@@ -72,6 +72,7 @@ void			load_player(t_core *cr)
 														cr->zoom / UNIT_SIZE;
 			cr->player.sec = ft_atoi(parr[2]);
 			cr->player.angle = ft_atof(parr[3]);
+			cr->player.isplayer = 1;
 			close(fd);
 			return ;
 		}

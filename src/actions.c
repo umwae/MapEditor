@@ -42,6 +42,8 @@ static void	key_action_p2(int keycode, t_core *cr)
 	}
 	else if (keycode == 32)
 		del_last_sector(cr);
+	else if (keycode == 18)
+		cr->show_obj_num *= -1;
 }
 
 int			key_action(int keycode, t_core *cr)

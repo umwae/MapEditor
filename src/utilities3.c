@@ -16,41 +16,40 @@
 #include "math.h"
 #include <fcntl.h>
 
-void		err_ex(int pr)
+void		checkbox_fill(t_core *cr, t_coord xy, t_coord ab)
 {
-	if (pr == 0)
-		ft_putstr("Error: memory allocation failure\n");
-	else if (pr == 1)
-		ft_putstr("Error: unexpected GNL data\n");
-	exit(1);
+	xy.x = xy.x + ab.x * 0.1;
+	xy.y = xy.y + ab.y * 0.1;
+	ab.x *= 0.8;
+	ab.y *= 0.8;
+	draw_rectangle(cr, xy, ab, 0);
 }
 
-void		reopen_10_times(int *fd)
+void		draw_rectangle(t_core *cr, t_coord xy, t_coord ab, int color)
 {
-	int		i;
+	int		c_abx;
 
-	i = 10;
-	while (i-- && (*fd = open(SAVEPATH, O_RDONLY)) < 0)
+	while (ab.y--)
 	{
+		c_abx = ab.x;
+		while (c_abx--)
+		{
+			pxl_put_wrap(cr, xy.x + c_abx, xy.y + ab.y, color);
+		}
 	}
-	if (*fd < 0)
-		err_ex(1);
 }
 
-int			check_bounds(int x, int y)
+void		draw_rectangle_img_pxl(t_core *cr, t_coord xy, t_coord ab, \
+int color)
 {
-	if (x >= WIN_WIDTH || y >= WIN_HIGHT || \
-		x < 0 || y < 0)
-		return (1);
-	return (0);
-}
+	int		c_abx;
 
-int			min(int a, int b)
-{
-	return (a < b ? a : b);
-}
-
-int			max(int a, int b)
-{
-	return (a > b ? a : b);
+	while (ab.y--)
+	{
+		c_abx = ab.x;
+		while (c_abx--)
+		{
+			img_pxl(cr, xy.x + c_abx, xy.y + ab.y, color);
+		}
+	}
 }

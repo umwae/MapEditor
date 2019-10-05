@@ -74,6 +74,7 @@
 #define SAVEPATH "./maps/testmap"
 
 # define BUFF_SIZE 100
+# define FD_STORAGE_NUM 11
 
 typedef struct		s_coord
 {
@@ -142,6 +143,7 @@ typedef struct					s_obj
 	float							angle;
 	int								sec;
 	int								color;
+	int								isplayer;
 	void							*next;
 }									t_obj;
 
@@ -235,8 +237,9 @@ typedef struct		s_core
 	t_coord					p3;
 	t_coord					rpoint;
 	t_coord					rstart;
+	int						show_obj_num;
 
-	char					*gnlstr[11];
+	char					*gnlstr[FD_STORAGE_NUM];
 
 }									t_core;
 

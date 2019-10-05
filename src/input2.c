@@ -26,9 +26,10 @@ static void			calc_inp(t_core *cr, int num, char **v, t_coord *inp)
 		reopen_10_times(&fd);
 	printf(">>>>>>>>>>444>>>>>>>>>>> %d\n", fd);
 	j = 0;
+	prepare_gnlstr(&cr->gnlstr[1]);
 	while (j++ <= num)
 	{
-		if (get_next_line(fd, &line) <= 0)
+		if (gnl_struct(&cr->gnlstr[1], fd, &line) <= 0)
 			err_ex(1);
 		// printf(">>>>>>>>>>11>>>>>>>>>>> %s\n", line);
 		if (j < num + 1)
@@ -39,6 +40,7 @@ static void			calc_inp(t_core *cr, int num, char **v, t_coord *inp)
 	inp->x = ft_atof(v[2]) * cr->zoom / UNIT_SIZE;
 	inp->y = ft_atof(v[1]) * cr->zoom / UNIT_SIZE;
 	ft_arrfree(&v, ft_arrlen(v));
+	close(fd);
 }
 
 void				process_walls(t_core *cr, char **pts, char **prt, int snum)

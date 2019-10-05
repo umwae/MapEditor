@@ -73,6 +73,8 @@
 
 #define SAVEPATH "./maps/testmap"
 
+# define BUFF_SIZE 100
+
 typedef struct		s_coord
 {
 	int							x;
@@ -234,6 +236,8 @@ typedef struct		s_core
 	t_coord					rpoint;
 	t_coord					rstart;
 
+	char					*gnlstr[11];
+
 }									t_core;
 
 void							init(t_core		*cr);
@@ -288,7 +292,7 @@ void							load_map(t_core *cr);
 void							erase_by_id(t_core	*cr, int id);
 int    						find_rep_symb(char *line, char symb, int num);
 t_wall						*get_last_wall(t_core *cr);
-int								find_vt_id(float x, float y);
+int								find_vt_id(t_core *cr, float x, float y);
 void							count_sectors(t_core *cr, t_wall *wall, int pr1, int pr2);
 int								check_bounds(int x, int y);
 void							grid(t_core *cr);
@@ -355,4 +359,7 @@ int								find_w_id(t_core *cr);
 void							get_last_sec(t_core *cr, t_wall *wall, int idref, int pr2);
 int								does_sec_id_exist(t_core *cr, int idref);
 void							sec_id_replace(t_core *cr, t_wall *wall, int idold, int idnew);
+int								gnl_struct(char **gnlstr, const int fd, char **line);
+void							prepare_gnlstr(char **str);
+
 #endif

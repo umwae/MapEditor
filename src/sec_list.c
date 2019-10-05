@@ -44,7 +44,8 @@ static char			**find_sec_in_save(t_core *cr, int secid)
 	i = -1;
 	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
 		reopen_10_times(&fd);
-	while (get_next_line(fd, &line) > 0)
+	prepare_gnlstr(&cr->gnlstr[8]);
+	while (gnl_struct(&cr->gnlstr[8], fd, &line) > 0)
 	{
 		if (line[0] == 's')
 		{
@@ -52,12 +53,14 @@ static char			**find_sec_in_save(t_core *cr, int secid)
 			if (i == secid)
 			{
 				find_sec_in_save_part(cr, tmp, &pts, line);
+				close(fd);
 				return (pts);
 			}
 		}
 		free(line);
 	}
 	free(line);
+	close(fd);
 	return (NULL);
 }
 
@@ -107,11 +110,13 @@ void				load_sec_info(t_core *cr)
 	i = 0;
 	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
 		reopen_10_times(&fd);
-	while (get_next_line(fd, &line) > 0)
+	prepare_gnlstr(&cr->gnlstr[9]);
+	while (gnl_struct(&cr->gnlstr[9], fd, &line) > 0)
 	{
 		if (line[0] == 't')
 			load_sec_info_part(cr, pts, sec, line);
 		free(line);
 	}
+	close(fd);
 	free(line);
 }

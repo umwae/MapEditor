@@ -37,6 +37,10 @@ void				init(t_core *cr)
 	cr->test = -1;
 	cr->zoom = 20;
 	cr->searchtype = 1;
+	for (size_t i = 0; i <= 10; i++)
+	{
+		cr->gnlstr[i] = NULL;
+	}
 	img_new(cr);
 	redraw(cr);
 }

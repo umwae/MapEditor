@@ -25,9 +25,10 @@ static void			find_w_id_part(t_core *cr, int *vt, t_coord *xy)
 	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
 		reopen_10_times(&fd);
 	i = -1;
+	prepare_gnlstr(&cr->gnlstr[10]);
 	while (i < *vt)
 	{
-		if (get_next_line(fd, &line) < 0)
+		if (gnl_struct(&cr->gnlstr[10], fd, &line) < 0)
 			err_ex(1);
 		if (i + 1 < *vt)
 			free(line);
@@ -36,6 +37,7 @@ static void			find_w_id_part(t_core *cr, int *vt, t_coord *xy)
 	xy->y = ft_atof(line + 2) * cr->zoom / UNIT_SIZE;
 	xy->x = ft_atof(line + find_rep_symb(line, ' ', 2) + 1) * cr->zoom / \
 															UNIT_SIZE;
+	close(fd);
 	free(line);
 }
 

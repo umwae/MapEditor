@@ -27,7 +27,7 @@ BIN_PATH=./bin
 SRC= main.c image.c init.c show.c actions.c actions2.c actions3.c walls.c selection.c utilities.c \
 context_menu.c gui.c gui_func.c gui_func2.c sectors.c sectors2.c sectors3.c colors.c output.c output2.c output3.c input.c input2.c input3.c grid.c \
 objects.c objects2.c objects3.c player.c sec_list.c validation.c im_events_wall.c im_canvas_wall.c \
-im_canvas_obj.c im_events_obj.c im_canvas_sec.c im_events_sec.c raycast.c sec_list2.c sec_list3.c sec_list4.c
+im_canvas_obj.c im_events_obj.c im_canvas_sec.c im_events_sec.c raycast.c sec_list2.c sec_list3.c sec_list4.c gnl_struct.c
 OBJ:= $(addprefix $(BIN_PATH)/,$(SRC:.c=.o))
 
 .PHONY: all clean fclean re

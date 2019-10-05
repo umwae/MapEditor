@@ -133,6 +133,5 @@ void					add_wall(t_core *cr)
 	wall->sectors[1].t = ST_TEXTURE;
 	wall->isportal = cr->mpsw;
 	cr->mpsw = 0;
-	printf("w>>>%d %d\n", wall->sectors[0].t, wall->sectors[1].t);
 	iter_wall(cr, 0, 0, &redraw_color);
 }

@@ -16,7 +16,7 @@
 #include "stdlib.h"
 #include "math.h"
 
-int			find_vt_id(float x, float y)
+int			find_vt_id(t_core *cr, float x, float y)
 {
 	int		fd;
 	char	*line;
@@ -25,23 +25,27 @@ int			find_vt_id(float x, float y)
 	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
 		reopen_10_times(&fd);
 	i = 0;
-	while (get_next_line(fd, &line) == 1)
+	prepare_gnlstr(&cr->gnlstr[5]);
+	while (gnl_struct(&cr->gnlstr[5], fd, &line) == 1)
 	{
 		if (line[0] != 'v')
 		{
 			free(line);
+			close(fd);
 			return (0);
 		}
 		else if (ft_atof(line + 2) == y && \
 		ft_atof(line + find_rep_symb(line, ' ', 2) + 1) == x)
 		{
 			free(line);
+			close(fd);
 			return (i);
 		}
 		free(line);
 		i++;
 	}
 	free(line);
+	close(fd);
 	return (0);
 }
 

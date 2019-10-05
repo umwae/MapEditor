@@ -26,8 +26,6 @@ void		reopen_10_times(int *fd)
 	}
 	if (*fd < 0)
 		err_ex(1);
-	else
-		printf("REOPEN SUCCESS\n");
 }
 
 int		check_bounds(int x, int y)

@@ -78,12 +78,11 @@ void			record_sectors(t_core *cr, int fd)
 			{
 				wtmp = find_by_index(cr, curr);
 				//
-				ft_strcat(txt, (tmp = ft_itoa(find_vt_id(cw.x, cw.y))));
+				ft_strcat(txt, (tmp = ft_itoa(find_vt_id(cr, cw.x, cw.y))));
 				//
 				if (wtmp->sectors[0].t != -1 || wtmp->sectors[1].t != -1 || sec->floor != ST_FLOOR_HIGHT || sec->ceiling != ST_CEIL_HIGHT || \
 				sec->illum != ST_ILLUMINATION || sec->ftex != ST_FTEX || sec->ftex != ST_CTEX)
 					doprint_wtx = 1;
-				printf("%d %d \n", wtmp->sectors[0].t, wtmp->sectors[1].t);
 				ft_strcat(wtx, cr->tms = ft_itoa(wtmp->sectors[0].s == i ? wtmp->sectors[0].t : wtmp->sectors[1].t));
 				free(cr->tms);
 				//
@@ -133,7 +132,6 @@ void			record_sectors(t_core *cr, int fd)
 		ft_strclr(conn);
 		//
 		ft_strcat(wtx, "|");
-		printf("IIIII +++ %d\n", i);
 		i++;
 	}
 		free(txt);
@@ -142,7 +140,6 @@ void			record_sectors(t_core *cr, int fd)
 		//
 		if (i == cr->sec_num)
 		{
-			printf("i == cr->sec_num (%d)\n", cr->sec_num);
 			ft_putstr_fd(wtx, fd);
 			ft_putstr_fd("\n", fd);
 		}
@@ -156,16 +153,19 @@ int				check_vt_dups(t_core *cr, float	x, float y)
 
 	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
       reopen_10_times(&fd);
-	while (get_next_line(fd, &line) > 0)
+	prepare_gnlstr(&cr->gnlstr[6]);
+	while (gnl_struct(&cr->gnlstr[6], fd, &line) > 0)
 	{
 		if ((int)(ft_atof(line + 2) * cr->zoom / UNIT_SIZE) == y && \
 		(int)(ft_atof(line + find_rep_symb(line, ' ', 2) + 1) * cr->zoom / UNIT_SIZE) == x)
 		{
 			free(line);
+			close(fd);
 			return (1);
 		}
 		free(line);
 	}
 	free(line);
+	close(fd);
 	return (0);
 }

@@ -70,7 +70,8 @@ void			load_objects(t_core *cr)
 	char		*line;
 
 	fd = open("./maps/testmap", O_RDONLY);
-	while (get_next_line(fd, &line) > 0)
+	prepare_gnlstr(&cr->gnlstr[4]);
+	while (gnl_struct(&cr->gnlstr[4], fd, &line) > 0)
 	{
 		if (line[0] == 'o')
 		{

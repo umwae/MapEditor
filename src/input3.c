@@ -77,7 +77,8 @@ void				load_doors(t_core *cr)
 
 	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
 		reopen_10_times(&fd);
-	while (get_next_line(fd, &line) > 0)
+	prepare_gnlstr(&cr->gnlstr[2]);
+	while (gnl_struct(&cr->gnlstr[2], fd, &line) > 0)
 	{
 		if (line[0] == 'd')
 			find_sec_list(cr, ft_atoi(line + 2))->isdoor = 1;
@@ -85,7 +86,6 @@ void				load_doors(t_core *cr)
 	}
 	close(fd);
 	free(line);
-	return ;
 }
 
 void				load_finish(t_core *cr)
@@ -95,7 +95,8 @@ void				load_finish(t_core *cr)
 
 	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
 		reopen_10_times(&fd);
-	while (get_next_line(fd, &line) > 0)
+	prepare_gnlstr(&cr->gnlstr[3]);
+	while (gnl_struct(&cr->gnlstr[3], fd, &line) > 0)
 	{
 		if (line[0] == 'f')
 			find_sec_list(cr, ft_atoi(line + 2))->isfinish = 1;
@@ -103,5 +104,4 @@ void				load_finish(t_core *cr)
 	}
 	close(fd);
 	free(line);
-	return ;
 }

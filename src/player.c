@@ -61,7 +61,8 @@ void			load_player(t_core *cr)
 
 	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
 		reopen_10_times(&fd);
-	while (get_next_line(fd, &line) > 0)
+	prepare_gnlstr(&cr->gnlstr[7]);
+	while (gnl_struct(&cr->gnlstr[7], fd, &line) > 0)
 	{
 		if (line[0] == 'p')
 		{

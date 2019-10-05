@@ -57,13 +57,17 @@ static void				str_parcing(t_core *cr, int *i, char *tmp, char *line)
 	ft_arrfree(&pts, ft_arrlen(pts));
 }
 
-static void				load_sectors(t_core *cr, int *i, int fd)
+static void				load_sectors(t_core *cr, int *i)
 {
 	char	*line;
 	char	*tmp;
+	int		fd;
 
+	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
+		reopen_10_times(&fd);
 	tmp = ft_strnew(400);
-	while (get_next_line(fd, &line) > 0)
+	prepare_gnlstr(&cr->gnlstr[0]);
+	while (gnl_struct(&cr->gnlstr[0], fd, &line) > 0)
 	{
 		if (line[0] == 's')
 		{
@@ -78,6 +82,7 @@ static void				load_sectors(t_core *cr, int *i, int fd)
 	}
 	free(line);
 	free(tmp);
+	close(fd);
 }
 
 void					load_map(t_core *cr)
@@ -87,12 +92,10 @@ void					load_map(t_core *cr)
 	int		fd;
 
 	i = -1;
-	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
-		reopen_10_times(&fd);
 	cr->sec_num = 0;
 	while (cr->wlist)
 		erase_by_id(cr, 0);
-	load_sectors(cr, &i, fd);
+	load_sectors(cr, &i);
 	load_sec_info(cr);
 	while (*cr->olist)
 		del_object(cr, 0);

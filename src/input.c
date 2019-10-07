@@ -11,10 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include <fcntl.h>
 #include "stdlib.h"
-#include "math.h"
 
 static void				process_pts(t_core *cr, char *tmp, char **pts, int i)
 {

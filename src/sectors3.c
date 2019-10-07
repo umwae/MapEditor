@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "math.h"
 
 void		restore_sec_id_v2(t_core *cr)
 {
@@ -27,7 +24,6 @@ void		restore_sec_id_v2(t_core *cr)
 	iter_wall(cr, i, -1, &get_last_sec);
 	while (i <= cr->idcurr)
 	{
-		fflush(stdout);
 		if ((does_sec_id_exist(cr, i) == 1))
 		{
 			scount++;

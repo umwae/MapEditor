@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
 #include "editor.h"
 
 static int	check_i_menu_bounds(t_core *cr, int x, int y)

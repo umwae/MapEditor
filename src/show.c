@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include "math.h"
-#include "stdlib.h"
 
 void			draw_nodes(t_core *cr, t_wall *wall, int pr1, int pr2)
 {

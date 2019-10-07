@@ -11,9 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include "stdlib.h"
-#include "math.h"
 
 static void	sec_info_menu_lvls(t_core *cr, t_sec *sec, char *text, t_coord xy)
 {

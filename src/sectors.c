@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include "stdlib.h"
 #include "math.h"
 
 static int		calc_angle(t_core *cr, t_wall *ref, t_coord *wp, int id)

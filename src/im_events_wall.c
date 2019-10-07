@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "math.h"
 
 void	check_wall_events(int x, int y, t_wall *wall)
 {

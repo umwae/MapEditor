@@ -11,10 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include <fcntl.h>
 #include "stdlib.h"
-#include "math.h"
 
 static void			calc_inp(t_core *cr, int num, t_coord *inp)
 {

@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include "stdlib.h"
 
 void			grid_magnet(t_core *cr, int *x, int *y, int check_start)
 {

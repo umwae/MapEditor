@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "math.h"
 
 void	new_sector(t_core *cr)
 {

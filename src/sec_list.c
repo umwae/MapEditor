@@ -11,10 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include "stdlib.h"
-#include "math.h"
-#include <fcntl.h>
 
 static void			find_sec_in_save_part(t_core *cr, char ***pts, \
 char *line)

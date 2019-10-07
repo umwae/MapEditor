@@ -11,9 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include "stdlib.h"
-#include "math.h"
 
 void		switch_isportal(t_core *cr, t_wall *wall, int switchval, int pr2)
 {

@@ -426,7 +426,7 @@ int idold, int idnew);
 int								gnl_struct(char **gnlstr, const int fd, \
 char **line);
 void							prepare_gnlstr(char **str);
-void							record_sectors_part3(t_core *cr, int fd);
+void							record_sectors_part3(t_core *cr);
 void							record_sectors_partx(t_core *cr);
 void							find_any_wall_in_sec(t_core *cr, t_wall *wall, \
 int refid, int pr2);

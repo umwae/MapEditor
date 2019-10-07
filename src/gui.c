@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "math.h"
 
 static void			choose_instrument_p2(t_core *cr, int x, int y)
 {

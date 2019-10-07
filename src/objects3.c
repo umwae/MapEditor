@@ -11,10 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include "stdlib.h"
-#include "math.h"
-#include <fcntl.h>
 
 static void	restore_obj_id(t_core *cr)
 {

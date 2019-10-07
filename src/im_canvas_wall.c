@@ -11,9 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include "stdlib.h"
-#include "math.h"
 
 static void		display_coords(t_core *cr, char *text, t_wall *wall, t_coord xy)
 {

@@ -11,9 +11,12 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include "math.h"
-#include "stdlib.h"
+
+static int		legal_abs(int x)
+{
+	return (x >= 0 ? x : -x);
+}
 
 void			straight_line(t_core *cr, int *x, int *y)
 {
@@ -21,11 +24,11 @@ void			straight_line(t_core *cr, int *x, int *y)
 	int		dy;
 	float	m;
 
-	dx = abs(*x - cr->vs.mem_x);
-	dy = abs(*y - cr->vs.mem_y);
+	dx = legal_abs(*x - cr->vs.mem_x);
+	dy = legal_abs(*y - cr->vs.mem_y);
 	if (dx == 0 || dy == 0)
 		return ;
-	m = atan2(abs(dy), abs(dx));
+	m = atan2(legal_abs(dy), legal_abs(dx));
 	if (m > 0 && m < (PI_4 / 2) / 3)
 		*y = cr->vs.mem_y;
 	else if (m > (PI_4 / 2) / 3 * 2 && m < (PI_4 / 2))
@@ -52,8 +55,8 @@ void			bresenham(t_core *cr, void (*print_func)(void *, int, int, int))
 	int	e2;
 
 	copy_vals(cr);
-	cr->vs.dx = abs(cr->vs.x1 - cr->vs.x0_copy);
-	cr->vs.dy = abs(cr->vs.y1 - cr->vs.y0_copy);
+	cr->vs.dx = legal_abs(cr->vs.x1 - cr->vs.x0_copy);
+	cr->vs.dy = legal_abs(cr->vs.y1 - cr->vs.y0_copy);
 	sx = cr->vs.x0_copy < cr->vs.x1 ? 1 : -1;
 	sy = cr->vs.y0_copy < cr->vs.y1 ? 1 : -1;
 	cr->vs.err = (cr->vs.dx > cr->vs.dy ? cr->vs.dx : -cr->vs.dy) / 2;

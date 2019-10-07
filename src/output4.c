@@ -11,10 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include <fcntl.h>
 #include "stdlib.h"
-#include "math.h"
 
 static int	find_vt_id_part(int fd, char *line, int ret)
 {
@@ -76,7 +73,7 @@ void		record_sectors_partx(t_core *cr)
 	ft_strcat(cr->rs.wtx, " ");
 }
 
-void		record_sectors_part3(t_core *cr, int fd)
+void		record_sectors_part3(t_core *cr)
 {
 	cr->rs.wtmp = find_by_index(cr, cr->rs.curr);
 	ft_strcat(cr->rs.txt, \

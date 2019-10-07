@@ -11,10 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include "stdlib.h"
-#include "math.h"
-#include <fcntl.h>
 
 void		checkbox_fill(t_core *cr, t_coord xy, t_coord ab)
 {

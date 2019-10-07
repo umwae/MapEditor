@@ -11,10 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include "stdlib.h"
-#include "math.h"
-#include <fcntl.h>
 
 static void			find_w_id_part(t_core *cr, int *vt, t_coord *xy)
 {

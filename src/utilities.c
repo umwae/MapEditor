@@ -11,9 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include "stdlib.h"
-#include "math.h"
 #include <fcntl.h>
 
 void		err_ex(int pr)

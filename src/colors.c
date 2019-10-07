@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "math.h"
 
 void			find_multi_sel(t_core *cr)
 {

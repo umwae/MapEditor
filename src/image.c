@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 
 void		img_fill(void *idata, int color)
 {

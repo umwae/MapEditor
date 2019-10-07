@@ -11,10 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include "stdlib.h"
-#include "math.h"
-#include <fcntl.h>
 
 void		draw_objects_text(t_core *cr)
 {

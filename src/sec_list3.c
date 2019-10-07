@@ -11,10 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include "stdlib.h"
-#include "math.h"
-#include <fcntl.h>
 
 static void	print_sec_num_part(int i, t_wall *wall, int *am, t_coord *summ)
 {

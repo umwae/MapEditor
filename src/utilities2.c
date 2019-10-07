@@ -11,10 +11,8 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include "stdlib.h"
 #include "math.h"
-#include <fcntl.h>
 
 float		calc_dist(int x0, int y0, int x1, int y1)
 {

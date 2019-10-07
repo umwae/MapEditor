@@ -11,10 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include <fcntl.h>
 #include "stdlib.h"
-#include "math.h"
 
 int					find_rep_symb(char *line, char symb, int num)
 {

@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
 #include "editor.h"
 
 int			mouse_move(int x, int y, t_core *cr)

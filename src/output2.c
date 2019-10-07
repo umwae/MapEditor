@@ -11,10 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include <fcntl.h>
 #include "stdlib.h"
-#include "math.h"
 
 static void	choose_direction_p2(t_core *cr, t_fcoord *cw, t_wall *start)
 {

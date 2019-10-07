@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include "stdlib.h"
 #include "math.h"
 
 int					is_near_wall(t_core *cr, t_wall *wall, int x, int y)

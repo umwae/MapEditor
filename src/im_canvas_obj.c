@@ -11,9 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include "stdlib.h"
-#include "math.h"
 
 void			obj_info_menu(t_core *cr, t_obj *obj)
 {

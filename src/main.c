@@ -10,11 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
-#include <stdlib.h>
 #include "editor.h"
-#include <time.h>
-#include <stdio.h>
+#include "stdlib.h"
 
 int		hooks(t_core *cr)
 {

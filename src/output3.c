@@ -11,12 +11,9 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include <fcntl.h>
 #include "stdlib.h"
-#include "math.h"
 
-static void	record_sectors_part3_p2(t_core *cr, int fd)
+static void	record_sectors_part3_p2(t_core *cr)
 {
 	if (cr->rs.wtmp->sectors[0].s == cr->rs.i)
 	{
@@ -32,15 +29,15 @@ static void	record_sectors_part3_p2(t_core *cr, int fd)
 	}
 }
 
-static void	record_sectors_part2(t_core *cr, int fd)
+static void	record_sectors_part2(t_core *cr)
 {
 	choose_direction(cr, &cr->rs.cw, find_by_index(cr, cr->idcurr), cr->rs.i);
 	while ((cr->rs.curr = \
 			find_next_wall(cr, &cr->rs.cw, cr->rs.curr, cr->rs.i)) >= 0)
 	{
-		record_sectors_part3(cr, fd);
+		record_sectors_part3(cr);
 		if (cr->rs.wtmp->isportal == 1)
-			record_sectors_part3_p2(cr, fd);
+			record_sectors_part3_p2(cr);
 		else
 			cr->rs.conn = ft_strcat(cr->rs.conn, "-1");
 		if (cr->rs.curr == cr->idcurr)
@@ -79,7 +76,7 @@ static void	record_sectors_part(t_core *cr, int fd)
 	iter_wall(cr, cr->rs.i, -1, &find_any_wall_in_sec);
 	cr->rs.curr = cr->idcurr;
 	if (cr->idcurr != -1)
-		record_sectors_part2(cr, fd);
+		record_sectors_part2(cr);
 	ft_strcat(cr->rs.txt, "|");
 	ft_putstr_fd(cr->rs.txt, fd);
 	if (cr->rs.sec->illum > 0)

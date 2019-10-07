@@ -11,10 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include "stdlib.h"
 #include "math.h"
-#include <fcntl.h>
 
 static void		vert_line_case(t_core *cr, t_wall *wall, t_coord ray, \
 															t_obj *obj)

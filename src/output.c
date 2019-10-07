@@ -11,10 +11,8 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include <fcntl.h>
 #include "stdlib.h"
-#include "math.h"
 
 static void		record_walls_part(t_core *cr, char *line, int fd, t_coord *p)
 {

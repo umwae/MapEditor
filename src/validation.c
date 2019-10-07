@@ -11,10 +11,6 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "math.h"
-#include <fcntl.h>
 
 void	valid_illum_val(float *val)
 {

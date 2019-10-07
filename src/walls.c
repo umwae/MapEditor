@@ -11,9 +11,7 @@
 /* ************************************************************************** */
 
 #include "editor.h"
-#include "stdio.h"
 #include "stdlib.h"
-#include "math.h"
 
 static void				add_first_wall(t_core *cr, int *i, t_wall **wall)
 {

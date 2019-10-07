@@ -12,13 +12,11 @@
 
 NAME=Editor
 
-CFLAGS=#-Wall -Wextra -Werror
+CFLAGS=-Wall -Wextra -Werror
 FFLAGS=-framework OpenGL -framework AppKit
-#FFLAGS= -lXext -lX11 -lm
 
 SRC_PATH=./src
 INC_PATH=./include
-#MLX_PATH=./minilibx
 MLX_PATH=./minilibx_macos
 MLX_INC_PATH=/usr/X11/include
 FT_PATH=./libft

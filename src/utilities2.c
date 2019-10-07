@@ -56,8 +56,7 @@ char		*ft_ftoa(float num)
 	}
 	tmpm = ft_itoa(abs(i));
 	tmpa = ft_itoa(num);
-	if (!(str = ft_strnew(ft_strlen(tmpm) + ft_strlen(tmpa))))
-		return (NULL);
+	strnew_nullcheck(&str, ft_strlen(tmpm) + ft_strlen(tmpa));
 	ft_strcat(str, mem >= 0 ? "" : "-");
 	ft_ftoa_part(&str, num, tmpm, tmpa);
 	free(tmpm);

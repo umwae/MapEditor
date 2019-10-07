@@ -38,7 +38,7 @@ void		print_sec_num(t_core *cr)
 	t_coord		summ;
 	char		*txt;
 
-	txt = ft_strnew(10);
+	strnew_nullcheck(&txt, STR_SMALL);
 	i = 0;
 	while (i < cr->sec_num)
 	{

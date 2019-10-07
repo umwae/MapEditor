@@ -16,39 +16,6 @@
 #include "stdlib.h"
 #include "math.h"
 
-int			find_vt_id(t_core *cr, float x, float y)
-{
-	int		fd;
-	char	*line;
-	int		i;
-
-	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
-		reopen_10_times(&fd);
-	i = 0;
-	prepare_gnlstr(&cr->gnlstr[5]);
-	while (gnl_struct(&cr->gnlstr[5], fd, &line) == 1)
-	{
-		if (line[0] != 'v')
-		{
-			free(line);
-			close(fd);
-			return (0);
-		}
-		else if (ft_atof(line + 2) == y && \
-		ft_atof(line + find_rep_symb(line, ' ', 2) + 1) == x)
-		{
-			free(line);
-			close(fd);
-			return (i);
-		}
-		free(line);
-		i++;
-	}
-	free(line);
-	close(fd);
-	return (0);
-}
-
 static void	choose_direction_p2(t_core *cr, t_fcoord *cw, t_wall *start)
 {
 	int			side;
@@ -127,4 +94,28 @@ int			find_next_wall(t_core *cr, t_fcoord *cw, int prev, int secid)
 		wall = wall->next;
 	}
 	return (-1);
+}
+
+int			check_vt_dups(t_core *cr, float x, float y)
+{
+	int		fd;
+	char	*line;
+
+	open_gamesave(&fd);
+	prepare_gnlstr(&cr->gnlstr[6]);
+	while (gnl_struct(&cr->gnlstr[6], fd, &line) > 0)
+	{
+		if ((int)(ft_atof(line + 2) * cr->zoom / UNIT_SIZE) == y && \
+		(int)(ft_atof(line + find_rep_symb(line, ' ', 2) + 1) * \
+		cr->zoom / UNIT_SIZE) == x)
+		{
+			free(line);
+			close(fd);
+			return (1);
+		}
+		free(line);
+	}
+	free(line);
+	close(fd);
+	return (0);
 }

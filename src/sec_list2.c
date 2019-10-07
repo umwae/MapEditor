@@ -50,7 +50,7 @@ void		sec_list_id_replace(t_core *cr, int new, int old)
 	}
 }
 
-static void		del_sec_list_p2(t_sec *pr, int idref)
+static void	del_sec_list_p2(t_sec *pr, int idref)
 {
 	t_sec	*sec;
 

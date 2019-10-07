@@ -22,8 +22,7 @@ static void			find_w_id_part(t_core *cr, int *vt, t_coord *xy)
 	char	*line;
 	int		i;
 
-	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
-		reopen_10_times(&fd);
+	open_gamesave(&fd);
 	i = -1;
 	prepare_gnlstr(&cr->gnlstr[10]);
 	while (i < *vt)

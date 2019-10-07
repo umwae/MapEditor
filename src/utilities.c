@@ -22,19 +22,15 @@ void		err_ex(int pr)
 		ft_putstr("Error: memory allocation failure\n");
 	else if (pr == 1)
 		ft_putstr("Error: unexpected GNL data\n");
+	else if (pr == 2)
+		ft_putstr("Error: can't open file\n");
 	exit(1);
 }
 
-void		reopen_10_times(int *fd)
+void		open_gamesave(int *fd)
 {
-	int		i;
-
-	i = 10;
-	while (i-- && (*fd = open(SAVEPATH, O_RDONLY)) < 0)
-	{
-	}
-	if (*fd < 0)
-		err_ex(1);
+	if (!(*fd = open(SAVEPATH, O_RDONLY)))
+		err_ex(2);
 }
 
 int			check_bounds(int x, int y)

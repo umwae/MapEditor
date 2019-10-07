@@ -63,9 +63,8 @@ static void				load_sectors(t_core *cr, int *i)
 	char	*tmp;
 	int		fd;
 
-	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
-		reopen_10_times(&fd);
-	tmp = ft_strnew(400);
+	open_gamesave(&fd);
+	strnew_nullcheck(&tmp, STR_LARGE);
 	prepare_gnlstr(&cr->gnlstr[0]);
 	while (gnl_struct(&cr->gnlstr[0], fd, &line) > 0)
 	{

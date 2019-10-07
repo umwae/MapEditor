@@ -52,8 +52,13 @@ static void	sec_info_menu_fctex(t_core *cr, t_sec *sec, char *text, t_coord xy)
 		xy.x + I_MENU_XLEN - ICON_SIZE, (xy.y + ICON_SIZE * 2 + 12));
 	ft_strclr(text);
 	ft_strcat(text, "Ceiling tex: ");
-	ft_strcat(text, cr->tms = ft_itoa(sec->ctex));
-	free(cr->tms);
+	if (sec->ctex == SKY)
+		ft_strcat(text, "skybox");
+	else
+	{
+		ft_strcat(text, cr->tms = ft_itoa(sec->ctex));
+		free(cr->tms);
+	}
 	mlx_string_put(cr->mlx, cr->win, xy.x + 60, \
 	(xy.y + ICON_SIZE * 3 + 16), 0, text);
 	mlx_put_image_to_window(cr->mlx, cr->win, cr->arrowl_trash, \
@@ -120,7 +125,7 @@ void		sec_info_menu(t_core *cr, int secid)
 	xy.x = WIN_WIDTH - ab.x - 4;
 	xy.y = 0 + 4;
 	draw_rectangle(cr, xy, ab, MENU_COLOR);
-	text = ft_strnew(100);
+	strnew_nullcheck(&text, STR_MED);
 	sec_info_menu_lvls(cr, sec, text, xy);
 	sec_info_menu_fctex(cr, sec, text, xy);
 	sec_info_menu_illum(cr, sec, text, xy);

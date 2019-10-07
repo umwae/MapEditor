@@ -29,7 +29,7 @@ void			obj_info_menu(t_core *cr, t_obj *obj)
 	xy.x = WIN_WIDTH - ab.x - 4;
 	xy.y = 0 + 4;
 	draw_rectangle(cr, xy, ab, MENU_COLOR);
-	text = ft_strnew(100);
+	strnew_nullcheck(&text, STR_MED);
 	ft_strcat(text, " Type: ");
 	ft_strcat(text, cr->tms = ft_itoa(obj->type));
 	free(cr->tms);

@@ -23,16 +23,13 @@ static void			calc_inp(t_core *cr, int num, t_coord *inp)
 	int			j;
 	char		**v;
 
-	if ((fd = open(SAVEPATH, O_RDONLY)) == -1)
-		reopen_10_times(&fd);
-	printf(">>>>>>>>>>444>>>>>>>>>>> %d\n", fd);
+	open_gamesave(&fd);
 	j = 0;
 	prepare_gnlstr(&cr->gnlstr[1]);
 	while (j++ <= num)
 	{
 		if (gnl_struct(&cr->gnlstr[1], fd, &line) <= 0)
 			err_ex(1);
-		// printf(">>>>>>>>>>11>>>>>>>>>>> %s\n", line);
 		if (j < num + 1)
 			free(line);
 	}

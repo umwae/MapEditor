@@ -70,7 +70,7 @@ void			load_objects(t_core *cr)
 	int			fd;
 	char		*line;
 
-	fd = open("./maps/testmap", O_RDONLY);
+	open_gamesave(&fd);
 	prepare_gnlstr(&cr->gnlstr[4]);
 	while (gnl_struct(&cr->gnlstr[4], fd, &line) > 0)
 	{

@@ -66,7 +66,7 @@ void			info_menu(t_core *cr, t_wall *wall)
 
 	if (!wall)
 		return ;
-	text = ft_strnew(100);
+	strnew_nullcheck(&text, STR_MED);
 	cr->i_menu_is_open = 1;
 	cr->i_menu_wall = wall;
 	ab.x = I_MENU_XLEN;

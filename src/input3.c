@@ -75,8 +75,7 @@ void				load_doors(t_core *cr)
 	int			fd;
 	char		*line;
 
-	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
-		reopen_10_times(&fd);
+	open_gamesave(&fd);
 	prepare_gnlstr(&cr->gnlstr[2]);
 	while (gnl_struct(&cr->gnlstr[2], fd, &line) > 0)
 	{
@@ -93,8 +92,7 @@ void				load_finish(t_core *cr)
 	int			fd;
 	char		*line;
 
-	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
-		reopen_10_times(&fd);
+	open_gamesave(&fd);
 	prepare_gnlstr(&cr->gnlstr[3]);
 	while (gnl_struct(&cr->gnlstr[3], fd, &line) > 0)
 	{

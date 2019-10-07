@@ -34,11 +34,10 @@ static void		record_walls(t_core *cr, int fd)
 	t_wall	*wall;
 	char	*line;
 
-	if (!(line = ft_strnew(100)))
-		err_ex(0);
 	wall = cr->wlist;
 	if (!wall)
 		return ;
+	strnew_nullcheck(&line, STR_MED);
 	while (wall)
 	{
 		if (check_vt_dups(cr, wall->p1.x, wall->p1.y) == 0)
@@ -60,7 +59,7 @@ static void		record_doors(t_core *cr, int fd)
 	char	*text;
 	char	*tmp;
 
-	text = ft_strnew(10);
+	strnew_nullcheck(&text, STR_SMALL);
 	sec = *cr->slist;
 	while (sec)
 	{
@@ -83,7 +82,7 @@ static void		record_finish(t_core *cr, int fd)
 	char	*text;
 	char	*tmp;
 
-	text = ft_strnew(10);
+	strnew_nullcheck(&text, STR_SMALL);
 	sec = *cr->slist;
 	while (sec)
 	{
@@ -104,8 +103,8 @@ void			save_map(t_core *cr)
 {
 	int		fd;
 
-	if ((fd = open("./maps/testmap", O_WRONLY | O_CREAT | O_TRUNC, 0777)) < 0)
-		printf("ERROR\n");
+	if (!(fd = open(SAVEPATH, O_WRONLY | O_CREAT | O_TRUNC, 0777)))
+		err_ex(2);
 	record_walls(cr, fd);
 	record_sectors(cr, fd);
 	record_objects(cr, fd);

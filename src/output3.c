@@ -16,153 +16,99 @@
 #include "stdlib.h"
 #include "math.h"
 
-static void			find_any_wall_in_sec(t_core *cr, t_wall *wall, int refid, int pr2)
+static void	record_sectors_part3_p2(t_core *cr, int fd)
 {
-	(void)pr2;
-	if (wall->sectors[0].s == refid)
-		cr->idcurr = wall->index;
-	else if (wall->sectors[1].s == refid)
-		cr->idcurr = wall->index;
+	if (cr->rs.wtmp->sectors[0].s == cr->rs.i)
+	{
+		cr->rs.tmp = ft_itoa(cr->rs.wtmp->sectors[1].s);
+		cr->rs.conn = ft_strcat(cr->rs.conn, cr->rs.tmp);
+		free(cr->rs.tmp);
+	}
+	else if (cr->rs.wtmp->sectors[1].s == cr->rs.i)
+	{
+		cr->rs.tmp = ft_itoa(cr->rs.wtmp->sectors[0].s);
+		cr->rs.conn = ft_strcat(cr->rs.conn, cr->rs.tmp);
+		free(cr->rs.tmp);
+	}
 }
 
-void			record_sectors(t_core *cr, int fd)
+static void	record_sectors_part2(t_core *cr, int fd)
 {
-	char		*txt;
-	char		*tmp;
-	char		*conn;
-	char		*wtx;
-	int			doprint_wtx = 0;
-	t_wall		*wtmp;
-	int			i;
-	t_fcoord	cw;
-	int			curr;
-	t_sec		*sec;
+	choose_direction(cr, &cr->rs.cw, find_by_index(cr, cr->idcurr), cr->rs.i);
+	while ((cr->rs.curr = \
+			find_next_wall(cr, &cr->rs.cw, cr->rs.curr, cr->rs.i)) >= 0)
+	{
+		record_sectors_part3(cr, fd);
+		if (cr->rs.wtmp->isportal == 1)
+			record_sectors_part3_p2(cr, fd);
+		else
+			cr->rs.conn = ft_strcat(cr->rs.conn, "-1");
+		if (cr->rs.curr == cr->idcurr)
+			break ;
+		else
+		{
+			ft_strcat(cr->rs.txt, " ");
+			ft_strcat(cr->rs.conn, " ");
+			ft_strcat(cr->rs.wtx, " ");
+		}
+	}
+}
 
-	i = 0;
-	txt = ft_strnew(300);
-	conn = ft_strnew(300);
-	wtx = ft_strnew(3000);
+static void	record_sectors_part_p2(t_core *cr, int fd)
+{
+	ft_putstr_fd(cr->rs.conn, fd);
+	ft_strclr(cr->rs.txt);
+	ft_strclr(cr->rs.conn);
+	ft_strcat(cr->rs.wtx, "|");
+	cr->rs.i++;
+}
+
+static void	record_sectors_part(t_core *cr, int fd)
+{
+	record_sectors_partx(cr);
+	if (find_sec_list(cr, cr->rs.i)->ctex == SKY)
+		ft_strcat(cr->rs.wtx, "sky");
+	else
+	{
+		ft_strcat(cr->rs.wtx, (cr->rs.tmp = \
+		ft_itoa(find_sec_list(cr, cr->rs.i)->ctex)));
+		free(cr->rs.tmp);
+	}
+	ft_strcat(cr->rs.wtx, "|");
+	cr->idcurr = -1;
+	iter_wall(cr, cr->rs.i, -1, &find_any_wall_in_sec);
+	cr->rs.curr = cr->idcurr;
+	if (cr->idcurr != -1)
+		record_sectors_part2(cr, fd);
+	ft_strcat(cr->rs.txt, "|");
+	ft_putstr_fd(cr->rs.txt, fd);
+	if (cr->rs.sec->illum > 0)
+	{
+		ft_strcat(cr->rs.conn, "|");
+		ft_strcat(cr->rs.conn, (cr->rs.tmp = ft_ftoa(cr->rs.sec->illum)));
+		free(cr->rs.tmp);
+		ft_strcat(cr->rs.conn, "|");
+	}
+	record_sectors_part_p2(cr, fd);
+}
+
+void		record_sectors(t_core *cr, int fd)
+{
+	cr->rs.i = 0;
+	cr->rs.doprint_wtx = 0;
+	strnew_nullcheck(&cr->rs.txt, STR_LARGE);
+	strnew_nullcheck(&cr->rs.conn, STR_LARGE);
+	strnew_nullcheck(&cr->rs.wtx, STR_LARGE * cr->sec_num);
 	iter_wall(cr, 0, -1, &find_any_wall_in_sec);
-	while (i < cr->sec_num && cr->idcurr != -1)
+	while (cr->rs.i < cr->sec_num && cr->idcurr != -1)
+		record_sectors_part(cr, fd);
+	free(cr->rs.txt);
+	free(cr->rs.conn);
+	ft_putstr_fd("\n", fd);
+	if (cr->rs.i == cr->sec_num)
 	{
-		sec = find_sec_list(cr, i);
-		ft_strcat(txt, "\ns|");
-		ft_strcat(txt, (tmp = ft_ftoa(sec->floor)));
-		free(tmp);
-		ft_strcat(txt, " ");
-		ft_strcat(txt, (tmp = ft_ftoa(sec->ceiling)));
-		free(tmp);
-		ft_strcat(txt, "|");
-		//
-		ft_strcat(wtx, "\nt|");
-		ft_strcat(wtx, (tmp = ft_itoa(i)));
-		free(tmp);
-		ft_strcat(wtx, "|");
-		ft_strcat(wtx, (tmp = ft_itoa(find_sec_list(cr, i)->ftex)));
-		free(tmp);
-		ft_strcat(wtx, " ");
-		ft_strcat(wtx, (tmp = ft_itoa(find_sec_list(cr, i)->ctex)));
-		free(tmp);
-		ft_strcat(wtx, "|");
-		//
-		cr->idcurr = -1;
-		iter_wall(cr, i, -1, &find_any_wall_in_sec);
-		curr = cr->idcurr;
-		if (cr->idcurr != -1)
-		{
-			choose_direction(cr, &cw, find_by_index(cr, cr->idcurr), i);
-			while ((curr = find_next_wall(cr, &cw, curr, i)) >= 0)
-			{
-				wtmp = find_by_index(cr, curr);
-				//
-				ft_strcat(txt, (tmp = ft_itoa(find_vt_id(cr, cw.x, cw.y))));
-				//
-				if (wtmp->sectors[0].t != -1 || wtmp->sectors[1].t != -1 || sec->floor != ST_FLOOR_HIGHT || sec->ceiling != ST_CEIL_HIGHT || \
-				sec->illum != ST_ILLUMINATION || sec->ftex != ST_FTEX || sec->ftex != ST_CTEX)
-					doprint_wtx = 1;
-				ft_strcat(wtx, cr->tms = ft_itoa(wtmp->sectors[0].s == i ? wtmp->sectors[0].t : wtmp->sectors[1].t));
-				free(cr->tms);
-				//
-				free(tmp);
-				if (wtmp->isportal == 1)
-				{
-					if (wtmp->sectors[0].s == i)
-					{
-						conn = ft_strcat(conn, (tmp = ft_itoa(wtmp->sectors[1].s)));
-						free(tmp);
-					}
-					else if (wtmp->sectors[1].s == i)
-					{
-						conn = ft_strcat(conn, (tmp = ft_itoa(wtmp->sectors[0].s)));
-						free(tmp);
-					}
-				}
-				else
-				{
-					conn = ft_strcat(conn, "-1");
-				}
-				if (curr == cr->idcurr)
-				{
-					// conn = ft_strcat(conn, " -1");
-					// i++;
-					break ;
-				}
-				else
-				{
-					ft_strcat(txt, " ");
-					ft_strcat(conn, " ");
-					ft_strcat(wtx, " ");
-				}
-			}
-		}
-		ft_strcat(txt, "|");
-		ft_putstr_fd(txt, fd);
-		if (sec->illum > 0)
-		{
-			ft_strcat(conn, "|");
-			ft_strcat(conn, (tmp = ft_ftoa(sec->illum)));
-			free(tmp);
-			ft_strcat(conn, "|");
-		}
-		ft_putstr_fd(conn, fd);
-		ft_strclr(txt);
-		ft_strclr(conn);
-		//
-		ft_strcat(wtx, "|");
-		i++;
-	}
-		free(txt);
-		free(conn);
+		ft_putstr_fd(cr->rs.wtx, fd);
 		ft_putstr_fd("\n", fd);
-		//
-		if (i == cr->sec_num)
-		{
-			ft_putstr_fd(wtx, fd);
-			ft_putstr_fd("\n", fd);
-		}
-		free(wtx);
-}
-
-int				check_vt_dups(t_core *cr, float	x, float y)
-{
-	int		fd;
-	char	*line;
-
-	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
-      reopen_10_times(&fd);
-	prepare_gnlstr(&cr->gnlstr[6]);
-	while (gnl_struct(&cr->gnlstr[6], fd, &line) > 0)
-	{
-		if ((int)(ft_atof(line + 2) * cr->zoom / UNIT_SIZE) == y && \
-		(int)(ft_atof(line + find_rep_symb(line, ' ', 2) + 1) * cr->zoom / UNIT_SIZE) == x)
-		{
-			free(line);
-			close(fd);
-			return (1);
-		}
-		free(line);
 	}
-	free(line);
-	close(fd);
-	return (0);
+	free(cr->rs.wtx);
 }

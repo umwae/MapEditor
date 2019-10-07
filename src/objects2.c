@@ -22,7 +22,6 @@ void		draw_objects_text(t_core *cr)
 	t_coord		xy;
 	char		*txt;
 
-	printf("000 --- %d\n", cr->show_obj_num);
 	if (cr->show_obj_num < 0)
 		return ;
 	obj = *cr->olist;
@@ -30,8 +29,7 @@ void		draw_objects_text(t_core *cr)
 	{
 		xy.x = obj->fcoord.x - OBJECT_SIZE / 2 + cr->offs.x;
 		xy.y = obj->fcoord.y - OBJECT_SIZE / 2 + cr->offs.y;
-		if (!(txt = ft_strnew(6)))
-			err_ex(0);
+		strnew_nullcheck(&txt, STR_SMALL);
 		ft_strcpy(txt, (cr->tms = ft_itoa(obj->type)));
 		free(cr->tms);
 		mlx_string_put(cr->mlx, cr->win, xy.x, xy.y, 0xffffff, txt);
@@ -83,7 +81,7 @@ void		record_objects(t_core *cr, int fd)
 	t_obj	*obj;
 
 	obj = *cr->olist;
-	text = ft_strnew(100);
+	strnew_nullcheck(&text, STR_MED);
 	ft_putstr_fd("\n", fd);
 	while (obj)
 	{

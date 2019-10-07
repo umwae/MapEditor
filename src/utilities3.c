@@ -53,3 +53,15 @@ int color)
 		}
 	}
 }
+
+void		strnew_nullcheck(char **str, int len)
+{
+	if (!(*str = ft_strnew(len)))
+		err_ex(0);
+}
+
+void		end_reading(char **line, int fd)
+{
+	free(*line);
+	close(fd);
+}

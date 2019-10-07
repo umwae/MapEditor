@@ -34,7 +34,7 @@ void			record_player(t_core *cr, int fd)
 	char	*tmp;
 
 	ft_putstr_fd("\n", fd);
-	text = ft_strnew(ft_strlen("p|0.0 0.0|0|0.0|") + 1);
+	strnew_nullcheck(&text, STR_MED);
 	spot_sector_around(cr, &cr->player);
 	ft_strcat(text, "p|");
 	ft_strcat(text, tmp = ft_ftoa(cr->player.fcoord.x / cr->zoom * UNIT_SIZE));
@@ -59,8 +59,7 @@ void			load_player(t_core *cr)
 	int			fd;
 	char		*line;
 
-	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
-		reopen_10_times(&fd);
+	open_gamesave(&fd);
 	prepare_gnlstr(&cr->gnlstr[7]);
 	while (gnl_struct(&cr->gnlstr[7], fd, &line) > 0)
 	{
@@ -73,12 +72,12 @@ void			load_player(t_core *cr)
 			cr->player.sec = ft_atoi(parr[2]);
 			cr->player.angle = ft_atof(parr[3]);
 			cr->player.isplayer = 1;
-			close(fd);
+			ft_arrfree(&parr, ft_arrlen(parr));
+			end_reading(&line, fd);
 			return ;
 		}
 		free(line);
 	}
-	free(line);
-	close(fd);
+	end_reading(&line, fd);
 	return ;
 }

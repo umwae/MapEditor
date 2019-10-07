@@ -43,8 +43,7 @@ static char			**find_sec_in_save(t_core *cr, int secid)
 	int		i;
 
 	i = -1;
-	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
-		reopen_10_times(&fd);
+	open_gamesave(&fd);
 	prepare_gnlstr(&cr->gnlstr[8]);
 	while (gnl_struct(&cr->gnlstr[8], fd, &line) > 0)
 	{
@@ -95,7 +94,7 @@ char *line)
 	pts = ft_strsplit(line, '|');
 	sec = find_sec_list(cr, ft_atoi(pts[1]));
 	sec->ftex = ft_atoi(pts[2]);
-	if (ft_strncmp(ft_strchr(pts[2], ' '), "sky", 3) == 0)
+	if (ft_strncmp(ft_strchr(pts[2], ' ') + 1, "sky", 3) == 0)
 		sec->ctex = SKY;
 	else
 		sec->ctex = ft_atoi(ft_strchr(pts[2], ' '));
@@ -110,8 +109,7 @@ void				load_sec_info(t_core *cr)
 	int		i;
 
 	i = 0;
-	if ((fd = open("./maps/testmap", O_RDONLY)) == -1)
-		reopen_10_times(&fd);
+	open_gamesave(&fd);
 	prepare_gnlstr(&cr->gnlstr[9]);
 	while (gnl_struct(&cr->gnlstr[9], fd, &line) > 0)
 	{

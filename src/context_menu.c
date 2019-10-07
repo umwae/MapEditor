@@ -72,8 +72,7 @@ void		rmb_menu_p2(t_core *cr, t_wall *wall, int x, int y)
 
 	if (!wall)
 		return ;
-	if (!(text = ft_strnew(20)))
-		err_ex(0);
+	strnew_nullcheck(&text, STR_SMALL);
 	xy.x = x + (MENU_XLEN - LINE_SIZE_X) / 2;
 	xy.y = y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 0;
 	ab.x = CHECKBOX_SIZE;
@@ -107,8 +106,7 @@ void		rmb_menu(t_core *cr, t_wall *wall, int x, int y)
 	ab.x = MENU_XLEN;
 	ab.y = MENU_YLEN;
 	draw_rectangle(cr, xy, ab, MENU_COLOR);
-	if (!(text = ft_strnew(20)))
-		err_ex(0);
+	strnew_nullcheck(&text, STR_SMALL);
 	ft_strcpy(text, "Place player");
 	mlx_string_put(cr->mlx, cr->win, x + (MENU_XLEN - LINE_SIZE_X) / 2, \
 	y + (MENU_YLEN - LINE_SIZE_Y * 3) / 2 + LINE_SIZE_Y * 1, 0, text);

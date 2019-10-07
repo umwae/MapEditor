@@ -69,7 +69,7 @@
 # define COMPRESSING 30
 # define UNIT_SIZE 0.5f
 
-# define SKY 4
+# define SKY 11
 
 # define SAVEPATH "./maps/testmap"
 
